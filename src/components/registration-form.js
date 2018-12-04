@@ -43,6 +43,11 @@ export class RegistrationForm extends React.Component {
           name="password"
           validate={[required, passwordLength, isTrimmed]}
         />
+        <button
+          type="submit"
+          disabled={this.props.pristine || this.props.submitting}>
+            Register
+        </button>
       </form>
     );
   }
