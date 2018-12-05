@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import styled from 'styled-components';
 
 import LoginForm from './login-form';
 import './landingpage.css';
