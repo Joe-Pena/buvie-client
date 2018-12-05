@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-
+import { fetchMovies } from '../actions/movies-action';
 import { updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
@@ -16,54 +16,44 @@ class MovieSelection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      genres: []
+      movies: []
     };
+  }
+
+  componentDidMount() {
+    this.props.dispatch(fetchMovies(this.props.genres));
   }
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('working');
 
-    return this.props.dispatch(updateUser({ genres: this.state.genres }));
+    console.log(this.state.movies);
+    console.log('ran');
+    return this.props.dispatch(updateUser({ movies: this.state.movies }));
   }
 
   onChange(e) {
-    const genre = e.target.value;
+    const movie = e.target.value;
     if (e.target.checked) {
       this.setState({
-        genres: [...this.state.genres, genre]
+        movies: [...this.state.movies, movie]
       });
     } else {
       this.setState({
-        genres: this.state.genres.filter(name => name !== genre)
+        movies: this.state.movies.filter(movieId => movieId !== movie)
       });
     }
   }
 
   render() {
-    console.log(this.state.genres);
-    const genreList = [
-      { name: 'Action & Adventure', id: 'action' },
-      { name: 'Children & Family', id: 'family' },
-      { name: 'Comedies', id: 'comedies' },
-      { name: 'Documentaries', id: 'documentaries' },
-      { name: 'Dramas', id: 'dramas' },
-      { name: 'Foreign Movies', id: 'foreign' },
-      { name: 'Horror', id: 'horror' },
-      { name: 'Sci-Fi & Fantasy', id: 'fantasy' },
-      { name: 'Thrillers', id: 'thrillers' },
-    ];
-
-    const inputs = genreList.map(genre => {
+    const inputs = this.props.movies.map(movie => {
       return (
-        <label htmlFor={genre.id} key={genre.id}>
+        <label key={movie.id}>
           <input
             type="checkbox"
-            value={genre.name}
-            id={genre.id}
-            name={genre.id}
+            value={movie.id}
             onChange={e => this.onChange(e)}/>
-          {genre.name}
+          {movie.title}
         </label>);
     });
 
@@ -78,5 +68,9 @@ class MovieSelection extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  genres: state.user.genres,
+  movies: state.movie.list
+});
 
-export default connect()(MovieSelection);
+export default connect(mapStateToProps)(MovieSelection);

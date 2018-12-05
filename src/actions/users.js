@@ -82,9 +82,9 @@ export const updateUser = data => (dispatch, getState) => {
     },
     body: JSON.stringify(data)
   })
-    .then(res => normalizeResponseErrors(res))
     .then(res => res.json())
     .then(res => {
+      console.log(res);
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })

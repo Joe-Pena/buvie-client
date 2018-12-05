@@ -22,7 +22,6 @@ class GenreSelection extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    console.log('working');
 
     return this.props.dispatch(updateUser({ genres: this.state.genres }));
   }
@@ -41,17 +40,16 @@ class GenreSelection extends Component {
   }
 
   render() {
-    console.log(this.state.genres);
     const genreList = [
       { name: 'Action & Adventure', id: 'action' },
       { name: 'Children & Family', id: 'family' },
-      { name: 'Comedies', id: 'comedies' },
-      { name: 'Documentaries', id: 'documentaries' },
-      { name: 'Dramas', id: 'dramas' },
-      { name: 'Foreign Movies', id: 'foreign' },
+      { name: 'Comedy', id: 'comedy' },
+      { name: 'Documentary', id: 'documentary' },
+      { name: 'Drama', id: 'drama' },
+      { name: 'International', id: 'international' },
       { name: 'Horror', id: 'horror' },
-      { name: 'Sci-Fi & Fantasy', id: 'fantasy' },
-      { name: 'Thrillers', id: 'thrillers' },
+      { name: 'SciFi & Fantasy', id: 'fantasy' },
+      { name: 'Thriller', id: 'thriller' },
     ];
 
     const inputs = genreList.map(genre => {
