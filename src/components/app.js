@@ -6,6 +6,7 @@ import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import RegistrationPage from './registration-page';
+import './clearfix.css';
 import { refreshAuthToken } from '../actions/auth';
 
 export class App extends React.Component {

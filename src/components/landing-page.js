@@ -74,6 +74,21 @@ const StyledLandingPage = styled.div`
     border: none;
     background-color: #212032;
     border-bottom: 0.1rem solid #8b8b99;
+    width: 20rem;
+    margin: 2rem;
+    font-size: 1.6rem;
+  }
+
+  .landing-login-btn {
+    background-color: #a33944;
+    color: #000;
+    width: 20rem;
+    height: 3rem;
+    border: none;
+  }
+
+  .form-error {
+    font-size: 1rem;
   }
 `;
 
@@ -89,7 +104,7 @@ export function LandingPage(props) {
         <h1 className="info-message">Buvie, find friends to watch your <br />favorite movies with!</h1>
       </div>
       <div className="side-login">
-        <img src={logo} className="buvie-landing-logo" />
+        <img src={logo} alt="Buvie logo" className="buvie-landing-logo" />
         <LoginForm />
         <span className="signup-button">Not a member?<Link to="/register">Register</Link></span>
       </div>
