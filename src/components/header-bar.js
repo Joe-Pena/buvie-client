@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { clearAuth } from '../actions/auth';
 import { clearAuthToken } from '../local-storage';
 import styled from 'styled-components';
-import logoName from '../images/buvienamelogo.png';
+import logoName from '../images/buvielogoname.svg';
 
 const StyledHeaderBar = styled.div`
     display: grid;

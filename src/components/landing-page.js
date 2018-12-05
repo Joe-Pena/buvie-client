@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import RegistrationForm from './registration-form';
 
 import LoginForm from './login-form';
-import logo from '../images/buvienamelogo.png';
+import logo from '../images/buvielogoname.svg';
 
 const StyledLandingPage = styled.div`
   display: grid;

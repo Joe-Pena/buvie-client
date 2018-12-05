@@ -12,6 +12,7 @@ const StyledDashboard = styled.div`
   grid-template-columns: 0.25fr 1fr 0.25fr;
   grid-column-gap: 3rem;
   grid-template-areas: "profile matches adspace";
+  padding: 0 3rem;
 
   .dashboard-profile {
     grid-area: profile;
@@ -68,7 +69,6 @@ export class Dashboard extends React.Component {
         <div className="dashboard-profile">
           <h2>{this.props.username}</h2>
         </div>
-        
         <div className="dashboard-matches">
           <div className="first-match">
           </div>
