@@ -11,7 +11,7 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    console.log(this.props.genres);
+    console.log(this.props);
     if (!this.props.genres.length) {
       return <GenreSelection />;
     }
