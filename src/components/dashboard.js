@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
+import { fetchCurrentuser } from '../actions/users';
+import GenreSelection from '../components/genre-selection';
+import MovieSelection from '../components/movie-selection';
 import styled from 'styled-components';
 import { fetchProtectedData } from '../actions/protected-data';
 
@@ -60,10 +63,19 @@ const StyledDashboard = styled.div`
 
 export class Dashboard extends React.Component {
   componentDidMount() {
-    this.props.dispatch(fetchProtectedData());
+    this.props.dispatch(fetchCurrentuser());
   }
 
   render() {
+    console.log(this.props);
+    if (!this.props.genres.length) {
+      return <GenreSelection />;
+    }
+
+    if (!this.props.movies.length) {
+      return <MovieSelection />;
+    }
+
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
@@ -88,7 +100,9 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
-    protectedData: state.protectedData.data
+    protectedData: state.protectedData.data,
+    movies: state.user.movies,
+    genres: state.user.genres
   };
 };
 

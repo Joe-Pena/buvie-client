@@ -3,13 +3,17 @@ import { reducer as formReducer } from 'redux-form';
 import thunk from 'redux-thunk';
 import { loadAuthToken } from './local-storage';
 import authReducer from './reducers/auth';
+import userReducer from './reducers/user-reducer';
+import movieReducer from './reducers/movie-reducer';
 import protectedDataReducer from './reducers/protected-data';
 import { setAuthToken, refreshAuthToken } from './actions/auth';
 
 const store = createStore(
   combineReducers({
+    user: userReducer,
     form: formReducer,
     auth: authReducer,
+    movie: movieReducer,
     protectedData: protectedDataReducer
   }),
   applyMiddleware(thunk)
