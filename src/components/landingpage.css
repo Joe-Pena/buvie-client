@@ -47,6 +47,8 @@
   grid-area: logo;
   color: #fff;
   align-self: center;
+  justify-self: center;
+  width: 20rem;
 }
 
 .landing-login-form {
