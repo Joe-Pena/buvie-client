@@ -1,36 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
-import { fetchProtectedData } from '../actions/protected-data';
+import { fetchCurrentuser } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
+import MovieSelection from '../components/movie-selection';
 
 export class Dashboard extends React.Component {
   componentDidMount() {
-    this.props.dispatch(fetchProtectedData());
+    this.props.dispatch(fetchCurrentuser());
   }
 
   render() {
+    console.log(this.props.genres);
+    if (!this.props.genres.length) {
+      return <GenreSelection />;
+    }
+
+    if (!this.props.movies.length) {
+      return <MovieSelection />;
+    }
+
     return (
       <div className="dashboard">
         <div className="dashboard-username">
           Username: {this.props.username}
         </div>
-        <div className="dashboard-name">Name: {this.props.name}</div>
-        <div className="dashboard-protected-data">
-          Protected data: {this.props.protectedData}
-        </div>
-        <GenreSelection />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { currentUser } = state.auth;
   return {
     username: state.auth.currentUser.username,
-    name: `${currentUser.firstName} ${currentUser.lastName}`,
-    protectedData: state.protectedData.data
+    protectedData: state.protectedData.data,
+    movies: state.user.movies,
+    genres: state.user.genres
   };
 };
 
