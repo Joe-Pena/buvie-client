@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+
+
+import { updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
   label {
@@ -19,7 +23,8 @@ class GenreSelection extends Component {
   onSubmit(e) {
     e.preventDefault();
     console.log('working');
-    // return this.props.dispatch(login(values.username, values.password));
+
+    return this.props.dispatch(updateUser({ genres: this.state.genres }));
   }
 
   onChange(e) {
@@ -74,4 +79,4 @@ class GenreSelection extends Component {
 }
 
 
-export default GenreSelection;
+export default connect()(GenreSelection);
