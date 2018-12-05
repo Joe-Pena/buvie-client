@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
+import RegistrationForm from './registration-form';
 
 import LoginForm from './login-form';
 import logo from '../images/buvienamelogo.png';
@@ -60,13 +61,13 @@ const StyledLandingPage = styled.div`
 
   .landing-login-form {
     grid-area: loginform;
-    font-size: 2rem;
+    font-size: 3rem;
     align-self: center;
   }
 
   .signup-button {
     grid-area: signup-btn;
-    font-size: 1rem;
+    font-size: 1.5rem;
     align-self: flex-start;
   }
 
@@ -88,28 +89,45 @@ const StyledLandingPage = styled.div`
   }
 
   .form-error {
-    font-size: 1rem;
+    font-size: 2rem;
   }
 `;
 
-export function LandingPage(props) {
+export class LandingPage extends React.Component {
   // If we are logged in redirect straight to the user's dashboard
-  if (props.loggedIn) {
-    return <Redirect to="/dashboard" />;
+  constructor(props) {
+    super(props);
+    this.state = {
+      signUp: false,
+    };
   }
 
-  return (
-    <StyledLandingPage className="landing-page-main-grid">
-      <div className="info-area">
-        <h1 className="info-message">Buvie, find friends to watch your <br />favorite movies with!</h1>
-      </div>
-      <div className="side-login">
-        <img src={logo} alt="Buvie logo" className="buvie-landing-logo" />
-        <LoginForm />
-        <span className="signup-button">Not a member?<Link to="/register">Register</Link></span>
-      </div>
-    </StyledLandingPage>
-  );
+  render() {
+    if (this.props.loggedIn) {
+      return <Redirect to="/dashboard" />;
+    }
+
+    return (
+      <StyledLandingPage className="landing-page-main-grid">
+        <div className="info-area">
+          <h1 className="info-message">Buvie, find friends to watch your <br />favorite movies with!</h1>
+        </div>
+        <div className="side-login">
+          <img src={logo} alt="Buvie logo" className="buvie-landing-logo" />
+          { this.state.signUp ?
+            <RegistrationForm />
+            :
+            <LoginForm />
+          }
+          { this.state.signUp ?
+            <span className="signup-button" >Already a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
+            :
+            <span className="signup-button" >Not a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
+          }
+        </div>
+      </StyledLandingPage>
+    );
+  }
 }
 
 const mapStateToProps = state => ({

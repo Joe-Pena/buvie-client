@@ -1,7 +1,61 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
+import styled from 'styled-components';
 import { fetchProtectedData } from '../actions/protected-data';
+
+const StyledDashboard = styled.div`
+  background-color: #212032;
+  color: #fff;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 0.25fr 1fr 0.25fr;
+  grid-column-gap: 3rem;
+  grid-template-areas: "profile matches adspace";
+
+  .dashboard-profile {
+    grid-area: profile;
+    background-color: #8b8b99;
+    height: 85%;
+    align-self: center;
+  }
+
+  .dashboard-matches {
+    grid-area: matches;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-row-gap: 2rem;
+    grid-template-areas: 
+      "first-match"
+      "second-match"
+      "third-match";
+    height: 85%;
+    align-self: center;
+  }
+
+  .first-match {
+    grid-area: first-match;
+    background-color: #8b8b99;
+  }
+
+  .second-match {
+    grid-area: second-match;
+    background-color: #8b8b99;
+  }
+
+  .third-match {
+    grid-area: third-match;
+    background-color: #8b8b99;
+  }
+
+  .thirdspace {
+    grid-area: adspace;
+    background-color: #8b8b99;
+    height: 85%;
+    align-self: center;
+  }
+
+`;
 
 export class Dashboard extends React.Component {
   componentDidMount() {
@@ -10,24 +64,30 @@ export class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="dashboard">
-        <div className="dashboard-username">
-                    Username: {this.props.username}
+      <StyledDashboard className="dashboard">
+        <div className="dashboard-profile">
+          <h2>{this.props.username}</h2>
         </div>
-        <div className="dashboard-name">Name: {this.props.name}</div>
-        <div className="dashboard-protected-data">
-                    Protected data: {this.props.protectedData}
+        
+        <div className="dashboard-matches">
+          <div className="first-match">
+          </div>
+          <div className="second-match">
+          </div>
+          <div className="third-match">
+          </div>
         </div>
-      </div>
+
+        <div className="thirdspace">
+        </div>
+      </StyledDashboard>
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { currentUser } = state.auth;
   return {
     username: state.auth.currentUser.username,
-    name: `${currentUser.firstName} ${currentUser.lastName}`,
     protectedData: state.protectedData.data
   };
 };
