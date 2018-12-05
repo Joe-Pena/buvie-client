@@ -22,25 +22,25 @@ export class RegistrationForm extends React.Component {
         onSubmit={this.props.handleSubmit(values =>
           this.onSubmit(values)
         )}>
-        <label htmlFor="email">Email</label>
         <Field
           component={Input}
           type="text"
           name="email"
+          placeholder="email"
           validate={[required, nonEmpty, isTrimmed]}
         />
-        <label htmlFor="username">Username</label>
         <Field
           component={Input}
           type="text"
           name="username"
+          placeholder="username"
           validate={[required, nonEmpty, isTrimmed]}
         />
-        <label htmlFor="password">Password</label>
         <Field
           component={Input}
           type="password"
           name="password"
+          placeholder="password"
           validate={[required, passwordLength, isTrimmed]}
         />
         <button
