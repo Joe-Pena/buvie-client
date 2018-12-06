@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
+import { BASE_URL } from '../config';
 
 
 export class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: io('http://localhost:8080'),
+      socket: io(BASE_URL),
       messages: [],
       input: ''
     };
@@ -18,6 +19,10 @@ export class Chat extends Component {
         messages: [...this.state.messages, data]
       });
     });
+  }
+
+  componentWillUnmount() {
+    this.state.socket.disconnect();
   }
 
   onClick(e) {
