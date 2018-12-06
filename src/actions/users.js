@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
 import { API_BASE_URL } from '../config';
@@ -15,6 +16,41 @@ export const setMovies = movies => ({
   movies
 });
 
+export const FETCH_MATCHES_REQUEST = 'FETCH_MATCHES_REQUEST';
+export const fetchMatchesRequest = () => ({
+  type: FETCH_MATCHES_REQUEST
+});
+
+export const FETCH_MATCHES_SUCCESS = 'FETCH_MATCHES_SUCCESS';
+export const fetchMatchesSuccess = matches => ({
+  type: FETCH_MATCHES_SUCCESS,
+  matches
+});
+
+export const FETCH_MATCHES_FAILURE = 'FETCH_MATCHES_FAILURE';
+export const fetchMatchesFailure = error => ({
+  type: FETCH_MATCHES_FAILURE,
+  error
+});
+
+export const fetchMatches = () => (dispatch, getState) => {
+  dispatch(fetchMatchesRequest());
+  const authToken = getState().auth.authToken;
+
+  return fetch(`${API_BASE_URL}/main/`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(fetchMatchesSuccess(res));
+    })
+    .catch(err => dispatch(fetchMatchesFailure(err)));
+};
+
 export const fetchCurrentuser = () => (dispatch, getState) => {
   let userId;
   const currentUser = getState().auth.currentUser;
@@ -30,17 +66,7 @@ export const fetchCurrentuser = () => (dispatch, getState) => {
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {
-      const { reason, message, location } = err;
-      if (reason === 'ValidationError') {
-        // Convert ValidationErrors into SubmissionErrors for Redux Form
-        return Promise.reject(
-          new SubmissionError({
-            [location]: message
-          })
-        );
-      }
-    });
+    .catch(err => {console.error(err);});
 };
 
 export const registerUser = user => () => {
@@ -88,15 +114,5 @@ export const updateUser = data => (dispatch, getState) => {
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {
-      const { reason, message, location } = err;
-      if (reason === 'ValidationError') {
-        // Convert ValidationErrors into SubmissionErrors for Redux Form
-        return Promise.reject(
-          new SubmissionError({
-            [location]: message
-          })
-        );
-      }
-    });
+    .catch(err => {console.error(err);});
 };

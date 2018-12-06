@@ -1,11 +1,17 @@
 import {
   SET_GENRES,
-  SET_MOVIES
+  SET_MOVIES,
+  FETCH_MATCHES_REQUEST,
+  FETCH_MATCHES_SUCCESS,
+  FETCH_MATCHES_FAILURE
 } from '../actions/users';
 
 const initialState = {
+  loading: false,
+  error: null,
   movies: [],
-  genres: []
+  genres: [],
+  matches: []
 };
 
 export default function reducer(state = initialState, action) {
@@ -16,6 +22,21 @@ export default function reducer(state = initialState, action) {
   } else if (action.type === SET_MOVIES) {
     return Object.assign({}, state, {
       movies: action.movies
+    });
+  } else if (action.type === FETCH_MATCHES_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === FETCH_MATCHES_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      matches: action.matches
+    });
+  } else if (action.type === FETCH_MATCHES_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
     });
   }
   return state;

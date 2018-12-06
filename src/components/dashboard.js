@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
-import { fetchCurrentuser } from '../actions/users';
+import { fetchCurrentuser, fetchMatches } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
+import Chat from './chat';
 import styled from 'styled-components';
-import { fetchProtectedData } from '../actions/protected-data';
 
 const StyledDashboard = styled.div`
   background-color: #212032;
@@ -63,7 +63,8 @@ const StyledDashboard = styled.div`
 
 export class Dashboard extends React.Component {
   componentDidMount() {
-    this.props.dispatch(fetchCurrentuser());
+    this.props.dispatch(fetchCurrentuser())
+      .then(() => this.props.dispatch(fetchMatches()));
   }
 
   render() {
@@ -76,6 +77,33 @@ export class Dashboard extends React.Component {
       return <MovieSelection />;
     }
 
+    const matches = this.props.matches.map(user => {
+      let matchGenres;
+      if (user.genres) {
+        matchGenres = user.genres.map(genre => {
+          return (<h4 key={genre}>{genre}</h4>);
+        });
+      }
+      let matchMovies;
+      if (user.movies) {
+        matchMovies = user.movies.map(movie => {
+          return (
+            <React.Fragment key={movie._id}>
+              <h4 >{movie.title}</h4>
+              <img src={movie.poster} alt={movie.title} />
+            </React.Fragment>
+          );
+        });
+      }
+      return (
+        <React.Fragment key={user.id}>
+          <h3>{user.username}</h3>
+          {matchGenres}
+          {matchMovies}
+        </React.Fragment>
+      );
+    });
+
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
@@ -83,14 +111,30 @@ export class Dashboard extends React.Component {
         </div>
         <div className="dashboard-matches">
           <div className="first-match">
+            {
+              matches[0] ?
+                matches[0] :
+                'No more matches'
+            }
           </div>
           <div className="second-match">
+            {
+              matches[1] ?
+                matches[1] :
+                'No more matches'
+            }
           </div>
           <div className="third-match">
+            {
+              matches[2] ?
+                matches[2] :
+                'No more matches'
+            }
           </div>
         </div>
 
         <div className="thirdspace">
+          <Chat />
         </div>
       </StyledDashboard>
     );
@@ -102,7 +146,8 @@ const mapStateToProps = state => {
     username: state.auth.currentUser.username,
     protectedData: state.protectedData.data,
     movies: state.user.movies,
-    genres: state.user.genres
+    genres: state.user.genres,
+    matches: state.user.matches
   };
 };
 
