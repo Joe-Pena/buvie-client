@@ -31,7 +31,8 @@ const StyledHeaderBar = styled.div`
     .welcome-message {
       color: #fff;
       font-size: 1.6rem;
-      justify-self: flex-end;
+      position: relative;
+      right: 1rem;
     }
 `;
 export class HeaderBar extends React.Component {
