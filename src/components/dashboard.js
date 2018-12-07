@@ -136,6 +136,14 @@ export class Dashboard extends React.Component {
       .then(() => this.props.dispatch(fetchMatched()));
   }
 
+  popcorn(userId) {
+    this.props.dispatch(popCornMatch({ userId }))
+      .then(() => this.props.dispatch(fetchCurrentuser()))
+      .then(() => this.props.dispatch(fetchMatches()))
+      .then(() => this.props.dispatch(fetchPopcorn()))
+      .then(() => this.props.dispatch(fetchMatched()));
+  }
+
   render() {
     if (!this.props.genres.length) {
       return <GenreSelection />;
@@ -172,7 +180,7 @@ export class Dashboard extends React.Component {
           <ul className="match-movie-list">
             {matchMovies}
           </ul>
-          <button className="match-popcorn-btn" onClick={() => this.props.dispatch(popCornMatch({ userId: user.id }))}>
+          <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
             Popcorn
           </button>
           <button className="match-chair-btn">Chair</button>
@@ -184,13 +192,30 @@ export class Dashboard extends React.Component {
     console.log(this.props);
     if (this.props.matched.matched) {
       chats = this.props.matched.matched.map(match => {
-        return (<Chat key={match._id} matched={match}/>);
+        return (<Chat key={match.chatroom._id} matched={match}/>);
       });
     }
+
+    let popcorns;
+    if (this.props.popcorn) {
+      popcorns = this.props.popcorn.map(user => {
+        return (
+          <React.Fragment key={user.id}>
+            <p>{user.username}</p>
+            <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
+          Popcorn
+            </button>
+            <button className="match-chair-btn">Chair</button>
+          </React.Fragment>
+        );
+      });
+    }
+
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
           <h2>{this.props.username}</h2>
+          popcorns {popcorns}
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
