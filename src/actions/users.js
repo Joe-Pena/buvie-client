@@ -138,11 +138,6 @@ export const updateUser = data => (dispatch, getState) => {
 
 export const popCornMatch = data => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
-  const currentUser = getState().auth.currentUser;
-  let userId;
-  if (currentUser) {
-    userId = currentUser.id;
-  }
 
   return fetch(`${API_BASE_URL}/main/popcorn`, {
     method: 'PUT',
@@ -152,9 +147,89 @@ export const popCornMatch = data => (dispatch, getState) => {
     },
     body: JSON.stringify(data)
   })
-    .then(res => res.json())
     .then(res => {
       console.log(res);
     })
     .catch(err => {console.error(err);});
+};
+
+export const FETCH_POPCORN_REQUEST = 'FETCH_POPCORN_REQUEST';
+export const fetchPopcornRequest = () => ({
+  type: FETCH_POPCORN_REQUEST
+});
+
+export const FETCH_POPCORN_SUCCESS = 'FETCH_POPCORN_SUCCESS';
+export const fetchPopcornSuccess = popcorn => ({
+  type: FETCH_POPCORN_SUCCESS,
+  popcorn
+});
+
+export const FETCH_POPCORN_FAILURE = 'FETCH_POPCORN_FAILURE';
+export const fetchPopcornFailure = error => ({
+  type: FETCH_POPCORN_FAILURE,
+  error
+});
+
+export const fetchPopcorn = () => (dispatch, getState) => {
+  dispatch(fetchPopcornRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/popcorn/${userId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(fetchPopcornSuccess(res));
+    })
+    .catch(err => dispatch(fetchPopcornFailure(err)));
+};
+
+
+export const FETCH_MATCHED_REQUEST = 'FETCH_MATCHED_REQUEST';
+export const fetchMatchedRequest = () => ({
+  type: FETCH_MATCHED_REQUEST
+});
+
+export const FETCH_MATCHED_SUCCESS = 'FETCH_MATCHED_SUCCESS';
+export const fetchMatchedSuccess = matched => ({
+  type: FETCH_MATCHED_SUCCESS,
+  matched
+});
+
+export const FETCH_MATCHED_FAILURE = 'FETCH_MATCHED_FAILURE';
+export const fetchMatchedFailure = error => ({
+  type: FETCH_MATCHED_FAILURE,
+  error
+});
+
+export const fetchMatched = () => (dispatch, getState) => {
+  dispatch(fetchMatchedRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/matches/${userId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(fetchMatchedSuccess(res));
+    })
+    .catch(err => dispatch(fetchMatchedFailure(err)));
 };
