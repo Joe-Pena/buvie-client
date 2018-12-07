@@ -29,7 +29,7 @@ export class Chat extends Component {
     if (matched) {
       id = matched._id;
     }
-    const match = id ? id._id : 'everyone';
+    const match = id ? id.username : 'everyone';
     const chatroom = id ? id.chatroom : 'everyone';
     this.setState({
       match, chatroom
