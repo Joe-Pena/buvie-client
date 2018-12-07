@@ -6,12 +6,11 @@ import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
 import styled from 'styled-components';
-import './clearfix.css';
 
 const StyledDashboard = styled.div`
   background-color: #212032;
   color: #fff;
-  height: 100%;
+  height: 100vh;
   display: grid;
   grid-template-columns: 0.25fr 1fr 0.25fr;
   grid-column-gap: 3rem;
