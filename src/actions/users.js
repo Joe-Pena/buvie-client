@@ -116,3 +116,26 @@ export const updateUser = data => (dispatch, getState) => {
     })
     .catch(err => {console.error(err);});
 };
+
+export const popCornMatch = data => (dispatch, getState) => {
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/popcorn`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify(data)
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {console.error(err);});
+};

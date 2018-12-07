@@ -76,6 +76,7 @@ const StyledLandingPage = styled.div`
     background-color: #212032;
     border-bottom: 0.1rem solid #8b8b99;
     width: 20rem;
+    color: #fff;
     margin: 2rem;
     font-size: 1.6rem;
   }
