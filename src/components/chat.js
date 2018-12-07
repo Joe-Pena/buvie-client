@@ -25,12 +25,16 @@ export class Chat extends Component {
   componentDidMount() {
     console.log(this.props.matched);
     const matched = this.props.matched;
-    let id;
+    let user;
+    let room;
     if (matched) {
-      id = matched._id;
+      user = matched._id;
+      room = matched.chatroom;
     }
-    const match = id ? id.username : 'everyone';
-    const chatroom = id ? id.chatroom : 'everyone';
+
+
+    const match = user ? user.username : 'everyone';
+    const chatroom = room ? room._id : 'everyone';
     this.setState({
       match, chatroom
     });
