@@ -65,10 +65,12 @@ class GenreSelection extends Component {
         </label>);
     });
 
+    const disabled = this.props.loading || !this.state.genres.length;
+
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
         {inputs}
-        <button disabled={false}>
+        <button disabled={disabled}>
           Continue
         </button>
       </StyledForm>
@@ -76,5 +78,11 @@ class GenreSelection extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.user.loading
+  };
+};
 
-export default connect()(GenreSelection);
+
+export default connect(mapStateToProps)(GenreSelection);
