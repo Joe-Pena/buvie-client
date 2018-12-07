@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
-import { fetchCurrentuser, fetchMatches } from '../actions/users';
+import { fetchCurrentuser, fetchMatches, popCornMatch } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -10,7 +10,7 @@ import styled from 'styled-components';
 const StyledDashboard = styled.div`
   background-color: #212032;
   color: #fff;
-  height: 100vh;
+  height: 100%;
   display: grid;
   grid-template-columns: 0.25fr 1fr 0.25fr;
   grid-column-gap: 3rem;
@@ -59,6 +59,9 @@ const StyledDashboard = styled.div`
     align-self: center;
   }
 
+  .match-movie-poster {
+    width: 12rem;
+  }
 `;
 
 export class Dashboard extends React.Component {
@@ -81,7 +84,7 @@ export class Dashboard extends React.Component {
       let matchGenres;
       if (user.genres) {
         matchGenres = user.genres.map(genre => {
-          return (<h4 key={genre}>{genre}</h4>);
+          return (<h4 key={genre} className="match-genre">{genre}</h4>);
         });
       }
       let matchMovies;
@@ -89,17 +92,21 @@ export class Dashboard extends React.Component {
         matchMovies = user.movies.map(movie => {
           return (
             <React.Fragment key={movie._id}>
-              <h4 >{movie.title}</h4>
-              <img src={movie.poster} alt={movie.title} />
+              {/* <h4 >{movie.title}</h4> */}
+              <img src={movie.poster} className="match-movie-poster" alt={movie.title} />
             </React.Fragment>
           );
         });
       }
       return (
         <React.Fragment key={user.id}>
-          <h3>{user.username}</h3>
+          <h3 className="match-username">{user.username}</h3>
           {matchGenres}
           {matchMovies}
+          <button className="match-popcorn-btn" onClick={() => this.props.dispatch(popCornMatch({ userId: user.id }))}>
+            Popcorn
+          </button>
+          <button className="match-chair-btn">Chair</button>
         </React.Fragment>
       );
     });
@@ -110,6 +117,7 @@ export class Dashboard extends React.Component {
           <h2>{this.props.username}</h2>
         </div>
         <div className="dashboard-matches">
+          {/* =========================================FIRST MATCH================ */}
           <div className="first-match">
             {
               matches[0] ?
@@ -117,6 +125,7 @@ export class Dashboard extends React.Component {
                 'No more matches'
             }
           </div>
+          {/* =========================================SECOND MATCH================ */}
           <div className="second-match">
             {
               matches[1] ?
@@ -124,6 +133,7 @@ export class Dashboard extends React.Component {
                 'No more matches'
             }
           </div>
+          {/* =========================================THIRD MATCH================ */}
           <div className="third-match">
             {
               matches[2] ?
