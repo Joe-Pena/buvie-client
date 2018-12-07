@@ -3,7 +3,10 @@ import {
   SET_MOVIES,
   FETCH_MATCHES_REQUEST,
   FETCH_MATCHES_SUCCESS,
-  FETCH_MATCHES_FAILURE
+  FETCH_MATCHES_FAILURE,
+  FETCH_CURRENT_USER_REQUEST,
+  FETCH_CURRENT_USER_SUCCESS,
+  FETCH_CURRENT_USER_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -34,6 +37,20 @@ export default function reducer(state = initialState, action) {
       matches: action.matches
     });
   } else if (action.type === FETCH_MATCHES_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === FETCH_CURRENT_USER_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === FETCH_CURRENT_USER_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false
+    });
+  } else if (action.type === FETCH_CURRENT_USER_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error

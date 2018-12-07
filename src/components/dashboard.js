@@ -71,7 +71,6 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     if (!this.props.genres.length) {
       return <GenreSelection />;
     }
@@ -154,7 +153,6 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
-    protectedData: state.protectedData.data,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches

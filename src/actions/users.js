@@ -51,7 +51,25 @@ export const fetchMatches = () => (dispatch, getState) => {
     .catch(err => dispatch(fetchMatchesFailure(err)));
 };
 
+export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST';
+export const fetchCurrentuserRequest = () => ({
+  type: FETCH_CURRENT_USER_REQUEST
+});
+
+export const FETCH_CURRENT_USER_SUCCESS = 'FETCH_CURRENT_USER_SUCCESS';
+export const fetchCurrentuserSuccess = user => ({
+  type: FETCH_CURRENT_USER_SUCCESS,
+  user
+});
+
+export const FETCH_CURRENT_USER_FAILURE = 'FETCH_CURRENT_USER_FAILURE';
+export const fetchCurrentuserFailure = error => ({
+  type: FETCH_CURRENT_USER_FAILURE,
+  error
+});
+
 export const fetchCurrentuser = () => (dispatch, getState) => {
+  dispatch(fetchCurrentuserRequest());
   let userId;
   const currentUser = getState().auth.currentUser;
   if (currentUser) {
@@ -63,10 +81,11 @@ export const fetchCurrentuser = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
+      dispatch(fetchCurrentuserSuccess(res));
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {console.error(err);});
+    .catch(err => dispatch(fetchCurrentuserFailure(err)));
 };
 
 export const registerUser = user => () => {

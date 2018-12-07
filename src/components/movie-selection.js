@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import { fetchMovies } from '../actions/movies-action';
-import { updateUser } from '../actions/users';
+import { fetchMatches, updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
   label {
@@ -27,9 +27,9 @@ class MovieSelection extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    console.log(this.state.movies);
-    console.log('ran');
-    return this.props.dispatch(updateUser({ movies: this.state.movies }));
+    return this.props.dispatch(updateUser({ movies: this.state.movies }))
+      .then(() => this.props.dispatch(fetchMatches()));
+
   }
 
   onChange(e) {
@@ -57,10 +57,12 @@ class MovieSelection extends Component {
         </label>);
     });
 
+    const disabled = this.props.loading || !this.state.movies.length;
+
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
         {inputs}
-        <button disabled={false}>
+        <button disabled={disabled}>
           Continue
         </button>
       </StyledForm>
@@ -69,6 +71,7 @@ class MovieSelection extends Component {
 }
 
 const mapStateToProps = state => ({
+  loading: state.user.loading,
   genres: state.user.genres,
   movies: state.movie.list
 });
