@@ -181,7 +181,13 @@ export class Dashboard extends React.Component {
       );
     });
 
+    let chats;
     console.log(this.props);
+    if (this.props.matched.matched) {
+      chats = this.props.matched.matched.map(match => {
+        return (<Chat key={match._id} matched={match}/>);
+      });
+    }
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
@@ -215,6 +221,7 @@ export class Dashboard extends React.Component {
         </div>
 
         <div className="thirdspace">
+          {chats}
           <Chat />
         </div>
       </StyledDashboard>

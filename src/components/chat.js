@@ -10,10 +10,11 @@ export class Chat extends Component {
     this.state = {
       socket: io(BASE_URL),
       messages: [],
-      input: ''
+      input: '',
+      match: '',
+      chatroom: ''
     };
 
-    let self = this;
     this.state.socket.on('chat', data => {
       this.setState({
         messages: [...this.state.messages, data]
@@ -21,6 +22,20 @@ export class Chat extends Component {
     });
   }
 
+  componentDidMount() {
+    console.log(this.props.matched);
+    const matched = this.props.matched;
+    let id;
+    if (matched) {
+      id = matched._id;
+    }
+    const match = id ? id._id : 'everyone';
+    const chatroom = id ? id.chatroom : 'everyone';
+    this.setState({
+      match, chatroom
+    });
+    this.state.socket.emit('subscribe', chatroom);
+  }
   componentWillUnmount() {
     this.state.socket.disconnect();
   }
@@ -28,7 +43,8 @@ export class Chat extends Component {
   onClick(e) {
     this.state.socket.emit('chat', {
       message: this.state.input,
-      handle: this.props.username
+      handle: this.props.username,
+      room: this.state.chatroom
     });
   }
 
@@ -39,12 +55,12 @@ export class Chat extends Component {
   }
 
   render() {
-    console.log(this.state);
     const messages = this.state.messages.map((data, i) => {
       return <p key={i}>{data.handle} - {data.message}</p>;
     });
     return (
       <div>
+        <h2>conversation with {this.state.match}</h2>
         <div id="chat-window">
           <div id="output">
             {messages}
