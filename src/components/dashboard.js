@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
-import { fetchCurrentuser, fetchMatches, popCornMatch } from '../actions/users';
+import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -67,7 +67,9 @@ const StyledDashboard = styled.div`
 export class Dashboard extends React.Component {
   componentDidMount() {
     this.props.dispatch(fetchCurrentuser())
-      .then(() => this.props.dispatch(fetchMatches()));
+      .then(() => this.props.dispatch(fetchMatches()))
+      .then(() => this.props.dispatch(fetchPopcorn()))
+      .then(() => this.props.dispatch(fetchMatched()));
   }
 
   render() {
@@ -110,6 +112,7 @@ export class Dashboard extends React.Component {
       );
     });
 
+    console.log(this.props);
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
@@ -155,7 +158,9 @@ const mapStateToProps = state => {
     username: state.auth.currentUser.username,
     movies: state.user.movies,
     genres: state.user.genres,
-    matches: state.user.matches
+    matches: state.user.matches,
+    popcorn: state.user.popcorn,
+    matched: state.user.matched
   };
 };
 
