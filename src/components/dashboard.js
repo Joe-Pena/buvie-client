@@ -144,7 +144,6 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
-    protectedData: state.protectedData.data,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches
