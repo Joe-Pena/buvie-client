@@ -10,4 +10,5 @@ html {
 body {
   font-size: 0.625rem;
   box-sizing: border-box;
+  min-height: 100%;
 }
