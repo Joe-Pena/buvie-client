@@ -6,8 +6,66 @@ import { connect } from 'react-redux';
 import { updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
+  display: grid;
+  grid-template-rows: auto;
+  grid-row-gap: 0.5rem;
+  background-color: #212032;
+  height: 95vh;
+  color: #fff;
+
+  h3 {
+    justify-self: center;
+  }
+
   label {
     display: block;
+    justify-self: center;
+  }
+
+  /* .genres-list-action {
+    grid-row-start: 1;
+  } 
+
+  .genres-list-family {
+    grid-row-start: 2;
+  } 
+
+  .genres-list-comedy {
+    grid-row-start: 3;
+  }
+
+  .genres-list-documentary {
+    grid-row-start: 4;
+  } 
+
+  .genres-list-drama {
+    grid-row-start: 5;
+  } 
+
+  .genres-list-international {
+    grid-row-start: 6;
+  } 
+
+  .genres-list-horror {
+    grid-row-start: 7;
+  } 
+
+  .genres-list-fantasy {
+    grid-row-start: 8;
+  } 
+
+  .genres-list-thriller {
+    grid-row-start: 9;
+  }  */
+
+  .genre-continue-btn {
+    grid-row-start: 11;
+    background-color: #a33944;
+    color: #000;
+    width: 8rem;
+    height: 3rem;
+    border: none;
+    justify-self: center;
   }
 `;
 
@@ -57,6 +115,7 @@ class GenreSelection extends Component {
         <label htmlFor={genre.id} key={genre.id}>
           <input
             type="checkbox"
+            className={`genres-list-${genre.id}`}
             value={genre.name}
             id={genre.id}
             name={genre.id}
@@ -69,8 +128,9 @@ class GenreSelection extends Component {
 
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
+        <h3>Please choose your favorite genres so we can find better matches for you!</h3>
         {inputs}
-        <button disabled={disabled}>
+        <button className="genre-continue-btn" disabled={disabled}>
           Continue
         </button>
       </StyledForm>
