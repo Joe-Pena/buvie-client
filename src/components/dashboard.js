@@ -105,7 +105,7 @@ const StyledDashboard = styled.div`
   }
 
   .match-movie-poster {
-    width: 10rem;
+    width: 12rem;
     margin: 0 1rem;
     justify-self: center;
   }
