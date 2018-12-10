@@ -301,6 +301,7 @@ export const fetchMessageFailure = error => ({
   type: FETCH_MESSAGE_FAILURE,
   error
 });
+
 export const fetchMessages = chatroomId => (dispatch, getState) => {
   dispatch(fetchMessageRequest());
   const authToken = getState().auth.authToken;
@@ -315,4 +316,38 @@ export const fetchMessages = chatroomId => (dispatch, getState) => {
       dispatch(fetchMessageSuccess(res));
     })
     .catch(err => dispatch(fetchMessageFailure(err)));
-}
+};
+
+export const PUT_MESSAGE_REQUEST = 'PUT_MESSAGE_REQUEST';
+export const putMessageRequest = () => ({
+  type: PUT_MESSAGE_REQUEST
+});
+
+export const PUT_MESSAGE_SUCCESS = 'PUT_MESSAGE_SUCCESS';
+export const putMessageSuccess = message => ({
+  type: PUT_MESSAGE_SUCCESS,
+  message
+});
+
+export const PUT_MESSAGE_FAILURE = 'PUT_MESSAGE_FAILURE';
+export const putMessageFailure = error => ({
+  type: PUT_MESSAGE_FAILURE,
+  error
+});
+
+export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
+  dispatch(putMessageRequest());
+  const authToken = getState().auth.authToken;
+  return fetch(`${API_BASE_URL}/main/messages/${chatroomId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify({ messages })
+  })
+    .then(res => {
+      dispatch(putMessageSuccess(res));
+    })
+    .catch(err => dispatch(putMessageFailure(err)));
+};
