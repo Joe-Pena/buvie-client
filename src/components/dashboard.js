@@ -29,7 +29,7 @@ const StyledDashboard = styled.div`
   .dashboard-matches {
     grid-area: matches;
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 0.8fr 0.8fr 0.8fr;
     grid-row-gap: 1.5rem;
     grid-template-areas: 
       "first-match"
@@ -43,10 +43,10 @@ const StyledDashboard = styled.div`
     grid-area: first-match;
     background-color: #8b8b99;
     display: grid;
-    grid-template-rows: 0.2fr 1fr 0.2fr;
-    grid-template-columns: 0.5fr 1fr 0.25fr 0.25fr;
+    grid-template-rows: 0.2fr 0.6fr 0.2fr;
+    grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
     grid-template-areas:
-      "username . genres genres"
+      "avatar username genres genres"
       "movies movies genres genres"
       ". . popcorn-btn ignore-btn";
   }
@@ -55,10 +55,10 @@ const StyledDashboard = styled.div`
     grid-area: second-match;
     background-color: #8b8b99;
     display: grid;
-    grid-template-rows: 0.2fr 1fr 0.2fr;
-    grid-template-columns: 0.5fr 1fr 0.25fr 0.25fr;
+    grid-template-rows: 0.2fr 0.6fr 0.2fr;
+    grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
     grid-template-areas:
-    "username . genres genres"
+      "avatar username genres genres"
       "movies movies genres genres"
       ". . popcorn-btn ignore-btn";
   }
@@ -67,10 +67,10 @@ const StyledDashboard = styled.div`
     grid-area: third-match;
     background-color: #8b8b99;
     display: grid;
-    grid-template-rows: 0.2fr 1fr 0.2fr;
-    grid-template-columns: 0.5fr 1fr 0.25fr 0.25fr;
+    grid-template-rows: 0.2fr 0.6fr 0.2fr;
+    grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
     grid-template-areas:
-    "username . genres genres"
+      "avatar username genres genres"
       "movies movies genres genres"
       ". . popcorn-btn ignore-btn";
   }
@@ -82,16 +82,28 @@ const StyledDashboard = styled.div`
     align-self: center;
   }
 
+  .match-avatar {
+    grid-area: avatar;
+    position: relative;
+    top: 0.5rem;
+    left: 1rem;
+    width: 4rem;
+    border-radius: 100rem;
+  }
+
   .match-username {
     grid-area: username;
     position: relative;
+    align-self: center;
     left: 1.5rem;
   }
 
   .match-genre-list {
     grid-area: genres;
+    align-self: center;
     list-style: none;
     word-wrap: none;
+    font-weight: 300;
   }
 
   .match-movie-list {
@@ -184,8 +196,8 @@ export class Dashboard extends React.Component {
         matchMovies = matchMovies.slice(0, 3);
         return (
           <React.Fragment key={user.id}>
+            <img className="match-avatar" src={gravatar} alt={user.username} />
             <h3 className="match-username">{user.username}</h3>
-            <img src={gravatar} alt={user.username} />
             <ul className="match-genre-list">
               <h3>{user.username} likes:</h3>
               {matchGenres}
