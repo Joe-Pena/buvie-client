@@ -283,3 +283,36 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     })
     .catch(err => dispatch(chairUserFailure(err)));
 };
+
+
+export const FETCH_MESSAGE_REQUEST = 'FETCH_MESSAGE_REQUEST';
+export const fetchMessageRequest = () => ({
+  type: FETCH_MESSAGE_REQUEST
+});
+
+export const FETCH_MESSAGE_SUCCESS = 'FETCH_MESSAGE_SUCCESS';
+export const fetchMessageSuccess = message => ({
+  type: FETCH_MESSAGE_SUCCESS,
+  message
+});
+
+export const FETCH_MESSAGE_FAILURE = 'FETCH_MESSAGE_FAILURE';
+export const fetchMessageFailure = error => ({
+  type: FETCH_MESSAGE_FAILURE,
+  error
+});
+export const fetchMessages = chatroomId => (dispatch, getState) => {
+  dispatch(fetchMessageRequest());
+  const authToken = getState().auth.authToken;
+  return fetch(`${API_BASE_URL}/main/messages/${chatroomId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(fetchMessageSuccess(res));
+    })
+    .catch(err => dispatch(fetchMessageFailure(err)));
+}

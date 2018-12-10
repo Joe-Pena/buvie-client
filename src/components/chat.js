@@ -49,6 +49,7 @@ export class Chat extends Component {
       handle: this.props.username,
       room: this.state.chatroom
     });
+    console.log(this.state.messages);
   }
 
   onChange(e) {
