@@ -26,6 +26,7 @@ const StyledHeaderBar = styled.div`
       height: 3rem;
       margin-right: 2rem;
       border: none;
+      cursor: pointer;
     }
 
     .welcome-message {
