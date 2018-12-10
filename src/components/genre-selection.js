@@ -17,46 +17,23 @@ const StyledForm = styled.form`
     justify-self: center;
   }
 
+  input {
+    opacity: 0;
+  }
+
   label {
     display: block;
     justify-self: center;
+    cursor: pointer;
+    height: 3rem;
   }
 
-  /* .genres-list-action {
-    grid-row-start: 1;
-  } 
-
-  .genres-list-family {
-    grid-row-start: 2;
-  } 
-
-  .genres-list-comedy {
-    grid-row-start: 3;
+  label.picked{
+    display: block;
+    background-color: #a33944;
+    width: 100%;
+    text-align: center;
   }
-
-  .genres-list-documentary {
-    grid-row-start: 4;
-  } 
-
-  .genres-list-drama {
-    grid-row-start: 5;
-  } 
-
-  .genres-list-international {
-    grid-row-start: 6;
-  } 
-
-  .genres-list-horror {
-    grid-row-start: 7;
-  } 
-
-  .genres-list-fantasy {
-    grid-row-start: 8;
-  } 
-
-  .genres-list-thriller {
-    grid-row-start: 9;
-  }  */
 
   .genre-continue-btn {
     grid-row-start: 11;
@@ -66,6 +43,7 @@ const StyledForm = styled.form`
     height: 3rem;
     border: none;
     justify-self: center;
+    cursor: pointer;
   }
 `;
 
@@ -112,7 +90,7 @@ class GenreSelection extends Component {
 
     const inputs = genreList.map(genre => {
       return (
-        <label htmlFor={genre.id} key={genre.id}>
+        <label htmlFor={genre.id} key={genre.id} onClick={(e) => e.target.classList.toggle('picked')}>
           <input
             type="checkbox"
             className={`genres-list-${genre.id}`}
