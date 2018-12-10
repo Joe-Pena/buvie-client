@@ -23,7 +23,6 @@ export class Chat extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.matched);
     const matched = this.props.matched;
     let user;
     let room;
@@ -44,7 +43,7 @@ export class Chat extends Component {
     this.state.socket.disconnect();
   }
 
-  onClick(e) {
+  onClick() {
     this.state.socket.emit('chat', {
       message: this.state.input,
       handle: this.props.username,

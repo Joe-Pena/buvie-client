@@ -6,6 +6,7 @@
     "react-scripts": "2.1.1"
   },
   "dependencies": {
+    "js-md5": "^0.7.3",
     "jwt-decode": "^2.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",

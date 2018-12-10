@@ -56,7 +56,6 @@ export const fetchMatches = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchMatchesSuccess(res));
     })
     .catch(err => dispatch(fetchMatchesFailure(err)));
@@ -198,7 +197,6 @@ export const fetchPopcorn = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchPopcornSuccess(res));
     })
     .catch(err => dispatch(fetchPopcornFailure(err)));
@@ -239,7 +237,6 @@ export const fetchMatched = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchMatchedSuccess(res));
     })
     .catch(err => dispatch(fetchMatchedFailure(err)));

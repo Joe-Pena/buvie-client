@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import md5 from 'js-md5';
 import requiresLogin from './requires-login';
 import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn, filterUser } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
@@ -162,6 +163,7 @@ export class Dashboard extends React.Component {
     const matches = this.props.matches
       .filter(user => !this.props.filter.includes(user.id))
       .map(user => {
+        let gravatar = `https://www.gravatar.com/avatar/${md5(user.email)}?d=retro`;
         let matchGenres;
         if (user.genres) {
           matchGenres = user.genres.map(genre => {
@@ -183,6 +185,7 @@ export class Dashboard extends React.Component {
         return (
           <React.Fragment key={user.id}>
             <h3 className="match-username">{user.username}</h3>
+            <img src={gravatar} alt={user.username} />
             <ul className="match-genre-list">
               <h3>{user.username} likes:</h3>
               {matchGenres}
