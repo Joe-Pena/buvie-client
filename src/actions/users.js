@@ -16,6 +16,12 @@ export const setMovies = movies => ({
   movies
 });
 
+export const FILTER_USER = 'FILTER_USER';
+export const filterUser = user => ({
+  type: FILTER_USER,
+  user
+});
+
 export const FETCH_MATCHES_REQUEST = 'FETCH_MATCHES_REQUEST';
 export const fetchMatchesRequest = () => ({
   type: FETCH_MATCHES_REQUEST

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import requiresLogin from './requires-login';
-import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn } from '../actions/users';
+import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn, filterUser } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -139,10 +139,15 @@ export class Dashboard extends React.Component {
 
   popcorn(userId) {
     this.props.dispatch(popCornMatch({ userId }))
+      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
       .then(() => this.props.dispatch(fetchMatched()));
+  }
+
+  filter(userId) {
+    this.props.dispatch(filterUser(userId));
   }
 
   render() {
@@ -154,45 +159,46 @@ export class Dashboard extends React.Component {
       return <MovieSelection />;
     }
 
-    const matches = this.props.matches.map(user => {
-      let matchGenres;
-      if (user.genres) {
-        matchGenres = user.genres.map(genre => {
-          return (<li key={genre} className="match-genre">{genre}</li>);
-        });
-      }
-      let matchMovies;
-      if (user.movies) {
-        matchMovies = user.movies.map(movie => {
-          return (
-            <li key={movie._id}>
-              <img src={movie.poster} className="match-movie-poster" alt={movie.title} />
-            </li>
-          );
-        });
-      }
+    const matches = this.props.matches
+      .filter(user => !this.props.filter.includes(user.id))
+      .map(user => {
+        let matchGenres;
+        if (user.genres) {
+          matchGenres = user.genres.map(genre => {
+            return (<li key={genre} className="match-genre">{genre}</li>);
+          });
+        }
+        let matchMovies;
+        if (user.movies) {
+          matchMovies = user.movies.map(movie => {
+            return (
+              <li key={movie._id}>
+                <img src={movie.poster} className="match-movie-poster" alt={movie.title} />
+              </li>
+            );
+          });
+        }
 
-      matchMovies = matchMovies.slice(0, 3);
-      return (
-        <React.Fragment key={user.id}>
-          <h3 className="match-username">{user.username}</h3>
-          <ul className="match-genre-list">
-            <h3>{user.username} likes:</h3>
-            {matchGenres}
-          </ul>
-          <ul className="match-movie-list">
-            {matchMovies}
-          </ul>
-          <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
+        matchMovies = matchMovies.slice(0, 3);
+        return (
+          <React.Fragment key={user.id}>
+            <h3 className="match-username">{user.username}</h3>
+            <ul className="match-genre-list">
+              <h3>{user.username} likes:</h3>
+              {matchGenres}
+            </ul>
+            <ul className="match-movie-list">
+              {matchMovies}
+            </ul>
+            <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
             Popcorn
-          </button>
-          <button className="match-chair-btn">Chair</button>
-        </React.Fragment>
-      );
-    });
+            </button>
+            <button className="match-chair-btn" onClick={() => this.filter(user.id)}>Chair</button>
+          </React.Fragment>
+        );
+      });
 
     let chats;
-    console.log(this.props);
     if (this.props.matched.matched) {
       chats = this.props.matched.matched.map(match => {
         return (<Chat key={match.chatroom._id} matched={match}/>);
@@ -263,7 +269,8 @@ const mapStateToProps = state => {
     genres: state.user.genres,
     matches: state.user.matches,
     popcorn: state.user.popcorn,
-    matched: state.user.matched
+    matched: state.user.matched,
+    filter: state.user.filter
   };
 };
 
