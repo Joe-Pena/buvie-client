@@ -171,6 +171,8 @@ export class Dashboard extends React.Component {
           );
         });
       }
+
+      matchMovies = matchMovies.slice(0, 3);
       return (
         <React.Fragment key={user.id}>
           <h3 className="match-username">{user.username}</h3>
