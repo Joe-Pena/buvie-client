@@ -243,6 +243,7 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
+
           <h2>{this.props.username}</h2>
           popcorns {popcorns}
         </div>
