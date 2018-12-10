@@ -305,7 +305,7 @@ export const fetchMessageFailure = error => ({
 export const fetchMessages = chatroomId => (dispatch, getState) => {
   dispatch(fetchMessageRequest());
   const authToken = getState().auth.authToken;
-  return fetch(`${API_BASE_URL}/main/messages/${chatroomId}`, {
+  return fetch(`${API_BASE_URL}/messages/${chatroomId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${authToken}`
@@ -337,7 +337,7 @@ export const putMessageFailure = error => ({
 export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
   dispatch(putMessageRequest());
   const authToken = getState().auth.authToken;
-  return fetch(`${API_BASE_URL}/main/messages/${chatroomId}`, {
+  return fetch(`${API_BASE_URL}/messages/${chatroomId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',

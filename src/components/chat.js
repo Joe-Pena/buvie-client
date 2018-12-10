@@ -3,6 +3,8 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import { BASE_URL } from '../config';
 
+import { fetchMessages, putMessages } from '../actions/users';
+
 
 export class Chat extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ export class Chat extends Component {
       this.setState({
         messages: [...this.state.messages, data]
       });
+      this.props.dispatch(putMessages(this.state.chatroom, this.state.messages));
     });
   }
 
@@ -38,6 +41,8 @@ export class Chat extends Component {
       match, chatroom
     });
     this.state.socket.emit('subscribe', chatroom);
+
+    this.props.dispatch(fetchMessages(chatroom));
   }
   componentWillUnmount() {
     this.state.socket.disconnect();
@@ -49,12 +54,11 @@ export class Chat extends Component {
       handle: this.props.username,
       room: this.state.chatroom
     });
-    console.log(this.state.messages);
   }
 
   onChange(e) {
     this.setState({
-      input:e.target.value
+      input: e.target.value
     });
   }
 
