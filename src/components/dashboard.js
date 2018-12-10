@@ -6,11 +6,12 @@ import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
 import styled from 'styled-components';
+import './clearfix.css';
 
 const StyledDashboard = styled.div`
   background-color: #212032;
   color: #fff;
-  height: 100vh;
+  height: 100rem; /*TODO: FIX THIS LINE. 100% OR 100VH DOES NOT COVER ENTIRE SCREEN */
   display: grid;
   grid-template-columns: 0.25fr 1fr 0.25fr;
   grid-column-gap: 3rem;
@@ -28,7 +29,7 @@ const StyledDashboard = styled.div`
     grid-area: matches;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
-    grid-row-gap: 2rem;
+    grid-row-gap: 1.5rem;
     grid-template-areas: 
       "first-match"
       "second-match"
@@ -46,7 +47,7 @@ const StyledDashboard = styled.div`
     grid-template-areas:
       "username . genres genres"
       "movies movies genres genres"
-      ". . popcorn-btn ignore-btn"
+      ". . popcorn-btn ignore-btn";
   }
 
   .second-match {
@@ -58,7 +59,7 @@ const StyledDashboard = styled.div`
     grid-template-areas:
     "username . genres genres"
       "movies movies genres genres"
-      ". . popcorn-btn ignore-btn"
+      ". . popcorn-btn ignore-btn";
   }
 
   .third-match {
@@ -70,7 +71,7 @@ const StyledDashboard = styled.div`
     grid-template-areas:
     "username . genres genres"
       "movies movies genres genres"
-      ". . popcorn-btn ignore-btn"
+      ". . popcorn-btn ignore-btn";
   }
 
   .thirdspace {
@@ -104,7 +105,7 @@ const StyledDashboard = styled.div`
   }
 
   .match-movie-poster {
-    width: 12rem;
+    width: 10rem;
     margin: 0 1rem;
     justify-self: center;
   }
