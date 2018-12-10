@@ -10,7 +10,7 @@ const StyledForm = styled.form`
   grid-template-rows: auto;
   grid-row-gap: 0.5rem;
   background-color: #212032;
-  height: 95vh;
+  height: 100vh;
   color: #fff;
 
   h3 {
@@ -96,6 +96,7 @@ class MovieSelection extends Component {
 
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
+        <h3>And now select your favorite movies!</h3>
         {inputs}
         <button className="movie-select-btn" disabled={disabled}>
           Continue
