@@ -255,7 +255,7 @@ export const chairUserSuccess = matched => ({
 
 export const CHAIR_USER_FAILURE = 'CHAIR_USER_FAILURE';
 export const chairUserFailure = error => ({
-  type: FETCH_MATCHED_FAILURE,
+  type: CHAIR_USER_FAILURE,
   error
 });
 
@@ -282,4 +282,55 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
       dispatch(chairUserSuccess(res));
     })
     .catch(err => dispatch(chairUserFailure(err)));
+};
+
+//GEOLOCATION
+
+export const GEOLOCATE_USER_REQUEST = 'GEOLOCATE_USER_REQUEST';
+export const geolocateUserRequest = () => ({
+  type: GEOLOCATE_USER_REQUEST
+});
+
+export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
+export const geolocateUserSuccess = location => ({
+  type: GEOLOCATE_USER_SUCCESS,
+  location
+});
+
+export const GEOLOCATE_USER_FAILURE = 'GEOLOCATE_USER_FAILURE';
+export const geolocateUserFailure = error => ({
+  type: GEOLOCATE_USER_FAILURE,
+  error
+});
+
+export const geolocateUser = () => (dispatch, getState) => {
+  dispatch(geolocateUserRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function success(position) {
+      console.log('latitude', position.coords.latitude, 'longitude', position.coords.longitude);
+    }, function error(error_message) {
+      console.error('An error has occured while retrieving location', error_message)
+    }); 
+  } else {
+    console.log('geolocation is not enabled on this browser');
+  }
+  // return fetch(`${API_BASE_URL}/main/ignore/${userId}`, {
+  //   method: 'PUT',
+  //   headers: {
+  //     'content-type': 'application/json',
+  //     Authorization: `Bearer ${authToken}`
+  //   },
+  //   body: JSON.stringify({ userId: ignoredUserId })
+  // })
+  //   .then(res => {
+  //     dispatch(chairUserSuccess(res));
+  //   })
+  //   .catch(err => dispatch(chairUserFailure(err)));
 };
