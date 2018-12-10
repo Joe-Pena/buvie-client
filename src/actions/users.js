@@ -324,9 +324,8 @@ export const putMessageRequest = () => ({
 });
 
 export const PUT_MESSAGE_SUCCESS = 'PUT_MESSAGE_SUCCESS';
-export const putMessageSuccess = messages => ({
-  type: PUT_MESSAGE_SUCCESS,
-  messages
+export const putMessageSuccess = () => ({
+  type: PUT_MESSAGE_SUCCESS
 });
 
 export const PUT_MESSAGE_FAILURE = 'PUT_MESSAGE_FAILURE';
