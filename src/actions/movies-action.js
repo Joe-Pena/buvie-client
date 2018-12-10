@@ -7,6 +7,11 @@ export const setMovieList = movies => ({
   movies
 });
 
+export const RESET_MOVIES = 'RESET_MOVIES';
+export const resetMovies = () => ({
+  type: RESET_MOVIES
+});
+
 export const fetchMovies = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   return fetch(`${API_BASE_URL}/movies`, {

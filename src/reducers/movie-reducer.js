@@ -1,5 +1,5 @@
 import {
-  SET_MOVIE_LIST
+  SET_MOVIE_LIST, RESET_MOVIES
 } from '../actions/movies-action';
 
 const initialState = {
@@ -11,6 +11,8 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       list: action.movies
     });
+  } else if (action.type === RESET_MOVIES) {
+    return initialState;
   }
   return state;
 }

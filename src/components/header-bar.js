@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { clearAuth } from '../actions/auth';
+import { resetUser } from '../actions/users';
+import { resetMovies } from '../actions/movies-action';
 import { clearAuthToken } from '../local-storage';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
@@ -39,6 +41,8 @@ const StyledHeaderBar = styled.div`
 export class HeaderBar extends React.Component {
   logOut() {
     this.props.dispatch(clearAuth());
+    this.props.dispatch(resetMovies());
+    this.props.dispatch(resetUser());
     clearAuthToken();
   }
 

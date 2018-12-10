@@ -22,6 +22,11 @@ export const filterUser = user => ({
   user
 });
 
+export const RESET_USER = 'RESET_USER';
+export const resetUser = () => ({
+  type: RESET_USER
+});
+
 export const FETCH_MATCHES_REQUEST = 'FETCH_MATCHES_REQUEST';
 export const fetchMatchesRequest = () => ({
   type: FETCH_MATCHES_REQUEST

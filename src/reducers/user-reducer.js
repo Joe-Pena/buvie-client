@@ -13,7 +13,8 @@ import {
   FETCH_MATCHED_REQUEST,
   FETCH_MATCHED_SUCCESS,
   FETCH_MATCHED_FAILURE,
-  FILTER_USER
+  FILTER_USER,
+  RESET_USER
 } from '../actions/users';
 
 const initialState = {
@@ -99,6 +100,8 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       filter: [...state.filter, action.user]
     });
+  }  else if (action.type === RESET_USER) {
+    return initialState;
   }
   return state;
 }
