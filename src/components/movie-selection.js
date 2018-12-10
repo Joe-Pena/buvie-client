@@ -10,7 +10,7 @@ const StyledForm = styled.form`
   grid-template-rows: auto;
   grid-row-gap: 0.5rem;
   background-color: #212032;
-  height: 100vh;
+  height: 100%;
   color: #fff;
 
   h3 {
