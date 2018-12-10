@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import md5 from 'js-md5';
 import requiresLogin from './requires-login';
-import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn, filterUser } from '../actions/users';
+import { fetchCurrentuser, fetchMatched, fetchMatches, popCornMatch, fetchPopcorn, filterUser, chairUser } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -147,8 +147,13 @@ export class Dashboard extends React.Component {
       .then(() => this.props.dispatch(fetchMatched()));
   }
 
-  filter(userId) {
-    this.props.dispatch(filterUser(userId));
+  ignore(userId) {
+    this.props.dispatch(chairUser(userId))
+      .then(() => this.props.dispatch(filterUser(userId)))
+      .then(() => this.props.dispatch(fetchCurrentuser()))
+      .then(() => this.props.dispatch(fetchMatches()))
+      .then(() => this.props.dispatch(fetchPopcorn()))
+      .then(() => this.props.dispatch(fetchMatched()));
   }
 
   render() {
@@ -196,7 +201,7 @@ export class Dashboard extends React.Component {
             <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
             Popcorn
             </button>
-            <button className="match-chair-btn" onClick={() => this.filter(user.id)}>Chair</button>
+            <button className="match-chair-btn" onClick={() => this.ignore(user.id)}>Chair</button>
           </React.Fragment>
         );
       });

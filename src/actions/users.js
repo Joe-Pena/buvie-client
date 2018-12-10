@@ -241,3 +241,45 @@ export const fetchMatched = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(fetchMatchedFailure(err)));
 };
+
+export const CHAIR_USER_REQUEST = 'CHAIR_USER_REQUEST';
+export const chairUserRequest = () => ({
+  type: CHAIR_USER_REQUEST
+});
+
+export const CHAIR_USER_SUCCESS = 'CHAIR_USER_SUCCESS';
+export const chairUserSuccess = matched => ({
+  type: CHAIR_USER_SUCCESS,
+  matched
+});
+
+export const CHAIR_USER_FAILURE = 'CHAIR_USER_FAILURE';
+export const chairUserFailure = error => ({
+  type: FETCH_MATCHED_FAILURE,
+  error
+});
+
+export const chairUser = ignoredUserId => (dispatch, getState) => {
+  console.log('chairing');
+  dispatch(chairUserRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  console.log(userId);
+  return fetch(`${API_BASE_URL}/main/ignore/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify({ userId: ignoredUserId })
+  })
+    .then(res => {
+      dispatch(chairUserSuccess(res));
+    })
+    .catch(err => dispatch(chairUserFailure(err)));
+};
