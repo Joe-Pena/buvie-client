@@ -200,9 +200,9 @@ export class Dashboard extends React.Component {
     if (this.props.popcorn) {
       popcorns = this.props.popcorn.map(user => {
         return (
-          <React.Fragment key={user.id}>
+          <React.Fragment key={user._id}>
             <p>{user.username}</p>
-            <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
+            <button className="match-popcorn-btn" onClick={() => this.popcorn(user._id)}>
           Popcorn
             </button>
             <button className="match-chair-btn">Chair</button>
