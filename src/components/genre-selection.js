@@ -6,8 +6,44 @@ import { connect } from 'react-redux';
 import { updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
+  display: grid;
+  grid-template-rows: auto;
+  grid-row-gap: 0.5rem;
+  background-color: #212032;
+  height: 95vh;
+  color: #fff;
+
+  h3 {
+    justify-self: center;
+  }
+
+  input {
+    opacity: 0;
+  }
+
   label {
     display: block;
+    justify-self: center;
+    cursor: pointer;
+    height: 3rem;
+  }
+
+  label.picked{
+    display: block;
+    background-color: #a33944;
+    width: 100%;
+    text-align: center;
+  }
+
+  .genre-continue-btn {
+    grid-row-start: 11;
+    background-color: #a33944;
+    color: #000;
+    width: 8rem;
+    height: 3rem;
+    border: none;
+    justify-self: center;
+    cursor: pointer;
   }
 `;
 
@@ -54,9 +90,10 @@ class GenreSelection extends Component {
 
     const inputs = genreList.map(genre => {
       return (
-        <label htmlFor={genre.id} key={genre.id}>
+        <label htmlFor={genre.id} key={genre.id} onClick={(e) => e.target.classList.toggle('picked')}>
           <input
             type="checkbox"
+            className={`genres-list-${genre.id}`}
             value={genre.name}
             id={genre.id}
             name={genre.id}
@@ -69,8 +106,9 @@ class GenreSelection extends Component {
 
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
+        <h3>Please choose your favorite genres so we can find better matches for you!</h3>
         {inputs}
-        <button disabled={disabled}>
+        <button className="genre-continue-btn" disabled={disabled}>
           Continue
         </button>
       </StyledForm>

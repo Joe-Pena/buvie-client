@@ -6,8 +6,43 @@ import { fetchMovies } from '../actions/movies-action';
 import { fetchMatches, updateUser } from '../actions/users';
 
 const StyledForm = styled.form`
+  display: grid;
+  grid-template-rows: auto;
+  grid-row-gap: 0.5rem;
+  background-color: #212032;
+  height: 100vh;
+  color: #fff;
+
+  h3 {
+    justify-self: center;
+  }
+
+  input {
+    opacity: 0;
+  }
+
   label {
     display: block;
+    justify-self: center;
+    cursor: pointer;
+    height: 3rem;
+  }
+
+  label.picked{
+    display: block;
+    background-color: #a33944;
+    width: 100%;
+    text-align: center;
+  }
+
+  .movie-select-btn {
+    background-color: #a33944;
+    color: #000;
+    width: 8rem;
+    height: 3rem;
+    border: none;
+    justify-self: center;
+    cursor: pointer;
   }
 `;
 
@@ -48,7 +83,7 @@ class MovieSelection extends Component {
   render() {
     const inputs = this.props.movies.map(movie => {
       return (
-        <label key={movie.id}>
+        <label key={movie.id} onClick={(e) => e.target.classList.toggle('picked')}>
           <input
             type="checkbox"
             value={movie.id}
@@ -61,8 +96,9 @@ class MovieSelection extends Component {
 
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
+        <h3>And now select your favorite movies!</h3>
         {inputs}
-        <button disabled={disabled}>
+        <button className="movie-select-btn" disabled={disabled}>
           Continue
         </button>
       </StyledForm>
