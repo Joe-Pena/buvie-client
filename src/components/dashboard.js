@@ -213,7 +213,7 @@ export class Dashboard extends React.Component {
             <button className="match-popcorn-btn" onClick={() => this.popcorn(user.id)}>
             Popcorn
             </button>
-            <button className="match-chair-btn" onClick={() => this.ignore(user.id)}>Chair</button>
+            <button className="match-chair-btn" onClick={() => this.ignore(user.id)}>Ignore</button>
           </React.Fragment>
         );
       });
@@ -234,7 +234,7 @@ export class Dashboard extends React.Component {
             <button className="match-popcorn-btn" onClick={() => this.popcorn(user._id)}>
           Popcorn
             </button>
-            <button className="match-chair-btn">Chair</button>
+            <button className="match-chair-btn">Ignore</button>
           </React.Fragment>
         );
       });
