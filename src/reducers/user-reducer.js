@@ -14,7 +14,13 @@ import {
   FETCH_MATCHED_SUCCESS,
   FETCH_MATCHED_FAILURE,
   FILTER_USER,
-  RESET_USER
+  RESET_USER,
+  FETCH_MESSAGE_REQUEST,
+  FETCH_MESSAGE_SUCCESS,
+  FETCH_MESSAGE_FAILURE,
+  PUT_MESSAGE_REQUEST,
+  PUT_MESSAGE_SUCCESS,
+  PUT_MESSAGE_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -102,6 +108,35 @@ export default function reducer(state = initialState, action) {
     });
   }  else if (action.type === RESET_USER) {
     return initialState;
+  } else if (action.type === FETCH_MESSAGE_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === FETCH_MESSAGE_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      messages: action.messages
+    });
+  } else if (action.type === FETCH_MESSAGE_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === PUT_MESSAGE_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === PUT_MESSAGE_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false
+    });
+  } else if (action.type === PUT_MESSAGE_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
   }
   return state;
 }

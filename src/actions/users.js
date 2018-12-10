@@ -291,9 +291,9 @@ export const fetchMessageRequest = () => ({
 });
 
 export const FETCH_MESSAGE_SUCCESS = 'FETCH_MESSAGE_SUCCESS';
-export const fetchMessageSuccess = message => ({
+export const fetchMessageSuccess = messages => ({
   type: FETCH_MESSAGE_SUCCESS,
-  message
+  messages
 });
 
 export const FETCH_MESSAGE_FAILURE = 'FETCH_MESSAGE_FAILURE';
@@ -324,9 +324,9 @@ export const putMessageRequest = () => ({
 });
 
 export const PUT_MESSAGE_SUCCESS = 'PUT_MESSAGE_SUCCESS';
-export const putMessageSuccess = message => ({
+export const putMessageSuccess = messages => ({
   type: PUT_MESSAGE_SUCCESS,
-  message
+  messages
 });
 
 export const PUT_MESSAGE_FAILURE = 'PUT_MESSAGE_FAILURE';
