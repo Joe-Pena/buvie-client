@@ -12,7 +12,8 @@ import {
   FETCH_POPCORN_FAILURE,
   FETCH_MATCHED_REQUEST,
   FETCH_MATCHED_SUCCESS,
-  FETCH_MATCHED_FAILURE
+  FETCH_MATCHED_FAILURE,
+  FILTER_USER
 } from '../actions/users';
 
 const initialState = {
@@ -22,7 +23,8 @@ const initialState = {
   genres: [],
   matches: [],
   popcorn: [],
-  matched: []
+  matched: [],
+  filter: []
 };
 
 export default function reducer(state = initialState, action) {
@@ -92,6 +94,10 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
+    });
+  } else if (action.type === FILTER_USER) {
+    return Object.assign({}, state, {
+      filter: [...state.filter, action.user]
     });
   }
   return state;
