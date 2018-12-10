@@ -41,8 +41,9 @@ export class Chat extends Component {
       match, chatroom
     });
     this.state.socket.emit('subscribe', chatroom);
-
-    this.props.dispatch(fetchMessages(chatroom));
+    if (chatroom !== 'everyone') {
+      this.props.dispatch(fetchMessages(chatroom));
+    }
   }
   componentWillUnmount() {
     this.state.socket.disconnect();
@@ -83,7 +84,7 @@ export class Chat extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.auth.currentUser.username,
+    username: state.auth.currentUser.username
   };
 };
 
