@@ -49,11 +49,12 @@ const StyledLandingPage = styled.div`
   .side-login {
     grid-area: side-login;
     display: grid;
-    grid-template-rows: 0.5fr 1fr 0.3fr;
+    grid-template-rows: 0.5fr 1fr 0.3fr 0.3fr;
     grid-template-areas: 
       "logo"
       "loginform"
-      "signup-btn";
+      "signup-btn"
+      "google-btn";
     color: #8b8b99;
     background-color: #212032;
     text-align: center;
@@ -103,29 +104,42 @@ const StyledLandingPage = styled.div`
   }
 
   .google-signup {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     position: relative;
   }
 
   .google-normal, .google-pressed, .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     position: absolute;
     display: none;
   }
 
   .google-signup:hover .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block;
     z-index: 99;
   }
 
   .google-signup:active .google-pressed {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block;
     z-index: 100;
   }
 
   .google-normal {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block
   }
-
-
 `;
 
 export class LandingPage extends React.Component {

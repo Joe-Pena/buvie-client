@@ -332,7 +332,7 @@ export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
       dispatch(putMessageSuccess(res));
     })
     .catch(err => dispatch(putMessageFailure(err)));
-
+};
 //GEOLOCATION
 
 export const GEOLOCATE_USER_REQUEST = 'GEOLOCATE_USER_REQUEST';
@@ -370,17 +370,4 @@ export const geolocateUser = () => (dispatch, getState) => {
   } else {
     console.log('geolocation is not enabled on this browser');
   }
-  // return fetch(`${API_BASE_URL}/main/ignore/${userId}`, {
-  //   method: 'PUT',
-  //   headers: {
-  //     'content-type': 'application/json',
-  //     Authorization: `Bearer ${authToken}`
-  //   },
-  //   body: JSON.stringify({ userId: ignoredUserId })
-  // })
-  //   .then(res => {
-  //     dispatch(chairUserSuccess(res));
-  //   })
-  //   .catch(err => dispatch(chairUserFailure(err)));
-
 };
