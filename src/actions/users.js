@@ -332,6 +332,7 @@ export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
       dispatch(putMessageSuccess(res));
     })
     .catch(err => dispatch(putMessageFailure(err)));
+};
 
 //GEOLOCATION
 
@@ -361,12 +362,12 @@ export const geolocateUser = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  if ("geolocation" in navigator) {
+  if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function success(position) {
       console.log('latitude', position.coords.latitude, 'longitude', position.coords.longitude);
     }, function error(error_message) {
-      console.error('An error has occured while retrieving location', error_message)
-    }); 
+      console.error('An error has occured while retrieving location', error_message);
+    });
   } else {
     console.log('geolocation is not enabled on this browser');
   }
