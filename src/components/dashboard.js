@@ -130,6 +130,7 @@ const StyledDashboard = styled.div`
     width: 8rem;
     height: 3rem;
     border: none;
+    cursor: pointer;
   }
 
   .match-chair-btn {
@@ -139,6 +140,7 @@ const StyledDashboard = styled.div`
     width: 8rem;
     height: 3rem;
     border: none;
+    cursor: pointer;
   }
 `;
 
