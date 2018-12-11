@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import { BASE_URL } from '../config';
-
-import { fetchMessages, putMessages } from '../actions/users';
+import { BASE_URL, API_BASE_URL } from '../config';
+import {
+  fetchMessageRequest,
+  fetchMessageSuccess, fetchMessageFailure, putMessages
+} from '../actions/users';
 
 
 export class Chat extends Component {
@@ -42,12 +44,31 @@ export class Chat extends Component {
     });
     this.state.socket.emit('subscribe', chatroom);
     if (chatroom !== 'everyone') {
-      this.props.dispatch(fetchMessages(chatroom));
+      this.fetchMessages(chatroom);
     }
   }
   componentWillUnmount() {
     this.state.socket.disconnect();
   }
+
+  fetchMessages(chatroomId) {
+    this.props.dispatch(fetchMessageRequest());
+    const authToken = this.props.authToken;
+    return fetch(`${API_BASE_URL}/messages/${chatroomId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        this.props.dispatch(fetchMessageSuccess(res));
+        this.setState({
+          messages: res.messages
+        });
+      })
+      .catch(err => this.props.dispatch(fetchMessageFailure(err)));
+  };
 
   onClick() {
     this.state.socket.emit('chat', {
@@ -84,7 +105,8 @@ export class Chat extends Component {
 
 const mapStateToProps = state => {
   return {
-    username: state.auth.currentUser.username
+    username: state.auth.currentUser.username,
+    authToken: state.auth.authToken
   };
 };
 

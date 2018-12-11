@@ -115,8 +115,7 @@ export default function reducer(state = initialState, action) {
     });
   } else if (action.type === FETCH_MESSAGE_SUCCESS) {
     return Object.assign({}, state, {
-      loading: false,
-      messages: action.messages
+      loading: false
     });
   } else if (action.type === FETCH_MESSAGE_FAILURE) {
     return Object.assign({}, state, {
