@@ -22,8 +22,26 @@ const StyledDashboard = styled.div`
   .dashboard-profile {
     grid-area: profile;
     background-color: #8b8b99;
+    display: grid;
+    grid-template-rows: 0.15fr 0.1fr 1fr;
+    grid-template-areas:
+      "avatar"
+      "username"
+      "content";
     height: 85%;
     align-self: center;
+  }
+
+  .dashboard-profile-avatar {
+    grid-area: avatar;
+    border-radius: 100rem;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .dashboard-profile-username {
+    grid-area: username;
+    justify-self: center;
   }
 
   .dashboard-matches {
@@ -245,8 +263,8 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-
-          <h2>{this.props.username}</h2>
+          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture"/>
+          <h2 className="dashboard-profile-username">{this.props.username}</h2>
           popcorns {popcorns}
         </div>
         <div className="dashboard-matches">
@@ -288,6 +306,7 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
+    email: state.auth.currentUser.email,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches,
