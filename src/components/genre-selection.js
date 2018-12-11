@@ -36,8 +36,12 @@ const StyledForm = styled.form`
     text-align: center;
   }
 
+  .feedback {
+    text-align: center
+  }
+
   .genre-continue-btn {
-    grid-row-start: 11;
+    grid-row-start: 12;
     background-color: #a33944;
     color: #000;
     width: 8rem;
@@ -53,14 +57,22 @@ class GenreSelection extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      genres: []
+      genres: [],
+      feedback: false
     };
   }
 
   onSubmit(e) {
     e.preventDefault();
-
-    return this.props.dispatch(updateUser({ genres: this.state.genres }));
+    if (this.state.genres.length <= 3) {
+      this.setState({
+        feedback: false
+      });
+      return this.props.dispatch(updateUser({ genres: this.state.genres }));
+    }
+    this.setState({
+      feedback: true
+    });
   }
 
   onChange(e) {
@@ -104,10 +116,18 @@ class GenreSelection extends Component {
     });
 
     const disabled = this.props.loading || !this.state.genres.length;
-
+    let feedback;
+    if (this.state.feedback) {
+      feedback = <div className='feedback'>
+        You can only select 3 genres!
+      </div>;
+    } else {
+      feedback = <div></div>;
+    }
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
-        <h3>Please choose your favorite genres so we can find better matches for you!</h3>
+        <h3>Please choose your favorite 3 genres so we can find better matches for you!</h3>
+        {feedback}
         {inputs}
         <button className="genre-continue-btn" disabled={disabled}>
           Continue
