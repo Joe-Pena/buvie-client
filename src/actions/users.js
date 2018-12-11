@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, GOOGLE_MAP_KEY } from '../config';
 import { normalizeResponseErrors } from './utils';
 
 export const SET_GENRES = 'SET_GENRES';
@@ -362,8 +362,17 @@ export const geolocateUser = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
+  function getLocationName(lat, lon) {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
+      .then(response => response.json())
+      .then(data => console.log('location is', data))
+      .catch(err => console.log('oh no sumting wong', err));
+  }
+  
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function success(position) {
+      console.log(GOOGLE_MAP_KEY);
+      getLocationName(position.coords.latitude, position.coords.longitude);
       console.log('latitude', position.coords.latitude, 'longitude', position.coords.longitude);
     }, function error(error_message) {
       console.error('An error has occured while retrieving location', error_message);
