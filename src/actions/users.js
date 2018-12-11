@@ -363,10 +363,21 @@ export const geolocateUser = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
+  function findCity(areas) {
+    const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
+    console.log(correctLoc);
+    return correctLoc[0].formatted_address;
+  }
+
   function getLocationName(lat, lon) {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
-      .then(data => dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon })))
+      .then(data => {
+        // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
+        const cityName = findCity(data.results);
+        dispatch(geolocateUserSuccess(cityName, { lat, lon }));
+        console.log(data.results);
+      })
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
