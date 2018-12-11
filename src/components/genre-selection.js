@@ -41,7 +41,7 @@ const StyledForm = styled.form`
   }
 
   .genre-continue-btn {
-    grid-row-start: 11;
+    grid-row-start: 12;
     background-color: #a33944;
     color: #000;
     width: 8rem;
@@ -121,10 +121,12 @@ class GenreSelection extends Component {
       feedback = <div className='feedback'>
         You can only select 3 genres!
       </div>;
+    } else {
+      feedback = <div></div>;
     }
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
-        <h3>Please choose your favorite genres so we can find better matches for you!</h3>
+        <h3>Please choose your favorite 3 genres so we can find better matches for you!</h3>
         {feedback}
         {inputs}
         <button className="genre-continue-btn" disabled={disabled}>
