@@ -20,7 +20,10 @@ import {
   FETCH_MESSAGE_FAILURE,
   PUT_MESSAGE_REQUEST,
   PUT_MESSAGE_SUCCESS,
-  PUT_MESSAGE_FAILURE
+  PUT_MESSAGE_FAILURE,
+  GEOLOCATE_USER_REQUEST,
+  GEOLOCATE_USER_SUCCESS,
+  GEOLOCATE_USER_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -31,7 +34,9 @@ const initialState = {
   matches: [],
   popcorn: [],
   matched: [],
-  filter: []
+  filter: [],
+  userCity: '',
+  userCoords: {},
 };
 
 export default function reducer(state = initialState, action) {
@@ -132,6 +137,23 @@ export default function reducer(state = initialState, action) {
       loading: false
     });
   } else if (action.type === PUT_MESSAGE_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === GEOLOCATE_USER_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: false
+    });
+  } else if (action.type === GEOLOCATE_USER_SUCCESS) {
+    console.log(action.location, action.coords);
+    return Object.assign({}, state, {
+      loading: false,
+      userCity: action.location,
+      userCoords: action.coords
+    });
+  } else if (action.type === GEOLOCATE_USER_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
