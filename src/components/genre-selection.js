@@ -15,6 +15,7 @@ const StyledForm = styled.form`
 
   h3 {
     justify-self: center;
+    text-align: center;
   }
 
   input {

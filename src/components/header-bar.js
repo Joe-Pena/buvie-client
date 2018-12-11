@@ -8,21 +8,63 @@ import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 
 const StyledHeaderBar = styled.div`
+  display: grid;
+  grid-template-columns: 8fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "logo menu" "logout logout";
+
+  .menu-button {
+    display: block;
+    grid-area: menu;
+    font-size: 80%;
+    padding: 0.1rem .3rem;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+  }
+
+  .nav-logo {
+    grid-area: logo;
+    width: 8rem;
+    position: relative;
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+
+  .nav-logout-btn {
+    display: ${props => props.isCollapsed ? 'none' : 'block'};
+    grid-area: logout;
+    background-color: #a33944;
+    color: #000;
+    justify-self: right;
+    width: 100%;
+    height: 3rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .welcome-message {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
     display: grid;
     grid-template-columns: 1fr 0.2fr 0.1fr;
     grid-template-areas: "logo profile logout";
     text-align: center;
-    background-color: #212032;
 
-    .nav-logo {
-      grid-area: logo;
-      width: 8rem;
+    .welcome-message {
+      display: block;
+      color: #fff;
+      font-size: 1.6rem;
       position: relative;
-      left: 0.5rem;
-      top: 0.5rem;
+      right: 1rem;
     }
 
     .nav-logout-btn {
+      display: block;
       grid-area: logout;
       background-color: #a33944;
       color: #000;
@@ -34,19 +76,32 @@ const StyledHeaderBar = styled.div`
       cursor: pointer;
     }
 
-    .welcome-message {
-      color: #fff;
-      font-size: 1.6rem;
-      position: relative;
-      right: 1rem;
+    .menu-button {
+      display: none;
     }
+
+  }
 `;
+
 export class HeaderBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isCollapsed: true
+    };
+  }
+
   logOut() {
     this.props.dispatch(clearAuth());
     this.props.dispatch(resetMovies());
     this.props.dispatch(resetUser());
     clearAuthToken();
+  }
+
+  toggleMenu() {
+    this.setState({
+      isCollapsed: !this.state.isCollapsed
+    });
   }
 
   render() {
@@ -57,13 +112,16 @@ export class HeaderBar extends React.Component {
       );
     }
     return (
-      <StyledHeaderBar className="header-bar">
+      <StyledHeaderBar className="header-bar" isCollapsed={this.state.isCollapsed}>
         <img src={logoName} alt="buvie logo" className="nav-logo"/>
         {this.props.loggedIn ?
           <h2 className="welcome-message">Welcome, {this.props.user.username}!</h2>
           :
           <div></div>
         }
+        <button className="menu-button" onClick={() => this.toggleMenu()}>
+          <i className="material-icons">menu</i>
+        </button>
         {logOutButton}
       </StyledHeaderBar>
     );
