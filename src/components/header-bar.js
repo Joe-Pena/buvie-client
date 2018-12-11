@@ -17,6 +17,9 @@ const StyledHeaderBar = styled.div`
     .nav-logo {
       grid-area: logo;
       width: 8rem;
+      position: relative;
+      left: 0.5rem;
+      top: 0.5rem;
     }
 
     .nav-logout-btn {
