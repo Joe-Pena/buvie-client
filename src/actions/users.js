@@ -365,7 +365,6 @@ export const geolocateUser = () => (dispatch, getState) => {
 
   function findCity(areas) {
     const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
-    console.log(correctLoc);
     return correctLoc[0].formatted_address;
   }
 
@@ -376,7 +375,6 @@ export const geolocateUser = () => (dispatch, getState) => {
         // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
         const cityName = findCity(data.results);
         dispatch(geolocateUserSuccess(cityName, { lat, lon }));
-        console.log(data.results);
       })
       .catch(err => dispatch(geolocateUserFailure(err)));
   }

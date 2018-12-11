@@ -147,7 +147,7 @@ export default function reducer(state = initialState, action) {
       error: false
     });
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
-    console.log('reducer activated', action.location, action.coords);
+    console.log(`You're current collection is ${action.location}, coordinates:`, action.coords);
     return Object.assign({}, state, {
       loading: false,
       userCity: action.location,
