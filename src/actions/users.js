@@ -371,7 +371,6 @@ export const geolocateUser = () => (dispatch, getState) => {
   
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function success(position) {
-      console.log(GOOGLE_MAP_KEY);
       getLocationName(position.coords.latitude, position.coords.longitude);
       console.log('latitude', position.coords.latitude, 'longitude', position.coords.longitude);
     }, function error(error_message) {
