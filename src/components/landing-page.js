@@ -3,9 +3,18 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import RegistrationForm from './registration-form';
+import queryString from 'query-string';
+import jwtDecode from 'jwt-decode';
 
+import { saveAuthToken } from '../local-storage';
 import LoginForm from './login-form';
 import logo from '../images/buvielogoname.svg';
+import { setAuthToken, authSuccess } from '../actions/auth';
+import { API_BASE_URL } from '../config';
+
+import googleNormal from '../images/btn_google_signin_light_normal_web.png';
+import googleFocus from '../images/btn_google_signin_light_focus_web.png';
+import googlePressed from '../images/btn_google_signin_light_pressed_web.png';
 
 const StyledLandingPage = styled.div`
   display: grid;
@@ -92,6 +101,31 @@ const StyledLandingPage = styled.div`
   .form-error {
     font-size: 2rem;
   }
+
+  .google-signup {
+    position: relative;
+  }
+
+  .google-normal, .google-pressed, .google-focus {
+    position: absolute;
+    display: none;
+  }
+
+  .google-signup:hover .google-focus {
+    display: block;
+    z-index: 99;
+  }
+
+  .google-signup:active .google-pressed {
+    display: block;
+    z-index: 100;
+  }
+
+  .google-normal {
+    display: block
+  }
+
+
 `;
 
 export class LandingPage extends React.Component {
@@ -101,6 +135,19 @@ export class LandingPage extends React.Component {
     this.state = {
       signUp: false,
     };
+  }
+
+  componentDidMount() {
+    if (this.props.location.search) {
+      const authToken = queryString.parse(this.props.location.search).authToken;
+
+      if (authToken) {
+        const decodedToken = jwtDecode(authToken);
+        this.props.dispatch(setAuthToken(authToken));
+        this.props.dispatch(authSuccess(decodedToken.user));
+        saveAuthToken(authToken);
+      }
+    }
   }
 
   render() {
@@ -120,6 +167,11 @@ export class LandingPage extends React.Component {
             :
             <LoginForm />
           }
+          <a className="google-signup" href={`${API_BASE_URL}/auth/google`}>
+            <img className="google-normal" src={googleNormal} alt="login with google" />
+            <img className="google-pressed" src={googlePressed} alt="login with google" />
+            <img className="google-focus" src={googleFocus} alt="login with google" />
+          </a>
           { this.state.signUp ?
             <span className="signup-button" >Already a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
             :

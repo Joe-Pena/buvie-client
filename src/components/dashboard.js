@@ -31,7 +31,7 @@ const StyledDashboard = styled.div`
     display: grid;
     grid-template-rows: 0.8fr 0.8fr 0.8fr;
     grid-row-gap: 1.5rem;
-    grid-template-areas: 
+    grid-template-areas:
       "first-match"
       "second-match"
       "third-match";
