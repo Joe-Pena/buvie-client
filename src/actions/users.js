@@ -365,8 +365,8 @@ export const geolocateUser = () => (dispatch, getState) => {
   function getLocationName(lat, lon) {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
-      .then(data => console.log('location is', data))
-      .catch(err => console.log('oh no sumting wong', err));
+      .then(data => dispatch(geolocateUserSuccess(data.results[6].formatted_address)))
+      .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
   if ('geolocation' in navigator) {
