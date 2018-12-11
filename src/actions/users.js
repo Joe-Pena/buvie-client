@@ -342,9 +342,10 @@ export const geolocateUserRequest = () => ({
 });
 
 export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
-export const geolocateUserSuccess = location => ({
+export const geolocateUserSuccess = (location, coords) => ({
   type: GEOLOCATE_USER_SUCCESS,
-  location
+  location,
+  coords
 });
 
 export const GEOLOCATE_USER_FAILURE = 'GEOLOCATE_USER_FAILURE';
@@ -365,14 +366,13 @@ export const geolocateUser = () => (dispatch, getState) => {
   function getLocationName(lat, lon) {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
-      .then(data => dispatch(geolocateUserSuccess(data.results[6].formatted_address)))
+      .then(data => dispatch(geolocateUserSuccess(data.results[6].formatted_address, { lat, lon })))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
   if ('geolocation' in navigator) {
     navigator.geolocation.getCurrentPosition(function success(position) {
       getLocationName(position.coords.latitude, position.coords.longitude);
-      console.log('latitude', position.coords.latitude, 'longitude', position.coords.longitude);
     }, function error(error_message) {
       console.error('An error has occured while retrieving location', error_message);
     });
