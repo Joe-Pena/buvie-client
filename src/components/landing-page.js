@@ -18,10 +18,9 @@ import googlePressed from '../images/btn_google_signin_light_pressed_web.png';
 
 const StyledLandingPage = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-areas: 
-    "info side-login";
-  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "info" "side-login";
 
   .info-area {
     grid-area: info;
@@ -39,11 +38,19 @@ const StyledLandingPage = styled.div`
     url(https://kylegrant76.files.wordpress.com/2015/12/top-10-movies-people-in-movie-theater-with-3d-glasses.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    min-height: 100vh;
   }
 
   .info-message {
     grid-area: second;
     align-self: center;
+  }
+
+  .google-signup {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    position: relative;
   }
 
   .side-login {
@@ -103,13 +110,6 @@ const StyledLandingPage = styled.div`
     font-size: 2rem;
   }
 
-  .google-signup {
-    grid-area: google-btn;
-    justify-self: center;
-    transform: translateX(-50%);
-    position: relative;
-  }
-
   .google-normal, .google-pressed, .google-focus {
     grid-area: google-btn;
     justify-self: center;
@@ -139,6 +139,16 @@ const StyledLandingPage = styled.div`
     justify-self: center;
     transform: translateX(-50%);
     display: block
+  }
+
+    @media (min-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-areas: 
+      "info side-login";
+    height: 100vh;
+
+    
   }
 `;
 
