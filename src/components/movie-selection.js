@@ -32,6 +32,7 @@ const StyledForm = styled.form`
 
   img {
     width: 120px;
+    transition: box-shadow .3s;
   }
 
   img.picked {
