@@ -366,7 +366,7 @@ export const geolocateUser = () => (dispatch, getState) => {
   function getLocationName(lat, lon) {
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
-      .then(data => dispatch(geolocateUserSuccess(data.results[6].formatted_address, { lat, lon })))
+      .then(data => dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon })))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
