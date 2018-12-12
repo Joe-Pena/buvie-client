@@ -143,7 +143,9 @@ export const updateUser = data => (dispatch, getState) => {
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const popCornMatch = data => (dispatch, getState) => {
@@ -160,7 +162,9 @@ export const popCornMatch = data => (dispatch, getState) => {
     .then(res => {
       console.log(res);
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const FETCH_POPCORN_REQUEST = 'FETCH_POPCORN_REQUEST';
@@ -201,7 +205,6 @@ export const fetchPopcorn = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(fetchPopcornFailure(err)));
 };
-
 
 export const FETCH_MATCHED_REQUEST = 'FETCH_MATCHED_REQUEST';
 export const fetchMatchedRequest = () => ({
@@ -284,7 +287,6 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     .catch(err => dispatch(chairUserFailure(err)));
 };
 
-
 export const FETCH_MESSAGE_REQUEST = 'FETCH_MESSAGE_REQUEST';
 export const fetchMessageRequest = () => ({
   type: FETCH_MESSAGE_REQUEST
@@ -364,12 +366,17 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 
   function findCity(areas) {
-    const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
+    const correctLoc = areas.filter(
+      area =>
+        area.types.includes('locality') && area.types.includes('political')
+    );
     return correctLoc[0].formatted_address;
   }
 
   function getLocationName(lat, lon) {
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`
+    )
       .then(response => response.json())
       .then(data => {
         // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
@@ -378,14 +385,28 @@ export const geolocateUser = () => (dispatch, getState) => {
       })
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
-  
+
   if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(function success(position) {
-      getLocationName(position.coords.latitude, position.coords.longitude);
-    }, function error(error_message) {
-      console.error('An error has occured while retrieving location', error_message);
-    });
+    navigator.geolocation.getCurrentPosition(
+      function success(position) {
+        getLocationName(position.coords.latitude, position.coords.longitude);
+      },
+      function error(error_message) {
+        console.error(
+          'An error has occured while retrieving location',
+          error_message
+        );
+      }
+    );
   } else {
     console.log('geolocation is not enabled on this browser');
   }
+};
+
+export const TOGGLE_PROFILE = 'TOGGLE_PROFILE';
+export const toggleProfilePage = value => {
+  return {
+    type: TOGGLE_PROFILE,
+    value
+  };
 };

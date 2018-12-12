@@ -23,7 +23,8 @@ import {
   PUT_MESSAGE_FAILURE,
   GEOLOCATE_USER_REQUEST,
   GEOLOCATE_USER_SUCCESS,
-  GEOLOCATE_USER_FAILURE
+  GEOLOCATE_USER_FAILURE,
+  TOGGLE_PROFILE
 } from '../actions/users';
 
 const initialState = {
@@ -37,6 +38,7 @@ const initialState = {
   filter: [],
   userCity: '',
   userCoords: {},
+  profilePage: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -111,7 +113,7 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       filter: [...state.filter, action.user]
     });
-  }  else if (action.type === RESET_USER) {
+  } else if (action.type === RESET_USER) {
     return initialState;
   } else if (action.type === FETCH_MESSAGE_REQUEST) {
     return Object.assign({}, state, {
@@ -147,7 +149,10 @@ export default function reducer(state = initialState, action) {
       error: false
     });
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
-    console.log(`You're current collection is ${action.location}, coordinates:`, action.coords);
+    console.log(
+      `You're current collection is ${action.location}, coordinates:`,
+      action.coords
+    );
     return Object.assign({}, state, {
       loading: false,
       userCity: action.location,
@@ -157,6 +162,10 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
+    });
+  } else if (action.type === TOGGLE_PROFILE) {
+    return Object.assign({}, state, {
+      profilePage: action.value
     });
   }
   return state;

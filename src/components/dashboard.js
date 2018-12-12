@@ -11,6 +11,7 @@ import {
   filterUser,
   chairUser
 } from '../actions/users';
+import { Redirect } from 'react-router-dom';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -27,45 +28,43 @@ const StyledDashboard = styled.div`
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
 
+	.dashboard-profile {
+		grid-area: profile;
+		background-color: #8b8b99;
+		display: grid;
+		grid-template-rows: 0.15fr 0.1fr 1fr;
+		grid-template-areas:
+			'avatar'
+			'username'
+			'content';
+		height: 85%;
+		align-self: center;
+	}
 
-  .dashboard-profile {
-    grid-area: profile;
-    background-color: #8b8b99;
-    display: grid;
-    grid-template-rows: 0.15fr 0.1fr 1fr;
-    grid-template-areas:
-      "avatar"
-      "username"
-      "content";
-    height: 85%;
-    align-self: center;
-  }
+	.dashboard-profile-avatar {
+		grid-area: avatar;
+		border-radius: 100rem;
+		justify-self: center;
+		align-self: center;
+	}
 
-  .dashboard-profile-avatar {
-    grid-area: avatar;
-    border-radius: 100rem;
-    justify-self: center;
-    align-self: center;
-  }
+	.dashboard-profile-username {
+		grid-area: username;
+		justify-self: center;
+	}
 
-  .dashboard-profile-username {
-    grid-area: username;
-    justify-self: center;
-  }
-
-  .dashboard-matches {
-    grid-area: matches;
-    display: grid;
-    grid-template-rows: 0.8fr 0.8fr 0.8fr;
-    grid-row-gap: 1.5rem;
-    grid-template-areas:
-      "first-match"
-      "second-match"
-      "third-match";
-    height: 85%;
-    align-self: center;
-  }
-
+	.dashboard-matches {
+		grid-area: matches;
+		display: grid;
+		grid-template-rows: 0.8fr 0.8fr 0.8fr;
+		grid-row-gap: 1.5rem;
+		grid-template-areas:
+			'first-match'
+			'second-match'
+			'third-match';
+		height: 85%;
+		align-self: center;
+	}
 
 	.first-match {
 		grid-area: first-match;
@@ -151,33 +150,31 @@ const StyledDashboard = styled.div`
 		display: inline-block;
 	}
 
-
 	.match-movie-poster {
 		width: 12rem;
 		margin: 0 1rem;
 		justify-self: center;
 	}
 
-  .match-popcorn-btn {
-    grid-area: popcorn-btn;
-    background-color: #a33944;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
+	.match-popcorn-btn {
+		grid-area: popcorn-btn;
+		background-color: #a33944;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 
-  .match-chair-btn {
-    grid-area: ignore-btn;
-    background-color: #b8b999;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
-
+	.match-chair-btn {
+		grid-area: ignore-btn;
+		background-color: #b8b999;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 `;
 
 export class Dashboard extends React.Component {
@@ -210,6 +207,10 @@ export class Dashboard extends React.Component {
   }
 
   render() {
+    if (this.props.profilePage) {
+      return <Redirect to="/profile" />;
+    }
+
     if (!this.props.genres.length) {
       return <GenreSelection />;
     }
@@ -303,9 +304,15 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture"/>
+          <img
+            className="dashboard-profile-avatar"
+            src={`https://www.gravatar.com/avatar/${md5(
+              this.props.email
+            )}?d=retro`}
+            alt="profile picture"
+          />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
-          popcorns {popcorns}
+					popcorns {popcorns}
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -341,7 +348,8 @@ const mapStateToProps = state => {
     matches: state.user.matches,
     popcorn: state.user.popcorn,
     matched: state.user.matched,
-    filter: state.user.filter
+    filter: state.user.filter,
+    profilePage: state.user.profilePage
   };
 };
 
