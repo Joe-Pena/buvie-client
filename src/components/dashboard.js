@@ -9,7 +9,8 @@ import {
   popCornMatch,
   fetchPopcorn,
   filterUser,
-  chairUser
+  chairUser,
+  neverMindUser
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -32,7 +33,7 @@ const StyledDashboard = styled.div`
     grid-area: profile;
     background-color: #8b8b99;
     display: grid;
-    grid-template-rows: 0.15fr 0.1fr 1fr;
+    grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
     grid-template-areas:
       "avatar"
       "username"
@@ -209,6 +210,16 @@ export class Dashboard extends React.Component {
       .then(() => this.props.dispatch(fetchMatched()));
   }
 
+  nevermind(userId) {
+    this.props
+      .dispatch(neverMindUser(userId))
+      .then(() => this.props.dispatch(filterUser(userId)))
+      .then(() => this.props.dispatch(fetchCurrentuser()))
+      .then(() => this.props.dispatch(fetchMatches()))
+      .then(() => this.props.dispatch(fetchPopcorn()))
+      .then(() => this.props.dispatch(fetchMatched()));
+  }
+
   render() {
     if (!this.props.genres.length) {
       return <GenreSelection />;
@@ -263,13 +274,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user.id)}
             >
-							Popcorn
+              Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user.id)}
             >
-							Ignore
+              Ignore
             </button>
           </React.Fragment>
         );
@@ -292,9 +303,36 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-							Popcorn
+              Popcorn
             </button>
-            <button className="match-chair-btn">Ignore</button>
+            <button
+              className="match-chair-btn"
+              onClick={() => this.ignore(user._id)}
+            >
+              Ignore
+            </button>
+          </React.Fragment>
+        );
+      });
+    }
+    let pending;
+    if (this.props.pending) {
+      pending = this.props.pending.map(user => {
+        return (
+          <React.Fragment key={user._id}>
+            <p>{user.username}</p>
+            <button
+              className="match-popcorn-btn"
+              onClick={() => this.popcorn(user._id)}
+            >
+              Re-Popcorn
+            </button>
+            <button
+              className="match-chair-btn"
+              onClick={() => this.nevermind(user._id)}
+            >
+              Never mind
+            </button>
           </React.Fragment>
         );
       });
@@ -303,9 +341,14 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture"/>
+          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture" />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
-          popcorns {popcorns}
+          <div>
+            popcorns {popcorns}
+          </div>
+          <div>
+            pending popcorns {pending}
+          </div>
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -340,6 +383,7 @@ const mapStateToProps = state => {
     genres: state.user.genres,
     matches: state.user.matches,
     popcorn: state.user.popcorn,
+    pending: state.user.pending,
     matched: state.user.matched,
     filter: state.user.filter
   };
