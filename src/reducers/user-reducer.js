@@ -33,6 +33,7 @@ const initialState = {
   genres: [],
   matches: [],
   popcorn: [],
+  pending: [],
   matched: [],
   filter: [],
   userCity: '',
@@ -85,7 +86,8 @@ export default function reducer(state = initialState, action) {
   } else if (action.type === FETCH_POPCORN_SUCCESS) {
     return Object.assign({}, state, {
       loading: false,
-      popcorn: action.popcorn
+      popcorn: action.popcorn.popcorned,
+      pending: action.popcorn.pendingPopcorn
     });
   } else if (action.type === FETCH_POPCORN_FAILURE) {
     return Object.assign({}, state, {
