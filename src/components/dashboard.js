@@ -294,7 +294,12 @@ export class Dashboard extends React.Component {
             >
               Popcorn
             </button>
-            <button className="match-chair-btn">Ignore</button>
+            <button
+              className="match-chair-btn"
+              onClick={() => this.ignore(user._id)}
+            >
+              Ignore
+            </button>
           </React.Fragment>
         );
       });
@@ -311,7 +316,7 @@ export class Dashboard extends React.Component {
             >
               Re-Popcorn
             </button>
-            <button className="match-chair-btn">Delete</button>
+            <button className="match-chair-btn">Never mind</button>
           </React.Fragment>
         );
       });
@@ -323,10 +328,10 @@ export class Dashboard extends React.Component {
           <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture" />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
           <div>
-          popcorns {popcorns}
+            popcorns {popcorns}
           </div>
           <div>
-          pending popcorns {pending}
+            pending popcorns {pending}
           </div>
         </div>
         <div className="dashboard-matches">
