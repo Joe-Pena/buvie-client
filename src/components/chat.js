@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import { BASE_URL } from '../config';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import { nonEmpty } from '../validators';
+import { BASE_URL, API_BASE_URL } from '../config';
+import {
+  fetchMessageRequest,
+  fetchMessageSuccess, fetchMessageFailure, putMessages
+} from '../actions/users';
+
 
 const ChatHeader = styled.header`
 	display: flex;
@@ -199,6 +204,7 @@ const customStyles = {
 };
 
 export class Chat extends Component {
+  
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -212,36 +218,39 @@ export class Chat extends Component {
 
 		this.messagesEnd = React.createRef();
 
-		this.state.socket.on('chat', data => {
-			this.setState({
-				messages: [...this.state.messages, data]
-			});
-		});
-	}
+		  this.state.socket.on('chat', data => {
+      this.setState({
+        messages: [...this.state.messages, data]
+      });
+      this.props.dispatch(putMessages(this.state.chatroom, this.state.messages));
+    });
+  }
 
 	componentWillMount() {
 		Modal.setAppElement('body');
 	}
 
 	componentDidMount() {
-		const matched = this.props.matched;
-		let user;
-		let room;
+    const matched = this.props.matched;
+    let user;
+    let room;
+    if (matched) {
+      user = matched._id;
+      room = matched.chatroom;
+    }
 
-		if (matched) {
-			console.log(matched, 'line 52');
-			user = matched._id;
-			room = matched.chatroom;
-		}
 
-		const match = user ? user.username : 'Everyone';
-		const chatroom = room ? room._id : 'everyone';
-		this.setState({
-			match,
-			chatroom
-		});
-		this.state.socket.emit('subscribe', chatroom);
-	}
+    const match = user ? user.username : 'everyone';
+    const chatroom = room ? room._id : 'everyone';
+    this.setState({
+      match, chatroom
+    });
+    this.state.socket.emit('subscribe', chatroom);
+    if (chatroom !== 'everyone') {
+      this.fetchMessages(chatroom);
+    }
+  }
+
 	componentWillUnmount() {
 		this.state.socket.disconnect();
 	}
@@ -255,6 +264,25 @@ export class Chat extends Component {
 			el.scrollIntoView({ behavior: 'instant' });
 		}
 	}
+
+  fetchMessages(chatroomId) {
+    this.props.dispatch(fetchMessageRequest());
+    const authToken = this.props.authToken;
+    return fetch(`${API_BASE_URL}/messages/${chatroomId}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    })
+      .then(res => res.json())
+      .then(res => {
+        this.props.dispatch(fetchMessageSuccess(res));
+        this.setState({
+          messages: res.messages
+        });
+      })
+      .catch(err => this.props.dispatch(fetchMessageFailure(err)));
+  };
 
 	onClick() {
 		this.state.socket.emit('chat', {
@@ -367,9 +395,10 @@ export class Chat extends Component {
 }
 
 const mapStateToProps = state => {
-	return {
-		username: state.auth.currentUser.username
-	};
+  return {
+    username: state.auth.currentUser.username,
+    authToken: state.auth.authToken
+  };
 };
 
 export default connect(mapStateToProps)(Chat);

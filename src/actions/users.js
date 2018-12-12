@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, GOOGLE_MAP_KEY } from '../config';
 import { normalizeResponseErrors } from './utils';
 
 export const SET_GENRES = 'SET_GENRES';
@@ -255,7 +255,7 @@ export const chairUserSuccess = matched => ({
 
 export const CHAIR_USER_FAILURE = 'CHAIR_USER_FAILURE';
 export const chairUserFailure = error => ({
-  type: FETCH_MATCHED_FAILURE,
+  type: CHAIR_USER_FAILURE,
   error
 });
 
@@ -282,4 +282,110 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
       dispatch(chairUserSuccess(res));
     })
     .catch(err => dispatch(chairUserFailure(err)));
+};
+
+
+export const FETCH_MESSAGE_REQUEST = 'FETCH_MESSAGE_REQUEST';
+export const fetchMessageRequest = () => ({
+  type: FETCH_MESSAGE_REQUEST
+});
+
+export const FETCH_MESSAGE_SUCCESS = 'FETCH_MESSAGE_SUCCESS';
+export const fetchMessageSuccess = messages => ({
+  type: FETCH_MESSAGE_SUCCESS
+});
+
+export const FETCH_MESSAGE_FAILURE = 'FETCH_MESSAGE_FAILURE';
+export const fetchMessageFailure = error => ({
+  type: FETCH_MESSAGE_FAILURE,
+  error
+});
+
+export const PUT_MESSAGE_REQUEST = 'PUT_MESSAGE_REQUEST';
+export const putMessageRequest = () => ({
+  type: PUT_MESSAGE_REQUEST
+});
+
+export const PUT_MESSAGE_SUCCESS = 'PUT_MESSAGE_SUCCESS';
+export const putMessageSuccess = () => ({
+  type: PUT_MESSAGE_SUCCESS
+});
+
+export const PUT_MESSAGE_FAILURE = 'PUT_MESSAGE_FAILURE';
+export const putMessageFailure = error => ({
+  type: PUT_MESSAGE_FAILURE,
+  error
+});
+
+export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
+  dispatch(putMessageRequest());
+  const authToken = getState().auth.authToken;
+  return fetch(`${API_BASE_URL}/messages/${chatroomId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify({ messages })
+  })
+    .then(res => {
+      dispatch(putMessageSuccess(res));
+    })
+    .catch(err => dispatch(putMessageFailure(err)));
+};
+
+//GEOLOCATION
+
+export const GEOLOCATE_USER_REQUEST = 'GEOLOCATE_USER_REQUEST';
+export const geolocateUserRequest = () => ({
+  type: GEOLOCATE_USER_REQUEST
+});
+
+export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
+export const geolocateUserSuccess = (location, coords) => ({
+  type: GEOLOCATE_USER_SUCCESS,
+  location,
+  coords
+});
+
+export const GEOLOCATE_USER_FAILURE = 'GEOLOCATE_USER_FAILURE';
+export const geolocateUserFailure = error => ({
+  type: GEOLOCATE_USER_FAILURE,
+  error
+});
+
+export const geolocateUser = () => (dispatch, getState) => {
+  dispatch(geolocateUserRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  function findCity(areas) {
+    const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
+    return correctLoc[0].formatted_address;
+  }
+
+  function getLocationName(lat, lon) {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
+      .then(response => response.json())
+      .then(data => {
+        // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
+        const cityName = findCity(data.results);
+        dispatch(geolocateUserSuccess(cityName, { lat, lon }));
+      })
+      .catch(err => dispatch(geolocateUserFailure(err)));
+  }
+  
+  if ('geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(function success(position) {
+      getLocationName(position.coords.latitude, position.coords.longitude);
+    }, function error(error_message) {
+      console.error('An error has occured while retrieving location', error_message);
+    });
+  } else {
+    console.log('geolocation is not enabled on this browser');
+  }
 };

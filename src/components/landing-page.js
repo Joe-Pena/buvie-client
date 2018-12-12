@@ -3,16 +3,24 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import RegistrationForm from './registration-form';
+import queryString from 'query-string';
+import jwtDecode from 'jwt-decode';
 
+import { saveAuthToken } from '../local-storage';
 import LoginForm from './login-form';
 import logo from '../images/buvielogoname.svg';
+import { setAuthToken, authSuccess } from '../actions/auth';
+import { API_BASE_URL } from '../config';
+
+import googleNormal from '../images/btn_google_signin_light_normal_web.png';
+import googleFocus from '../images/btn_google_signin_light_focus_web.png';
+import googlePressed from '../images/btn_google_signin_light_pressed_web.png';
 
 const StyledLandingPage = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-areas: 
-    "info side-login";
-  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "info" "side-login";
 
   .info-area {
     grid-area: info;
@@ -30,6 +38,7 @@ const StyledLandingPage = styled.div`
     url(https://kylegrant76.files.wordpress.com/2015/12/top-10-movies-people-in-movie-theater-with-3d-glasses.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    min-height: 100vh;
   }
 
   .info-message {
@@ -37,14 +46,22 @@ const StyledLandingPage = styled.div`
     align-self: center;
   }
 
+  .google-signup {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    position: relative;
+  }
+
   .side-login {
     grid-area: side-login;
     display: grid;
-    grid-template-rows: 0.5fr 1fr 0.3fr;
+    grid-template-rows: 0.5fr 1fr 0.3fr 0.3fr;
     grid-template-areas: 
       "logo"
       "loginform"
-      "signup-btn";
+      "signup-btn"
+      "google-btn";
     color: #8b8b99;
     background-color: #212032;
     text-align: center;
@@ -92,6 +109,47 @@ const StyledLandingPage = styled.div`
   .form-error {
     font-size: 2rem;
   }
+
+  .google-normal, .google-pressed, .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    position: absolute;
+    display: none;
+  }
+
+  .google-signup:hover .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    display: block;
+    z-index: 99;
+  }
+
+  .google-signup:active .google-pressed {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    display: block;
+    z-index: 100;
+  }
+
+  .google-normal {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    display: block
+  }
+
+    @media (min-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-areas: 
+      "info side-login";
+    height: 100vh;
+
+    
+  }
 `;
 
 export class LandingPage extends React.Component {
@@ -101,6 +159,19 @@ export class LandingPage extends React.Component {
     this.state = {
       signUp: false,
     };
+  }
+
+  componentDidMount() {
+    if (this.props.location.search) {
+      const authToken = queryString.parse(this.props.location.search).authToken;
+
+      if (authToken) {
+        const decodedToken = jwtDecode(authToken);
+        this.props.dispatch(setAuthToken(authToken));
+        this.props.dispatch(authSuccess(decodedToken.user));
+        saveAuthToken(authToken);
+      }
+    }
   }
 
   render() {
@@ -120,6 +191,11 @@ export class LandingPage extends React.Component {
             :
             <LoginForm />
           }
+          <a className="google-signup" href={`${API_BASE_URL}/auth/google`}>
+            <img className="google-normal" src={googleNormal} alt="login with google" />
+            <img className="google-pressed" src={googlePressed} alt="login with google" />
+            <img className="google-focus" src={googleFocus} alt="login with google" />
+          </a>
           { this.state.signUp ?
             <span className="signup-button" >Already a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
             :

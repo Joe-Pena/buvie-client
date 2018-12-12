@@ -27,25 +27,45 @@ const StyledDashboard = styled.div`
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
 
-	.dashboard-profile {
-		grid-area: profile;
-		background-color: #8b8b99;
-		height: 85%;
-		align-self: center;
-	}
 
-	.dashboard-matches {
-		grid-area: matches;
-		display: grid;
-		grid-template-rows: 0.8fr 0.8fr 0.8fr;
-		grid-row-gap: 1.5rem;
-		grid-template-areas:
-			'first-match'
-			'second-match'
-			'third-match';
-		height: 85%;
-		align-self: center;
-	}
+  .dashboard-profile {
+    grid-area: profile;
+    background-color: #8b8b99;
+    display: grid;
+    grid-template-rows: 0.15fr 0.1fr 1fr;
+    grid-template-areas:
+      "avatar"
+      "username"
+      "content";
+    height: 85%;
+    align-self: center;
+  }
+
+  .dashboard-profile-avatar {
+    grid-area: avatar;
+    border-radius: 100rem;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .dashboard-profile-username {
+    grid-area: username;
+    justify-self: center;
+  }
+
+  .dashboard-matches {
+    grid-area: matches;
+    display: grid;
+    grid-template-rows: 0.8fr 0.8fr 0.8fr;
+    grid-row-gap: 1.5rem;
+    grid-template-areas:
+      "first-match"
+      "second-match"
+      "third-match";
+    height: 85%;
+    align-self: center;
+  }
+
 
 	.first-match {
 		grid-area: first-match;
@@ -131,29 +151,33 @@ const StyledDashboard = styled.div`
 		display: inline-block;
 	}
 
+
 	.match-movie-poster {
 		width: 12rem;
 		margin: 0 1rem;
 		justify-self: center;
 	}
 
-	.match-popcorn-btn {
-		grid-area: popcorn-btn;
-		background-color: #a33944;
-		color: #000;
-		width: 8rem;
-		height: 3rem;
-		border: none;
-	}
+  .match-popcorn-btn {
+    grid-area: popcorn-btn;
+    background-color: #a33944;
+    color: #000;
+    width: 8rem;
+    height: 3rem;
+    border: none;
+    cursor: pointer;
+  }
 
-	.match-chair-btn {
-		grid-area: ignore-btn;
-		background-color: #b8b999;
-		color: #000;
-		width: 8rem;
-		height: 3rem;
-		border: none;
-	}
+  .match-chair-btn {
+    grid-area: ignore-btn;
+    background-color: #b8b999;
+    color: #000;
+    width: 8rem;
+    height: 3rem;
+    border: none;
+    cursor: pointer;
+  }
+
 `;
 
 export class Dashboard extends React.Component {
@@ -279,8 +303,9 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <h2>{this.props.username}</h2>
-					popcorns {popcorns}
+          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture"/>
+          <h2 className="dashboard-profile-username">{this.props.username}</h2>
+          popcorns {popcorns}
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -310,6 +335,7 @@ export class Dashboard extends React.Component {
 const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
+    email: state.auth.currentUser.email,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches,

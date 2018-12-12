@@ -46,7 +46,7 @@ export class LoginForm extends React.Component {
         />
         {error}
         <button className="landing-login-btn" disabled={this.props.pristine || this.props.submitting}>
-                    Log in
+          Log in
         </button>
       </form>
     );

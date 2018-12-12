@@ -7,11 +7,13 @@ import LandingPage from './landing-page';
 import Dashboard from './dashboard';
 import './clearfix.css';
 import { refreshAuthToken } from '../actions/auth';
+import { geolocateUser } from '../actions/users';
 
 export class App extends React.Component {
   componentDidUpdate(prevProps) {
     if (!prevProps.loggedIn && this.props.loggedIn) {
       this.startPeriodicRefresh();
+      this.props.dispatch(geolocateUser());
     } else if (prevProps.loggedIn && !this.props.loggedIn) {
       this.stopPeriodicRefresh();
     }
