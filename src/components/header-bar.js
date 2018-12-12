@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 
 const StyledHeaderBar = styled.div`
+
   display: grid;
   grid-template-columns: 8fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -108,7 +109,9 @@ export class HeaderBar extends React.Component {
     let logOutButton;
     if (this.props.loggedIn) {
       logOutButton = (
-        <button className="nav-logout-btn" onClick={() => this.logOut()}>Log out</button>
+        <button className="nav-logout-btn" onClick={() => this.logOut()}>
+					Log out
+        </button>
       );
     }
     return (
@@ -130,7 +133,7 @@ export class HeaderBar extends React.Component {
 
 const mapStateToProps = state => ({
   loggedIn: state.auth.currentUser !== null,
-  user: state.auth.currentUser,
+  user: state.auth.currentUser
 });
 
 export default connect(mapStateToProps)(HeaderBar);
