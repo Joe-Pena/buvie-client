@@ -19,12 +19,12 @@ import googlePressed from '../images/btn_google_signin_light_pressed_web.png';
 const StyledLandingPage = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "info" "side-login";
+  grid-template-rows: 1fr;
+  grid-template-areas: "side-login";
 
   .info-area {
     grid-area: info;
-    display: grid;
+    display: none;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas: 
       "first"
@@ -88,7 +88,13 @@ const StyledLandingPage = styled.div`
     align-self: flex-start;
   }
 
+  .signup-button a {
+    text-decoration: underline; 
+    color: #fff;
+  }
+
   .landing-login-form input {
+    outline: none;
     border: none;
     background-color: #212032;
     border-bottom: 0.1rem solid #8b8b99;
@@ -148,7 +154,9 @@ const StyledLandingPage = styled.div`
       "info side-login";
     height: 100vh;
 
-    
+    .info-area {
+      display: grid;
+    }
   }
 `;
 
@@ -197,9 +205,9 @@ export class LandingPage extends React.Component {
             <img className="google-focus" src={googleFocus} alt="login with google" />
           </a>
           { this.state.signUp ?
-            <span className="signup-button" >Already a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
+            <span className="signup-button" >Already a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
             :
-            <span className="signup-button" >Not a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
+            <span className="signup-button" >Not a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
           }
         </div>
       </StyledLandingPage>
