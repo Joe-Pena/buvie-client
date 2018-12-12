@@ -23,7 +23,10 @@ import {
   PUT_MESSAGE_FAILURE,
   GEOLOCATE_USER_REQUEST,
   GEOLOCATE_USER_SUCCESS,
-  GEOLOCATE_USER_FAILURE
+  GEOLOCATE_USER_FAILURE,
+  NEVER_MIND_USER_REQUEST,
+  NEVER_MIND_USER_SUCCESS,
+  NEVER_MIND_USER_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -156,6 +159,21 @@ export default function reducer(state = initialState, action) {
       userCoords: action.coords
     });
   } else if (action.type === GEOLOCATE_USER_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === NEVER_MIND_USER_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === NEVER_MIND_USER_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null
+    });
+  } else if (action.type === NEVER_MIND_USER_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
