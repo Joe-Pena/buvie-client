@@ -10,12 +10,13 @@ const StyledForm = styled.form`
   grid-template-rows: auto;
   grid-row-gap: 0.5rem;
   background-color: #212032;
-  height: 95vh;
+  height: 93vh;
   color: #fff;
+  text-align: center;
 
   h3 {
+    font-size: 3rem;
     justify-self: center;
-    text-align: center;
   }
 
   input {
@@ -29,15 +30,15 @@ const StyledForm = styled.form`
     height: 3rem;
   }
 
-  label.picked{
+  input:checked + label {
     display: block;
     background-color: #a33944;
     width: 100%;
-    text-align: center;
   }
 
   .feedback {
-    text-align: center
+    font-size: 2rem;
+    font-weight: 600;
   }
 
   .genre-continue-btn {
@@ -49,6 +50,10 @@ const StyledForm = styled.form`
     border: none;
     justify-self: center;
     cursor: pointer;
+  }
+
+  .genre-continue-btn:disabled {
+    opacity: 0.3
   }
 `;
 
@@ -103,27 +108,32 @@ class GenreSelection extends Component {
 
     const inputs = genreList.map(genre => {
       return (
-        <label htmlFor={genre.id} key={genre.id} onClick={(e) => e.target.classList.toggle('picked')}>
+        <div key={genre.id}>
           <input
             type="checkbox"
             className={`genres-list-${genre.id}`}
             value={genre.name}
             id={genre.id}
             name={genre.id}
-            onChange={e => this.onChange(e)}/>
-          {genre.name}
-        </label>);
+            onChange={e => this.onChange(e)}
+          />
+          <label htmlFor={genre.id} onClick={(e) => e.target.classList.toggle('picked')}>
+            <span>{genre.name}</span>
+          </label>
+        </div>);
     });
 
-    const disabled = this.props.loading || !this.state.genres.length;
+    const disabled = this.props.loading || this.state.genres.length !== 3;
     let feedback;
-    if (this.state.feedback) {
+    if (this.state.feedback || this.state.genres.length > 3) {
       feedback = <div className='feedback'>
         You can only select 3 genres!
       </div>;
     } else {
-      feedback = <div></div>;
+      feedback = <div className='feedback'>{this.state.genres.length} of 3 selected</div>;
     }
+
+
     return (
       <StyledForm onSubmit={e => this.onSubmit(e)}>
         <h3>Please choose your favorite 3 genres so we can find better matches for you!</h3>
