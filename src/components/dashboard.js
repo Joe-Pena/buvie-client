@@ -9,7 +9,8 @@ import {
   popCornMatch,
   fetchPopcorn,
   filterUser,
-  chairUser
+  chairUser,
+  neverMindUser
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -209,6 +210,16 @@ export class Dashboard extends React.Component {
       .then(() => this.props.dispatch(fetchMatched()));
   }
 
+  nevermind(userId) {
+    this.props
+      .dispatch(neverMindUser(userId))
+      .then(() => this.props.dispatch(filterUser(userId)))
+      .then(() => this.props.dispatch(fetchCurrentuser()))
+      .then(() => this.props.dispatch(fetchMatches()))
+      .then(() => this.props.dispatch(fetchPopcorn()))
+      .then(() => this.props.dispatch(fetchMatched()));
+  }
+
   render() {
     if (!this.props.genres.length) {
       return <GenreSelection />;
@@ -316,7 +327,12 @@ export class Dashboard extends React.Component {
             >
               Re-Popcorn
             </button>
-            <button className="match-chair-btn">Never mind</button>
+            <button
+              className="match-chair-btn"
+              onClick={() => this.nevermind(user._id)}
+            >
+              Never mind
+            </button>
           </React.Fragment>
         );
       });
