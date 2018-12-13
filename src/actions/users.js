@@ -334,7 +334,7 @@ export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
     .catch(err => dispatch(putMessageFailure(err)));
 };
 
-//GEOLOCATION
+//GEOLOCATION =========================================================================
 
 export const GEOLOCATE_USER_REQUEST = 'GEOLOCATE_USER_REQUEST';
 export const geolocateUserRequest = () => ({
@@ -342,10 +342,9 @@ export const geolocateUserRequest = () => ({
 });
 
 export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
-export const geolocateUserSuccess = (location, coords) => ({
+export const geolocateUserSuccess = (location) => ({
   type: GEOLOCATE_USER_SUCCESS,
-  location,
-  coords
+  location
 });
 
 export const GEOLOCATE_USER_FAILURE = 'GEOLOCATE_USER_FAILURE';
@@ -354,14 +353,39 @@ export const geolocateUserFailure = error => ({
   error
 });
 
-export const geolocateUser = () => (dispatch, getState) => {
-  dispatch(geolocateUserRequest());
+//BACKEND LOCATION UPDATE FUNCTION
+export const updateUserLocation = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
+  const location = getState().user.location;
+  console.log('location to be sent', location);
+
   let userId;
   if (currentUser) {
     userId = currentUser.id;
   }
+
+  fetch(`${API_BASE_URL}/main/location/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify(location)
+  })
+    .then(() => console.log('location updated in DB...'))
+    .catch(err => console.log(err.message));
+};
+
+
+export const geolocateUser = () => (dispatch, getState) => {
+  dispatch(geolocateUserRequest());
+  // const authToken = getState().auth.authToken;
+  // const currentUser = getState().auth.currentUser;
+  // let userId;
+  // if (currentUser) {
+  //   userId = currentUser.id;
+  // }
 
   function findCity(areas) {
     const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
@@ -369,17 +393,20 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 
   function getLocationName(lat, lon) {
+    console.log('Getting location name...');
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
       .then(data => {
-        // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
         const cityName = findCity(data.results);
-        dispatch(geolocateUserSuccess(cityName, { lat, lon }));
+        console.log(`City: ${cityName}, coordinates ${lat}, ${lon}`);
+        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lon } }));
       })
+      .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
   if ('geolocation' in navigator) {
+    console.log('locating...');
     navigator.geolocation.getCurrentPosition(function success(position) {
       getLocationName(position.coords.latitude, position.coords.longitude);
     }, function error(error_message) {
@@ -390,6 +417,7 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 };
 
+//IGNORING MATCHES ============================================================================
 export const NEVER_MIND_USER_REQUEST = 'NEVER_MIND_USER_REQUEST';
 export const neverMindUserRequest = () => ({
   type: NEVER_MIND_USER_REQUEST
