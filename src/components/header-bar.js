@@ -155,12 +155,7 @@ export class HeaderBar extends React.Component {
         <button className="menu-button" onClick={() => this.toggleMenu()}>
           <i className="material-icons">menu</i>
         </button>
-        {this.props.loggedIn && <DropDown
-          className='notifications'
-          isCollapsed={this.state.isCollapsed}
-          title='Notifications'
-          listArr={this.props.notifications} />
-        }
+        {notifications}
         {logOutButton}
       </StyledHeaderBar>
     );

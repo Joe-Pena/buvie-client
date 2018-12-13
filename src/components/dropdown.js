@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
+import onClickOutside from 'react-onclickoutside';
 
 const StyledDropDown = styled.div`
   color: #fff;
@@ -41,10 +42,16 @@ export class DropDown extends React.Component {
     };
   }
 
+  handleClickOutside(e) {
+    this.setState({
+      listOpen: false
+    });
+  }
+
   toggleList() {
-    this.setState(prevState => ({
-      listOpen: !prevState.listOpen
-    }));
+    this.setState({
+      listOpen: !this.state.listOpen
+    });
   }
 
   render() {
@@ -65,7 +72,6 @@ export class DropDown extends React.Component {
         </ul>
       );
     }
-    console.log(this.state.isCollapsed);
     return (
       <StyledDropDown className='dropdown-wrapper' isCollapsed={this.props.isCollapsed}>
         <div className='dropdown-header' onClick={() => this.toggleList()}>{headerTitle}</div>
@@ -80,4 +86,4 @@ const mapStateToProps = state => ({
   user: state.auth.currentUser
 });
 
-export default connect(mapStateToProps)(DropDown);
+export default connect(mapStateToProps)(onClickOutside(DropDown));
