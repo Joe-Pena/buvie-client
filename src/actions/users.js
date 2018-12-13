@@ -462,8 +462,8 @@ export const fetchNotification = () => (dispatch, getState) => {
       Authorization: `Bearer ${authToken}`
     }
   })
+    .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchNotificationSuccess(res));
     })
     .catch(err => dispatch(fetchNotificationFailure(err)));

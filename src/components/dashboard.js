@@ -10,7 +10,8 @@ import {
   fetchPopcorn,
   filterUser,
   chairUser,
-  neverMindUser
+  neverMindUser,
+  fetchNotification
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -187,7 +188,8 @@ export class Dashboard extends React.Component {
       .dispatch(fetchCurrentuser())
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
-      .then(() => this.props.dispatch(fetchMatched()));
+      .then(() => this.props.dispatch(fetchMatched()))
+      .then(() => this.props.dispatch(fetchNotification()));
   }
 
   popcorn(userId) {
