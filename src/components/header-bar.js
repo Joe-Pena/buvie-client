@@ -6,6 +6,7 @@ import { resetMovies } from '../actions/movies-action';
 import { clearAuthToken } from '../local-storage';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
+import DropDown from './dropdown';
 
 const StyledHeaderBar = styled.div`
 
@@ -114,6 +115,12 @@ export class HeaderBar extends React.Component {
         </button>
       );
     }
+    let notifications;
+    if (this.props.loggedIn) {
+      notifications = (
+        <DropDown title='Notifications' listArr={this.props.notifications}/>
+      );
+    }
     return (
       <StyledHeaderBar className="header-bar" isCollapsed={this.state.isCollapsed}>
         <img src={logoName} alt="buvie logo" className="nav-logo"/>
@@ -125,6 +132,7 @@ export class HeaderBar extends React.Component {
         <button className="menu-button" onClick={() => this.toggleMenu()}>
           <i className="material-icons">menu</i>
         </button>
+        {notifications}
         {logOutButton}
       </StyledHeaderBar>
     );
@@ -133,7 +141,8 @@ export class HeaderBar extends React.Component {
 
 const mapStateToProps = state => ({
   loggedIn: state.auth.currentUser !== null,
-  user: state.auth.currentUser
+  user: state.auth.currentUser,
+  notifications: state.user.notifications
 });
 
 export default connect(mapStateToProps)(HeaderBar);

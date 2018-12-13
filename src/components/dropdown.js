@@ -23,7 +23,7 @@ export class DropDown extends React.Component {
   render() {
     const { listArr } = this.props;
     const { listOpen, headerTitle } = this.state;
-    let listElements = list.map(item => {
+    let listElements = listArr.map(item => {
       return (<li className='dropdown-item' key={item._id}>{item.message}</li>);
     });
     let list;
