@@ -12,7 +12,7 @@ const StyledHeaderBar = styled.div`
 
   display: grid;
   grid-template-columns: 8fr 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
   grid-template-areas: "logo menu" "logout logout" "notifications notifications";
 
   .menu-button {
