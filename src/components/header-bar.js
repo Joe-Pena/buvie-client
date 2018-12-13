@@ -12,8 +12,8 @@ const StyledHeaderBar = styled.div`
 
   display: grid;
   grid-template-columns: 8fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "logo menu" "logout logout";
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas: "logo menu" "logout logout" "notifications notifications";
 
   .menu-button {
     display: block;
@@ -46,6 +46,15 @@ const StyledHeaderBar = styled.div`
     border: none;
     cursor: pointer;
   }
+
+  .notifications {
+    display: ${props => props.isCollapsed ? 'none' : 'block'};
+    color: #fff;
+    font-size: 1.6rem;
+    position: relative;
+    right: 3rem;
+    grid-area: notifications;
+    }
 
   .welcome-message {
     display: none;
@@ -120,19 +129,24 @@ export class HeaderBar extends React.Component {
     if (this.props.loggedIn) {
       logOutButton = (
         <button className="nav-logout-btn" onClick={() => this.logOut()}>
-					Log out
+          Log out
         </button>
       );
     }
     let notifications;
     if (this.props.loggedIn) {
       notifications = (
-        <DropDown  className='notifications' title='Notifications' listArr={this.props.notifications}/>
+        <DropDown
+          className='notifications'
+          isCollapsed={this.state.isCollapsed}
+          title='Notifications'
+          listArr={this.props.notifications}
+        />
       );
     }
     return (
       <StyledHeaderBar className="header-bar" isCollapsed={this.state.isCollapsed}>
-        <img src={logoName} alt="buvie logo" className="nav-logo"/>
+        <img src={logoName} alt="buvie logo" className="nav-logo" />
         {this.props.loggedIn ?
           <h2 className="welcome-message">Welcome, {this.props.user.username}!</h2>
           :
@@ -141,7 +155,12 @@ export class HeaderBar extends React.Component {
         <button className="menu-button" onClick={() => this.toggleMenu()}>
           <i className="material-icons">menu</i>
         </button>
-        {notifications}
+        {this.props.loggedIn && <DropDown
+          className='notifications'
+          isCollapsed={this.state.isCollapsed}
+          title='Notifications'
+          listArr={this.props.notifications} />
+        }
         {logOutButton}
       </StyledHeaderBar>
     );

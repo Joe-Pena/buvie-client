@@ -18,6 +18,17 @@ const StyledDropDown = styled.div`
   li {
     border-bottom: 1px solid #e5e5e5;
     text-align: left;
+    padding: 1px 3px;
+  }
+
+  .dropdown-header {
+    display: ${props => props.isCollapsed ? 'none' : 'block'};
+  }
+
+  @media (min-width: 768px) {
+    .dropdown-header {
+      display: block;
+    }
   }
   `;
 
@@ -50,12 +61,13 @@ export class DropDown extends React.Component {
     if (listOpen) {
       list = (
         <ul>
-          {listElements}
+          {listElements.reverse()}
         </ul>
       );
     }
+    console.log(this.state.isCollapsed);
     return (
-      <StyledDropDown className='dropdown-wrapper'>
+      <StyledDropDown className='dropdown-wrapper' isCollapsed={this.props.isCollapsed}>
         <div className='dropdown-header' onClick={() => this.toggleList()}>{headerTitle}</div>
         {list}
       </StyledDropDown>
