@@ -343,7 +343,7 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture" />
+          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile-avatar" />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
           <div>
             <a name='popcorn'>popcorns</a>

@@ -43,8 +43,7 @@ const initialState = {
   matched: [],
   notifications: [],
   filter: [],
-  userCity: '',
-  userCoords: {},
+  location: {},
 };
 
 export default function reducer(state = initialState, action) {
@@ -156,11 +155,10 @@ export default function reducer(state = initialState, action) {
       error: false
     });
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
-    console.log(`You're current collection is ${action.location}, coordinates:`, action.coords);
+    console.log(`You're current collection is ${action.location.city}, coordinates:`, action.location.coordinates);
     return Object.assign({}, state, {
       loading: false,
-      userCity: action.location,
-      userCoords: action.coords
+      location: action.location,
     });
   } else if (action.type === GEOLOCATE_USER_FAILURE) {
     return Object.assign({}, state, {
