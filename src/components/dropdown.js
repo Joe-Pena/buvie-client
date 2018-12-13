@@ -3,7 +3,17 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 const StyledDropDown = styled.div`
-  `
+  color: #fff;
+
+  ul {
+    list-style-type:  none;
+    background-color: #fff;
+    color: #000;
+    font-size: 1rem;
+    z-index: 1;
+    position: absolute;
+  }
+  `;
 
 export class DropDown extends React.Component {
   constructor(props) {
@@ -24,20 +34,20 @@ export class DropDown extends React.Component {
     const { listArr } = this.props;
     const { listOpen, headerTitle } = this.state;
     let listElements = listArr.map(item => {
-      return (<li className='dropdown-item' key={item._id}>{item.message}</li>);
+      return (<li className='dropdown-item' key={`${item._id}${item.type}`}>{item.message}</li>);
     });
     let list;
     if (listOpen) {
       list = (
         <ul>
-          listElements
+          {listElements}
         </ul>
       );
     }
     return (
       <StyledDropDown className='dropdown-wrapper'>
         <div className='dropdown-header' onClick={() => this.toggleList()}>{headerTitle}</div>
-        {listElements}
+        {list}
       </StyledDropDown>
     );
   }

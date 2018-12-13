@@ -53,8 +53,8 @@ const StyledHeaderBar = styled.div`
 
   @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: 1fr 0.2fr 0.1fr;
-    grid-template-areas: "logo profile logout";
+    grid-template-columns: 1fr 0.2fr 0.2fr 0.1fr;
+    grid-template-areas: "logo notifications profile logout";
     text-align: center;
 
     .welcome-message {
@@ -63,6 +63,15 @@ const StyledHeaderBar = styled.div`
       font-size: 1.6rem;
       position: relative;
       right: 1rem;
+    }
+
+    .notifications {
+      display: block;
+      color: #fff;
+      font-size: 1.6rem;
+      position: relative;
+      right: 3rem;
+      grid-area: notifications;
     }
 
     .nav-logout-btn {
@@ -118,7 +127,7 @@ export class HeaderBar extends React.Component {
     let notifications;
     if (this.props.loggedIn) {
       notifications = (
-        <DropDown title='Notifications' listArr={this.props.notifications}/>
+        <DropDown  className='notifications' title='Notifications' listArr={this.props.notifications}/>
       );
     }
     return (
