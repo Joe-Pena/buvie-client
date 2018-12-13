@@ -437,7 +437,8 @@ export const fetchNotificationRequest = () => ({
 export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
 export const fetchNotificationSuccess = (notificationInfo) => ({
   type: FETCH_NOTIFICATION_SUCCESS,
-  notifications: notificationInfo.notifications
+  notifications: notificationInfo.notifications,
+  notificationCheck: notificationInfo.notificationCheck
 });
 
 export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';

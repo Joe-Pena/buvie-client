@@ -42,6 +42,7 @@ const initialState = {
   pending: [],
   matched: [],
   notifications: [],
+  notificationCheck: null,
   filter: [],
   userCity: '',
   userCoords: {},
@@ -191,7 +192,8 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       loading: false,
       error: null,
-      notifications: action.notifications
+      notifications: action.notifications,
+      notificationCheck: action.notificationCheck
     });
   } else if (action.type === FETCH_NOTIFICATION_FAILURE) {
     return Object.assign({}, state, {
