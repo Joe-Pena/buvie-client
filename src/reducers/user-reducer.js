@@ -41,6 +41,7 @@ const initialState = {
   popcorn: [],
   pending: [],
   matched: [],
+  notifications: [],
   filter: [],
   userCity: '',
   userCoords: {},
