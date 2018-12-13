@@ -60,7 +60,7 @@ export class DropDown extends React.Component {
   }
 
   render() {
-    const { listArr } = this.props;
+    const { listArr, time } = this.props;
     const { listOpen, headerTitle } = this.state;
     let listElements = listArr.map(item => {
       let linkName;
@@ -78,6 +78,20 @@ export class DropDown extends React.Component {
           {moment(item.date).fromNow()}
         </li>);
     });
+    let newNotificationCount=0;
+    for (let i=0; i<listArr.length; i++) {
+      if (listArr[i].date > time) {
+        newNotificationCount++;
+      }
+    }
+    let displayCount;
+    if (newNotificationCount === 0) {
+      displayCount = '';
+    } else if (newNotificationCount <= 10) {
+      displayCount = newNotificationCount;
+    } else {
+      displayCount = '10+';
+    }
     let list;
     if (listOpen) {
       list = (
@@ -86,9 +100,10 @@ export class DropDown extends React.Component {
         </ul>
       );
     }
+
     return (
       <StyledDropDown className='dropdown-wrapper' isCollapsed={this.props.isCollapsed}>
-        <div className='dropdown-header' onClick={() => this.toggleList()}>{headerTitle}</div>
+        <div className='dropdown-header' onClick={() => this.toggleList()}>{`${headerTitle} ${displayCount}`}</div>
         {list}
       </StyledDropDown>
     );
