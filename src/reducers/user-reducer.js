@@ -188,7 +188,6 @@ export default function reducer(state = initialState, action) {
       error: null
     });
   } else if (action.type === FETCH_NOTIFICATION_SUCCESS) {
-    console.log(action.notifications);
     return Object.assign({}, state, {
       loading: false,
       error: null,

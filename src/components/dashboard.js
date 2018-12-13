@@ -346,7 +346,8 @@ export class Dashboard extends React.Component {
           <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture" />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
           <div>
-            popcorns {popcorns}
+            <a name='popcorn'>popcorns</a>
+            {popcorns}
           </div>
           <div>
             pending popcorns {pending}
@@ -368,6 +369,7 @@ export class Dashboard extends React.Component {
         </div>
 
         <div className="thirdspace">
+          <a name='matched'></a>
           <h2>MATCHES</h2>
           {chats}
           <Chat />

@@ -22,6 +22,11 @@ const StyledDropDown = styled.div`
     padding: 1px 3px;
   }
 
+  li a {
+    text-decoration: none;
+    color: #000;
+  }
+
   .dropdown-header {
     display: ${props => props.isCollapsed ? 'none' : 'block'};
   }
@@ -58,17 +63,26 @@ export class DropDown extends React.Component {
     const { listArr } = this.props;
     const { listOpen, headerTitle } = this.state;
     let listElements = listArr.map(item => {
-      return (<li className='dropdown-item' key={`${item._id}${item.type}`}>
-        {item.message}
-        <br/>
-        {moment(item.date).fromNow()}
-      </li>);
+      let linkName;
+      if (item.type === 'popcorn' || item.type === 're-popcorn') {
+        linkName = 'popcorn';
+      } else if (item.type === 'matched') {
+        linkName = 'matched';
+      }
+      return (
+        <li className='dropdown-item' key={`${item._id}${item.type}`}>
+          <a href={`#${linkName}`}>
+            {item.message}
+          </a>
+          <br />
+          {moment(item.date).fromNow()}
+        </li>);
     });
     let list;
     if (listOpen) {
       list = (
         <ul>
-          {listElements.reverse()}
+          {listElements.reverse().slice(0, 10)}
         </ul>
       );
     }
