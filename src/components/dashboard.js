@@ -10,7 +10,8 @@ import {
   fetchPopcorn,
   filterUser,
   chairUser,
-  neverMindUser
+  neverMindUser,
+  fetchNotification
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -187,7 +188,8 @@ export class Dashboard extends React.Component {
       .dispatch(fetchCurrentuser())
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
-      .then(() => this.props.dispatch(fetchMatched()));
+      .then(() => this.props.dispatch(fetchMatched()))
+      .then(() => this.props.dispatch(fetchNotification()));
   }
 
   popcorn(userId) {
@@ -344,7 +346,8 @@ export class Dashboard extends React.Component {
           <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile picture" />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
           <div>
-            popcorns {popcorns}
+            <a name='popcorn'>popcorns</a>
+            {popcorns}
           </div>
           <div>
             pending popcorns {pending}
@@ -366,6 +369,7 @@ export class Dashboard extends React.Component {
         </div>
 
         <div className="thirdspace">
+          <a name='matched'></a>
           <h2>MATCHES</h2>
           {chats}
           <Chat />

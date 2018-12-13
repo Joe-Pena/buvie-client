@@ -396,9 +396,8 @@ export const neverMindUserRequest = () => ({
 });
 
 export const NEVER_MIND_USER_SUCCESS = 'NEVER_MIND_USER_SUCCESS';
-export const neverMindUserSuccess = matched => ({
-  type: NEVER_MIND_USER_SUCCESS,
-  matched
+export const neverMindUserSuccess = () => ({
+  type: NEVER_MIND_USER_SUCCESS
 });
 
 export const NEVER_MIND_USER_FAILURE = 'NEVER_MIND_USER_FAILURE';
@@ -428,4 +427,44 @@ export const neverMindUser = neverMindUserId => (dispatch, getState) => {
       dispatch(neverMindUserSuccess(res));
     })
     .catch(err => dispatch(neverMindUserFailure(err)));
+};
+
+export const FETCH_NOTIFICATION_REQUEST = 'FETCH_NOTIFICATION_REQUEST';
+export const fetchNotificationRequest = () => ({
+  type: FETCH_NOTIFICATION_REQUEST
+});
+
+export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
+export const fetchNotificationSuccess = (notifications) => ({
+  type: FETCH_NOTIFICATION_SUCCESS,
+  notifications
+});
+
+export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';
+export const fetchNotificationFailure = error => ({
+  type: NEVER_MIND_USER_FAILURE,
+  error
+});
+
+export const fetchNotification = () => (dispatch, getState) => {
+  dispatch(fetchNotificationRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/notifications/${userId}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(fetchNotificationSuccess(res));
+    })
+    .catch(err => dispatch(fetchNotificationFailure(err)));
 };

@@ -26,7 +26,10 @@ import {
   GEOLOCATE_USER_FAILURE,
   NEVER_MIND_USER_REQUEST,
   NEVER_MIND_USER_SUCCESS,
-  NEVER_MIND_USER_FAILURE
+  NEVER_MIND_USER_FAILURE,
+  FETCH_NOTIFICATION_REQUEST,
+  FETCH_NOTIFICATION_SUCCESS,
+  FETCH_NOTIFICATION_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -38,6 +41,7 @@ const initialState = {
   popcorn: [],
   pending: [],
   matched: [],
+  notifications: [],
   filter: [],
   userCity: '',
   userCoords: {},
@@ -174,6 +178,22 @@ export default function reducer(state = initialState, action) {
       error: null
     });
   } else if (action.type === NEVER_MIND_USER_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === FETCH_NOTIFICATION_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === FETCH_NOTIFICATION_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null,
+      notifications: action.notifications
+    });
+  } else if (action.type === FETCH_NOTIFICATION_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
