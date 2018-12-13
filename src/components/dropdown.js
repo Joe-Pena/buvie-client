@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import moment from 'moment';
 
 const StyledDropDown = styled.div`
   color: #fff;
@@ -12,6 +13,11 @@ const StyledDropDown = styled.div`
     font-size: 1rem;
     z-index: 1;
     position: absolute;
+  }
+
+  li {
+    border-bottom: 1px solid #e5e5e5;
+    text-align: left;
   }
   `;
 
@@ -34,7 +40,11 @@ export class DropDown extends React.Component {
     const { listArr } = this.props;
     const { listOpen, headerTitle } = this.state;
     let listElements = listArr.map(item => {
-      return (<li className='dropdown-item' key={`${item._id}${item.type}`}>{item.message}</li>);
+      return (<li className='dropdown-item' key={`${item._id}${item.type}`}>
+        {item.message}
+        <br/>
+        {moment(item.date).fromNow()}
+      </li>);
     });
     let list;
     if (listOpen) {
