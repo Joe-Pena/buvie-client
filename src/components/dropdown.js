@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
 import onClickOutside from 'react-onclickoutside';
+import { putNotificationTime } from '../actions/users';
 
 const StyledDropDown = styled.div`
   color: #fff;
@@ -54,6 +55,9 @@ export class DropDown extends React.Component {
   }
 
   toggleList() {
+    if (!this.state.listOpen) {
+      this.props.dispatch(putNotificationTime());
+    }
     this.setState({
       listOpen: !this.state.listOpen
     });
