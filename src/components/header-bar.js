@@ -141,6 +141,7 @@ export class HeaderBar extends React.Component {
           isCollapsed={this.state.isCollapsed}
           title='Notifications'
           listArr={this.props.notifications}
+          time={this.props.notificationCheck}
         />
       );
     }
@@ -165,7 +166,8 @@ export class HeaderBar extends React.Component {
 const mapStateToProps = state => ({
   loggedIn: state.auth.currentUser !== null,
   user: state.auth.currentUser,
-  notifications: state.user.notifications
+  notifications: state.user.notifications,
+  notificationCheck: state.user.notificationCheck
 });
 
 export default connect(mapStateToProps)(HeaderBar);

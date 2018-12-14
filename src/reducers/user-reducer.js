@@ -29,7 +29,10 @@ import {
   NEVER_MIND_USER_FAILURE,
   FETCH_NOTIFICATION_REQUEST,
   FETCH_NOTIFICATION_SUCCESS,
-  FETCH_NOTIFICATION_FAILURE
+  FETCH_NOTIFICATION_FAILURE,
+  PUT_NOTIFICATION_TIME_REQUEST,
+  PUT_NOTIFICATION_TIME_SUCCESS,
+  PUT_NOTIFICATION_TIME_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -42,6 +45,7 @@ const initialState = {
   pending: [],
   matched: [],
   notifications: [],
+  notificationCheck: null,
   filter: [],
   location: {},
 };
@@ -189,9 +193,26 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       loading: false,
       error: null,
-      notifications: action.notifications
+      notifications: action.notifications,
+      notificationCheck: action.notificationCheck
     });
   } else if (action.type === FETCH_NOTIFICATION_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null,
+      notificationCheck: action.date
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error

@@ -465,12 +465,13 @@ export const fetchNotificationRequest = () => ({
 export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
 export const fetchNotificationSuccess = (notificationInfo) => ({
   type: FETCH_NOTIFICATION_SUCCESS,
-  notifications: notificationInfo.notifications
+  notifications: notificationInfo.notifications,
+  notificationCheck: notificationInfo.notificationCheck
 });
 
 export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';
 export const fetchNotificationFailure = error => ({
-  type: NEVER_MIND_USER_FAILURE,
+  type: FETCH_NOTIFICATION_FAILURE,
   error
 });
 
@@ -495,4 +496,44 @@ export const fetchNotification = () => (dispatch, getState) => {
       dispatch(fetchNotificationSuccess(res));
     })
     .catch(err => dispatch(fetchNotificationFailure(err)));
+};
+
+export const PUT_NOTIFICATION_TIME_REQUEST = 'PUT_NOTIFICATION_TIME_REQUEST';
+export const putNotificationTimeRequest = () => ({
+  type: PUT_NOTIFICATION_TIME_REQUEST
+});
+
+export const PUT_NOTIFICATION_TIME_SUCCESS = 'PUT_NOTIFICATION_TIME_SUCCESS';
+export const putNotificationTimeSuccess = (date) => ({
+  type: PUT_NOTIFICATION_TIME_SUCCESS,
+  date
+});
+
+export const PUT_NOTIFICATION_TIME_FAILURE = 'PUT_NOTIFICATION_TIME_FAILURE';
+export const putNotificationTimeFailure = error => ({
+  type: PUT_NOTIFICATION_TIME_FAILURE,
+  error
+});
+
+export const putNotificationTime = () => (dispatch, getState) => {
+  dispatch(putNotificationTimeRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/notificationtime/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(putNotificationTimeSuccess(res));
+    })
+    .catch(err => dispatch(putNotificationTimeFailure(err)));
 };
