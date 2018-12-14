@@ -13,9 +13,9 @@ import {
   neverMindUser,
   fetchNotification
 } from '../actions/users';
-import { fetchOmdbInfo } from '../actions/movies-action';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
+import MovieModal from '../components/movie-modal';
 import Chat from './chat';
 import styled from 'styled-components';
 import './clearfix.css';
@@ -223,10 +223,6 @@ export class Dashboard extends React.Component {
       .then(() => this.props.dispatch(fetchMatched()));
   }
 
-  getMovieInfo(imdbID) {
-    this.props.dispatch(fetchOmdbInfo(imdbID));
-  }
-
   render() {
     if (!this.props.genres.length) {
       return <GenreSelection />;
@@ -257,12 +253,7 @@ export class Dashboard extends React.Component {
           matchMovies = user.movies.map(movie => {
             return (
               <li key={movie._id}>
-                <img
-                  src={movie.poster}
-                  className="match-movie-poster"
-                  alt={movie.title}
-                  onClick={() => this.getMovieInfo(movie.imdbID)}
-                />
+                <MovieModal movie={movie}/>
               </li>
             );
           });
