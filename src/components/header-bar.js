@@ -14,6 +14,7 @@ const StyledHeaderBar = styled.div`
 	grid-template-columns: 8fr 1fr;
 	grid-template-rows: 1fr;
 	grid-template-areas: 'logo menu' 'logout logout' 'notifications notifications';
+	padding: 1%;
 	.menu-button {
 		display: block;
 		grid-area: menu;
@@ -126,33 +127,16 @@ export class HeaderBar extends React.Component {
     let linkLocation;
     let headerBarMessage;
     let username;
+    let logOutButton;
+    let notifications;
 
     if (this.props.loggedIn) {
       username = this.props.user.username;
-    }
-
-    {
-      this.props.location.pathname === '/dashboard'
-        ? (linkLocation = '/profile')
-        : (linkLocation = '/dashboard');
-    }
-
-    {
-      this.props.location.pathname === '/dashboard'
-        ? (headerBarMessage = `Welcome, ${username}!`)
-        : (headerBarMessage = 'Back to Dashboard!');
-    }
-
-    let logOutButton;
-    if (this.props.loggedIn) {
       logOutButton = (
         <button className="nav-logout-btn" onClick={() => this.logOut()}>
 					Log out
         </button>
       );
-    }
-    let notifications;
-    if (this.props.loggedIn) {
       notifications = (
         <DropDown
           className="notifications"
@@ -163,6 +147,19 @@ export class HeaderBar extends React.Component {
         />
       );
     }
+
+    {
+      this.props.location.pathname === '/dashboard'
+        ? (linkLocation = '/profile')
+        : (linkLocation = '/dashboard');
+    }
+
+    {
+      this.props.location.pathname === '/dashboard'
+        ? (headerBarMessage = `Welcome, ${username} !`)
+        : (headerBarMessage = 'Back to Dashboard!');
+    }
+
     return (
       <StyledHeaderBar
         className="header-bar"
@@ -190,8 +187,7 @@ const mapStateToProps = state => ({
   loggedIn: state.auth.currentUser !== null,
   user: state.auth.currentUser,
   notifications: state.user.notifications,
-  notificationCheck: state.user.notificationCheck,
-  profilePage: state.user.profilePage
+  notificationCheck: state.user.notificationCheck
 });
 
 export default connect(mapStateToProps)(HeaderBar);

@@ -27,7 +27,6 @@ import {
   USER_PIC_REQUEST,
   USER_PIC_SUCCESS,
   USER_PIC_FAILURE,
-  TOGGLE_PROFILE,
   NEVER_MIND_USER_REQUEST,
   NEVER_MIND_USER_SUCCESS,
   NEVER_MIND_USER_FAILURE,
@@ -51,7 +50,6 @@ const initialState = {
   notifications: [],
   notificationCheck: null,
   filter: [],
-  profilePage: false,
   profilePic: '',
   location: {}
 };
