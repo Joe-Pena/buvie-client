@@ -138,7 +138,7 @@ const StyledDashboard = styled.div`
     grid-area: location;
     justify-self: center;
     align-self: center;
-    font-weight: 300;
+    /* font-weight: 300; */
   }
 
 	.match-genre-list {
