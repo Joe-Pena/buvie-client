@@ -347,7 +347,8 @@ export class Dashboard extends React.Component {
             {popcorns}
           </div>
           <div>
-            pending popcorns {pending}
+            <h3 name='pending-popcorn'>pending popcorns</h3>
+            {pending}
           </div>
         </div>
         <div className="dashboard-matches">

@@ -45,8 +45,6 @@ export const fetchOmdbInfoError = (error) => ({
 });
 
 export const fetchOmdbInfo = (imdbID) => (dispatch, getState) => {
-  console.log(`${process.env.REACT_APP_OMDB_URL}/?apikey=${OMDB_API_KEY}&i=${imdbID}`);
-  const authToken = getState().auth.authToken;
   dispatch(fetchOmdbInfoRequest());
   return fetch(`${OMDB_URL}/?apikey=${OMDB_API_KEY}&i=${imdbID}`, {
     method: 'GET'

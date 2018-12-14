@@ -5,6 +5,33 @@ import styled from 'styled-components';
 import { fetchOmdbInfo } from '../actions/movies-action';
 
 const StyledMovieModal = styled.div`
+  .match-movie-poster {
+		width: 12rem;
+		margin: 0 1rem;
+		justify-self: center;
+	}
+`;
+
+const StyledMovieInfo = styled.div`
+  .movie-title {
+    text-align: center;
+    font-size: 3rem;
+  }
+
+  .movie-year {
+    font-size: 1.75rem;
+    font-weight: 300;
+  }
+  .modal-movie-poster {
+    width: 17rem;
+    margin: 1rem;
+  }
+
+  .basic-info {
+    display: flex;
+    justify-content: space-evenly;  
+    font-weight: 300;
+  }
 `;
 
 const customStyles = {
@@ -19,7 +46,9 @@ const customStyles = {
     width: '640px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundColor: '#212032',
+    color: '#fff'
   },
   overlay: {
     backgroundColor: 'transparent'
@@ -56,7 +85,7 @@ export class MovieModal extends React.Component {
   }
 
   render() {
-    const { movie } = this.props;
+    const { movie, movieInfo } = this.props;
     return (
       <StyledMovieModal>
         <img
@@ -72,7 +101,20 @@ export class MovieModal extends React.Component {
           shouldCloseOnOverlayClick={true}
           style={customStyles}
         >
-          <div>{this.props.movieInfo.Title}</div>
+          <StyledMovieInfo>
+            <h3 className='movie-title'>{movieInfo.Title}<span className='movie-year'>{` (${movieInfo.Year})`}</span></h3>
+            <div className='basic-info'>
+              <p>{movieInfo.Rated}</p>
+              <p>{movieInfo.Genre}</p>
+              <p>{movieInfo.Runtime}</p>
+            </div>
+            <img
+              src={movieInfo.Poster}
+              className="modal-movie-poster"
+              alt={movieInfo.Title}
+              onClick={() => this.getMovieInfo(movie.imdbID)}
+        /> 
+          </StyledMovieInfo>
 
         </Modal>
       </StyledMovieModal>
