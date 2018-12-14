@@ -61,6 +61,26 @@ export const fetchMatches = () => (dispatch, getState) => {
     .catch(err => dispatch(fetchMatchesFailure(err)));
 };
 
+// export const fetchMatchesNearMe = () => (dispatch, getState) => {
+//   dispatch(fetchMatchesRequest());
+//   const authToken = getState().auth.authToken;
+//   const lng = getState().user.location.coordinates.longitude;
+//   const lat = getState().user.location.coordinates.latitude;
+
+//   return fetch(`${API_BASE_URL}/main/location?lng=${lng}&lat=${lat}`, {
+//     method: 'GET',
+//     headers: {
+//       Authorization: `Bearer ${authToken}`
+//     }
+//   })
+//     .then(res => res.json())
+//     .then(res => {
+//       console.log('response from api near call:', res);
+//       dispatch(fetchMatchesSuccess(res));
+//     })
+//     .catch(err => dispatch(fetchMatchesFailure(err)));
+// };
+
 export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST';
 export const fetchCurrentuserRequest = () => ({
   type: FETCH_CURRENT_USER_REQUEST
@@ -358,7 +378,7 @@ export const updateUserLocation = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
   const location = getState().user.location;
-  console.log('location to be sent', location);
+  console.log('location to be updated to:', location);
 
   let userId;
   if (currentUser) {
@@ -392,21 +412,18 @@ export const geolocateUser = () => (dispatch, getState) => {
     return correctLoc[0].formatted_address;
   }
 
-  function getLocationName(lat, lon) {
-    console.log('Getting location name...');
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
+  function getLocationName(lat, lng) {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
       .then(data => {
         const cityName = findCity(data.results);
-        console.log(`City: ${cityName}, coordinates ${lat}, ${lon}`);
-        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lon } }));
+        dispatch(updateUserLocation());
+        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lng } }));
       })
-      .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
   if ('geolocation' in navigator) {
-    console.log('locating...');
     navigator.geolocation.getCurrentPosition(function success(position) {
       getLocationName(position.coords.latitude, position.coords.longitude);
     }, function error(error_message) {

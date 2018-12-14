@@ -11,7 +11,8 @@ import {
   filterUser,
   chairUser,
   neverMindUser,
-  fetchNotification
+  fetchNotification,
+  fetchMatchesNearMe
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -267,6 +268,7 @@ export class Dashboard extends React.Component {
           <React.Fragment key={user.id}>
             <img className="match-avatar" src={gravatar} alt={user.username} />
             <h3 className="match-username">{user.username}</h3>
+            <h3 className="match-location">{user.location.city}</h3>
             <ul className="match-genre-list">
               <h3>{user.username} likes:</h3>
               {matchGenres}

@@ -81,7 +81,8 @@ export default function reducer(state = initialState, action) {
     });
   } else if (action.type === FETCH_CURRENT_USER_SUCCESS) {
     return Object.assign({}, state, {
-      loading: false
+      loading: false,
+      location: action.user.location
     });
   } else if (action.type === FETCH_CURRENT_USER_FAILURE) {
     return Object.assign({}, state, {
@@ -159,7 +160,6 @@ export default function reducer(state = initialState, action) {
       error: false
     });
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
-    console.log(`You're current collection is ${action.location.city}, coordinates:`, action.location.coordinates);
     return Object.assign({}, state, {
       loading: false,
       location: action.location,
