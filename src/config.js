@@ -6,3 +6,5 @@ export const GOOGLE_MAP_KEY =
 process.env.REACT_APP_GOOGLE_MAP_KEY || undefined;
 export const OMDB_API_KEY =
 process.env.REACT_APP_OMDB_API_KEY || undefined;
+export const OMDB_URL =
+process.env.REACT_APP_OMDB_URL || undefined;
