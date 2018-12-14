@@ -482,6 +482,10 @@ export const postUserProfilePicture = (userId, imgUrl) => (
   fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
     method: 'POST',
     mode: 'cors',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
      body: JSON.stringify({
       profilePic: imgUrl
     })
