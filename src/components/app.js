@@ -31,7 +31,7 @@ export class App extends React.Component {
     );
     this.notificationRefreshInterval = setInterval(
       () => this.props.dispatch(fetchNotification()),
-      60*1000
+      60 * 1000
     );
   }
 

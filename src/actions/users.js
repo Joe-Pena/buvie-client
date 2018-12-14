@@ -159,7 +159,7 @@ export const updateUser = data => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
+   
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
@@ -292,7 +292,6 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  console.log(userId);
   return fetch(`${API_BASE_URL}/main/ignore/${userId}`, {
     method: 'PUT',
     headers: {
@@ -444,14 +443,6 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 };
 
-export const TOGGLE_PROFILE = 'TOGGLE_PROFILE';
-export const toggleProfilePage = value => {
-  return {
-    type: TOGGLE_PROFILE,
-    value
-  };
-};
-
 //NICK ADDED
 
 export const USER_PIC_REQUEST = 'USER_PIC_REQUEST';
@@ -475,13 +466,16 @@ export const postUserProfilePicture = (userId, imgUrl) => (
   getState
 ) => {
   const authToken = getState().auth.authToken;
-  console.log(authToken, 'line 437');
+
   dispatch(userPicRequest());
-  console.log(imgUrl);
-  console.log(API_BASE_URL);
+
   fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
     method: 'POST',
     mode: 'cors',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
      body: JSON.stringify({
       profilePic: imgUrl
     })
@@ -501,8 +495,6 @@ export const postUserProfilePicture = (userId, imgUrl) => (
 
 export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
   dispatch(userPicRequest());
-  console.log(file);
-  console.log(CLOUDINARY_BASE_URL);
   fetch(`${CLOUDINARY_BASE_URL}`, {
     method: 'POST',
     body: file

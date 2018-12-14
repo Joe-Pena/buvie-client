@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	toggleProfilePage,
 	postCloudinaryProfilePicture,
 	postUserProfilePicture
 } from '../actions/users';
@@ -53,14 +52,9 @@ class ProfilePage extends Component {
 				let url = reader.readAsDataURL(file);
 
 				reader.onloadend = e => {
-					this.setState(
-						{
-							imgSrc: reader.result
-						},
-						() => {
-							console.log(this.state);
-						}
-					);
+					this.setState({
+						imgSrc: reader.result
+					});
 				};
 			}
 		);
@@ -69,11 +63,9 @@ class ProfilePage extends Component {
 	onSubmit = () => {
 		let file = this.state.profilePicture;
 		let formData = new FormData();
-		console.log(CLOUDINARY_UPLOAD_PRESET, 'line 72 on submit');
-		console.log(file);
+
 		formData.append('file', file);
 		formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-		console.log(formData, 'line 74');
 
 		this.props.dispatch(
 			postCloudinaryProfilePicture(formData, this.props.user.id)
@@ -81,9 +73,6 @@ class ProfilePage extends Component {
 	};
 
 	render() {
-		if (!this.props.profilePage) {
-			return <Redirect to="/dashboard" />;
-		}
 		return (
 			<ProfileMain>
 				<div className="profile-option-select">
@@ -117,11 +106,9 @@ class ProfilePage extends Component {
 }
 
 const mapStateToProps = state => {
-	console.log(state.auth);
 	return {
 		loggedIn: state.auth.currentUser !== null,
-		user: state.auth.currentUser,
-		profilePage: state.user.profilePage
+		user: state.auth.currentUser
 	};
 };
 

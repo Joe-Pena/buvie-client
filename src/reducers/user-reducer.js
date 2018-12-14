@@ -27,8 +27,6 @@ import {
   USER_PIC_REQUEST,
   USER_PIC_SUCCESS,
   USER_PIC_FAILURE,
-  TOGGLE_PROFILE,
-
   NEVER_MIND_USER_REQUEST,
   NEVER_MIND_USER_SUCCESS,
   NEVER_MIND_USER_FAILURE,
@@ -52,7 +50,6 @@ const initialState = {
   notifications: [],
   notificationCheck: null,
   filter: [],
-  profilePage: false,
   profilePic: '',
   location: {}
 };
@@ -169,7 +166,7 @@ export default function reducer(state = initialState, action) {
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
     return Object.assign({}, state, {
       loading: false,
-      location: action.location,
+      location: action.location
     });
   } else if (action.type === GEOLOCATE_USER_FAILURE) {
     return Object.assign({}, state, {
@@ -219,14 +216,10 @@ export default function reducer(state = initialState, action) {
       error: null,
       notificationCheck: action.date
     });
-  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {    
+  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
-    });
-  } else if (action.type === TOGGLE_PROFILE) {
-    return Object.assign({}, state, {
-      profilePage: action.value
     });
   } else if (action.type === USER_PIC_REQUEST) {
     return Object.assign({}, state, {

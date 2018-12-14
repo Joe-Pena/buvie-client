@@ -31,30 +31,30 @@ const StyledDashboard = styled.div`
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
 
-  .dashboard-profile {
-    grid-area: profile;
-    background-color: #8b8b99;
-    display: grid;
-    grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
-    grid-template-areas:
-      "avatar"
-      "username"
-      "content";
-    height: 85%;
-    align-self: center;
-  }
+	.dashboard-profile {
+		grid-area: profile;
+		background-color: #8b8b99;
+		display: grid;
+		grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
+		grid-template-areas:
+			'avatar'
+			'username'
+			'content';
+		height: 85%;
+		align-self: center;
+	}
 
-  .dashboard-profile-avatar {
-    grid-area: avatar;
-    border-radius: 100rem;
-    justify-self: center;
-    align-self: center;
-  }
+	.dashboard-profile-avatar {
+		grid-area: avatar;
+		border-radius: 100rem;
+		justify-self: center;
+		align-self: center;
+	}
 
-  .dashboard-profile-username {
-    grid-area: username;
-    justify-self: center;
-  }
+	.dashboard-profile-username {
+		grid-area: username;
+		justify-self: center;
+	}
 
 	.dashboard-matches {
 		grid-area: matches;
@@ -134,12 +134,14 @@ const StyledDashboard = styled.div`
 		left: 1.5rem;
 	}
 
+
   .match-location {
     grid-area: location;
     justify-self: center;
     align-self: center;
     /* font-weight: 300; */
   }
+
 
 	.match-genre-list {
 		grid-area: genres;
@@ -228,11 +230,6 @@ export class Dashboard extends React.Component {
   }
 
   render() {
-
-    if (this.props.profilePage) {
-      return <Redirect to="/profile" />;
-    }
-
     if (!this.props.genres.length) {
       return <GenreSelection />;
     }
@@ -240,7 +237,7 @@ export class Dashboard extends React.Component {
     if (!this.props.movies.length) {
       return <MovieSelection />;
     }
-    
+
     let userProfilePicture;
 
     if (this.props.profilePicture) {
@@ -302,13 +299,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user.id)}
             >
-              Popcorn
+							Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user.id)}
             >
-              Ignore
+							Ignore
             </button>
           </React.Fragment>
         );
@@ -331,13 +328,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-              Popcorn
+							Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user._id)}
             >
-              Ignore
+							Ignore
             </button>
           </React.Fragment>
         );
@@ -353,13 +350,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-              Re-Popcorn
+							Re-Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.nevermind(user._id)}
             >
-              Never mind
+							Never mind
             </button>
           </React.Fragment>
         );
@@ -369,7 +366,6 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-
           <img
             className="dashboard-profile-avatar"
             src={userProfilePicture}
@@ -394,7 +390,7 @@ export class Dashboard extends React.Component {
         </div>
 
         <div className="thirdspace">
-          <div name='matched'></div>
+          <div name="matched" />
           <h2>MATCHES</h2>
           {chats}
           <Chat />
@@ -415,8 +411,7 @@ const mapStateToProps = state => {
     popcorn: state.user.popcorn,
     pending: state.user.pending,
     matched: state.user.matched,
-    filter: state.user.filter,
-    profilePage: state.user.profilePage
+    filter: state.user.filter
   };
 };
 
