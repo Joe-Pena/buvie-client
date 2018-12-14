@@ -413,17 +413,20 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 
   function getLocationName(lat, lng) {
+    console.log(`Coordinates are ${lat}, ${lng}`);
     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
       .then(data => {
         const cityName = findCity(data.results);
-        dispatch(updateUserLocation());
+        console.log('City located: ', cityName);
         dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lng } }));
       })
+      .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
   
   if ('geolocation' in navigator) {
+    console.log('aquiring location...');
     navigator.geolocation.getCurrentPosition(function success(position) {
       getLocationName(position.coords.latitude, position.coords.longitude);
     }, function error(error_message) {

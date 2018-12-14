@@ -77,7 +77,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -89,7 +89,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -101,7 +101,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -134,6 +134,13 @@ const StyledDashboard = styled.div`
 		align-self: center;
 		left: 1.5rem;
 	}
+
+  .match-location {
+    grid-area: location;
+    justify-self: center;
+    align-self: center;
+    font-weight: 300;
+  }
 
 	.match-genre-list {
 		grid-area: genres;
