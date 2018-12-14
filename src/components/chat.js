@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { nonEmpty } from '../validators';
+// import { nonEmpty } from '../validators';
 import { BASE_URL, API_BASE_URL } from '../config';
 import {
 	fetchMessageRequest,
@@ -260,7 +260,7 @@ export class Chat extends Component {
 		if (this.state.modalIsOpen) {
 		}
 		let el = document.getElementById('chat-message-end');
-		console.log(el, 'line 254');
+		// console.log(el, 'line 254');
 		if (el !== null) {
 			el.scrollIntoView({ behavior: 'instant' });
 		}
@@ -312,9 +312,9 @@ export class Chat extends Component {
 	};
 
 	render() {
-		console.log(this.state.messages, 'line 199');
+		// console.log(this.state.messages, 'line 199');
 		const messages = this.state.messages.map((data, i) => {
-			console.log(data.handle, this.props.username, '201');
+			// console.log(data.handle, this.props.username, '201');
 			if (data.handle === this.props.username) {
 				return (
 					<>

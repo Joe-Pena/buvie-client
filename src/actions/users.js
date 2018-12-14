@@ -61,6 +61,26 @@ export const fetchMatches = () => (dispatch, getState) => {
     .catch(err => dispatch(fetchMatchesFailure(err)));
 };
 
+// export const fetchMatchesNearMe = () => (dispatch, getState) => {
+//   dispatch(fetchMatchesRequest());
+//   const authToken = getState().auth.authToken;
+//   const lng = getState().user.location.coordinates.longitude;
+//   const lat = getState().user.location.coordinates.latitude;
+
+//   return fetch(`${API_BASE_URL}/main/location?lng=${lng}&lat=${lat}`, {
+//     method: 'GET',
+//     headers: {
+//       Authorization: `Bearer ${authToken}`
+//     }
+//   })
+//     .then(res => res.json())
+//     .then(res => {
+//       console.log('response from api near call:', res);
+//       dispatch(fetchMatchesSuccess(res));
+//     })
+//     .catch(err => dispatch(fetchMatchesFailure(err)));
+// };
+
 export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST';
 export const fetchCurrentuserRequest = () => ({
   type: FETCH_CURRENT_USER_REQUEST
@@ -336,7 +356,7 @@ export const putMessages = (chatroomId, messages) => (dispatch, getState) => {
     .catch(err => dispatch(putMessageFailure(err)));
 };
 
-//GEOLOCATION
+//GEOLOCATION =========================================================================
 
 export const GEOLOCATE_USER_REQUEST = 'GEOLOCATE_USER_REQUEST';
 export const geolocateUserRequest = () => ({
@@ -344,10 +364,9 @@ export const geolocateUserRequest = () => ({
 });
 
 export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
-export const geolocateUserSuccess = (location, coords) => ({
+export const geolocateUserSuccess = (location) => ({
   type: GEOLOCATE_USER_SUCCESS,
-  location,
-  coords
+  location
 });
 
 export const GEOLOCATE_USER_FAILURE = 'GEOLOCATE_USER_FAILURE';
@@ -356,14 +375,39 @@ export const geolocateUserFailure = error => ({
   error
 });
 
-export const geolocateUser = () => (dispatch, getState) => {
-  dispatch(geolocateUserRequest());
+//BACKEND LOCATION UPDATE FUNCTION
+export const updateUserLocation = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
+  const location = getState().user.location;
+  console.log('location to be updated to:', location);
+
   let userId;
   if (currentUser) {
     userId = currentUser.id;
   }
+
+  fetch(`${API_BASE_URL}/main/location/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${authToken}`
+    },
+    body: JSON.stringify(location)
+  })
+    .then(() => console.log('location updated in DB...'))
+    .catch(err => console.log(err.message));
+};
+
+
+export const geolocateUser = () => (dispatch, getState) => {
+  dispatch(geolocateUserRequest());
+  // const authToken = getState().auth.authToken;
+  // const currentUser = getState().auth.currentUser;
+  // let userId;
+  // if (currentUser) {
+  //   userId = currentUser.id;
+  // }
 
   function findCity(areas) {
     const correctLoc = areas.filter(
@@ -373,31 +417,28 @@ export const geolocateUser = () => (dispatch, getState) => {
     return correctLoc[0].formatted_address;
   }
 
-  function getLocationName(lat, lon) {
-    fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`
-    )
+
+  function getLocationName(lat, lng) {
+    console.log(`Coordinates are ${lat}, ${lng}`);
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
       .then(data => {
-        // dispatch(geolocateUserSuccess(data.results[7].formatted_address, { lat, lon }));
         const cityName = findCity(data.results);
-        dispatch(geolocateUserSuccess(cityName, { lat, lon }));
+        console.log('City located: ', cityName);
+        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lng } }));
       })
+      .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
 
   if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition(
-      function success(position) {
-        getLocationName(position.coords.latitude, position.coords.longitude);
-      },
-      function error(error_message) {
-        console.error(
-          'An error has occured while retrieving location',
-          error_message
-        );
-      }
-    );
+    console.log('aquiring location...');
+    navigator.geolocation.getCurrentPosition(function success(position) {
+      getLocationName(position.coords.latitude, position.coords.longitude);
+    }, function error(error_message) {
+      console.error('An error has occured while retrieving location', error_message);
+    });
+
   } else {
     console.log('geolocation is not enabled on this browser');
   }
@@ -441,11 +482,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
   fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
     method: 'POST',
     mode: 'cors',
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${authToken}`
-    },
-    body: JSON.stringify({
+     body: JSON.stringify({
       profilePic: imgUrl
     })
   })
@@ -481,3 +518,124 @@ export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
       console.log(err);
     });
 };
+    
+export const NEVER_MIND_USER_REQUEST = 'NEVER_MIND_USER_REQUEST';
+export const neverMindUserRequest = () => ({
+  type: NEVER_MIND_USER_REQUEST
+});
+
+export const NEVER_MIND_USER_SUCCESS = 'NEVER_MIND_USER_SUCCESS';
+export const neverMindUserSuccess = () => ({
+  type: NEVER_MIND_USER_SUCCESS
+});
+
+export const NEVER_MIND_USER_FAILURE = 'NEVER_MIND_USER_FAILURE';
+export const neverMindUserFailure = error => ({
+  type: NEVER_MIND_USER_FAILURE,
+  error
+});
+
+export const neverMindUser = neverMindUserId => (dispatch, getState) => {
+  dispatch(neverMindUserRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/nevermind/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify({ userId: neverMindUserId })
+  })
+    .then(res => {
+      dispatch(neverMindUserSuccess(res));
+    })
+    .catch(err => dispatch(neverMindUserFailure(err)));
+};
+
+export const FETCH_NOTIFICATION_REQUEST = 'FETCH_NOTIFICATION_REQUEST';
+export const fetchNotificationRequest = () => ({
+  type: FETCH_NOTIFICATION_REQUEST
+});
+
+export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
+export const fetchNotificationSuccess = (notificationInfo) => ({
+  type: FETCH_NOTIFICATION_SUCCESS,
+  notifications: notificationInfo.notifications,
+  notificationCheck: notificationInfo.notificationCheck
+});
+
+export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';
+export const fetchNotificationFailure = error => ({
+  type: FETCH_NOTIFICATION_FAILURE,
+  error
+});
+
+export const fetchNotification = () => (dispatch, getState) => {
+  dispatch(fetchNotificationRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/notifications/${userId}`, {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(fetchNotificationSuccess(res));
+    })
+    .catch(err => dispatch(fetchNotificationFailure(err)));
+};
+
+export const PUT_NOTIFICATION_TIME_REQUEST = 'PUT_NOTIFICATION_TIME_REQUEST';
+export const putNotificationTimeRequest = () => ({
+  type: PUT_NOTIFICATION_TIME_REQUEST
+});
+
+export const PUT_NOTIFICATION_TIME_SUCCESS = 'PUT_NOTIFICATION_TIME_SUCCESS';
+export const putNotificationTimeSuccess = (date) => ({
+  type: PUT_NOTIFICATION_TIME_SUCCESS,
+  date
+});
+
+export const PUT_NOTIFICATION_TIME_FAILURE = 'PUT_NOTIFICATION_TIME_FAILURE';
+export const putNotificationTimeFailure = error => ({
+  type: PUT_NOTIFICATION_TIME_FAILURE,
+  error
+});
+
+export const putNotificationTime = () => (dispatch, getState) => {
+  dispatch(putNotificationTimeRequest());
+  const authToken = getState().auth.authToken;
+  const currentUser = getState().auth.currentUser;
+  let userId;
+  if (currentUser) {
+    userId = currentUser.id;
+  }
+
+  return fetch(`${API_BASE_URL}/main/notificationtime/${userId}`, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(putNotificationTimeSuccess(res));
+    })
+    .catch(err => dispatch(putNotificationTimeFailure(err)));
+};
+

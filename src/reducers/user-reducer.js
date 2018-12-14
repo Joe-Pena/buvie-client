@@ -27,7 +27,17 @@ import {
   USER_PIC_REQUEST,
   USER_PIC_SUCCESS,
   USER_PIC_FAILURE,
-  TOGGLE_PROFILE
+  TOGGLE_PROFILE,
+
+  NEVER_MIND_USER_REQUEST,
+  NEVER_MIND_USER_SUCCESS,
+  NEVER_MIND_USER_FAILURE,
+  FETCH_NOTIFICATION_REQUEST,
+  FETCH_NOTIFICATION_SUCCESS,
+  FETCH_NOTIFICATION_FAILURE,
+  PUT_NOTIFICATION_TIME_REQUEST,
+  PUT_NOTIFICATION_TIME_SUCCESS,
+  PUT_NOTIFICATION_TIME_FAILURE
 } from '../actions/users';
 
 const initialState = {
@@ -37,12 +47,14 @@ const initialState = {
   genres: [],
   matches: [],
   popcorn: [],
+  pending: [],
   matched: [],
+  notifications: [],
+  notificationCheck: null,
   filter: [],
-  userCity: '',
-  userCoords: {},
   profilePage: false,
-  profilePic: ''
+  profilePic: '',
+  location: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -76,7 +88,8 @@ export default function reducer(state = initialState, action) {
     });
   } else if (action.type === FETCH_CURRENT_USER_SUCCESS) {
     return Object.assign({}, state, {
-      loading: false
+      loading: false,
+      location: action.user.location
     });
   } else if (action.type === FETCH_CURRENT_USER_FAILURE) {
     return Object.assign({}, state, {
@@ -91,7 +104,8 @@ export default function reducer(state = initialState, action) {
   } else if (action.type === FETCH_POPCORN_SUCCESS) {
     return Object.assign({}, state, {
       loading: false,
-      popcorn: action.popcorn
+      popcorn: action.popcorn.popcorned,
+      pending: action.popcorn.pendingPopcorn
     });
   } else if (action.type === FETCH_POPCORN_FAILURE) {
     return Object.assign({}, state, {
@@ -153,16 +167,59 @@ export default function reducer(state = initialState, action) {
       error: false
     });
   } else if (action.type === GEOLOCATE_USER_SUCCESS) {
-    console.log(
-      `You're current collection is ${action.location}, coordinates:`,
-      action.coords
-    );
     return Object.assign({}, state, {
       loading: false,
-      userCity: action.location,
-      userCoords: action.coords
+      location: action.location,
     });
   } else if (action.type === GEOLOCATE_USER_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === NEVER_MIND_USER_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === NEVER_MIND_USER_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null
+    });
+  } else if (action.type === NEVER_MIND_USER_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === FETCH_NOTIFICATION_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === FETCH_NOTIFICATION_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null,
+      notifications: action.notifications,
+      notificationCheck: action.notificationCheck
+    });
+  } else if (action.type === FETCH_NOTIFICATION_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true,
+      error: null
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: null,
+      notificationCheck: action.date
+    });
+  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {    
     return Object.assign({}, state, {
       loading: false,
       error: action.error

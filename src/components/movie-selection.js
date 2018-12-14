@@ -10,17 +10,25 @@ const StyledH3 = styled.h3`
   justify-self: center;
   text-align: center;
   color: #fff;
+  text-align: center;
+  font-size: 3rem;
 `;
 
 const StyledForm = styled.form`
   color: #fff;
   display: grid;
   margin-bottom: 3rem;
+  text-align: center;
 
   .options {  
     display: grid;
     grid-template-columns: 1fr;
     align-items: center;
+  }
+
+  .feedback {
+    font-size: 2rem;
+    font-weight: 600;
   }
 
   label {
@@ -31,17 +39,18 @@ const StyledForm = styled.form`
   }
 
   img {
+    margin: 16px;
     width: 120px;
     transition: box-shadow .3s;
   }
 
-  img.picked {
+  input:checked + img {
     background-color: #a33944;
     /* box-shadow: 0 0 10px 5px #900; */
     box-shadow:
-        0 0 60px 30px #fff, 
-        0 0 100px 60px #f0f,
-        0 0 140px 90px #0ff;
+        0 0 6px 3px #fff, 
+        0 0 10px 6px #f0f,
+        0 0 14px 9px #0ff;
   }
 
   input {
@@ -56,6 +65,10 @@ const StyledForm = styled.form`
     border: none;
     justify-self: center;
     cursor: pointer;
+  }
+
+  .movie-select-btn:disabled {
+    opacity: 0.3
   }
 
   @media (min-width: 480px) {
@@ -124,12 +137,13 @@ class MovieSelection extends Component {
         </label>);
     });
 
-    const disabled = this.props.loading || !this.state.movies.length;
+    const disabled = this.props.loading || this.state.movies.length < 3;
 
     return (
       <Container>
-        <StyledH3>And now select your favorite movies!</StyledH3>
+        <StyledH3>And now select your favorite movies! Choose at least 3</StyledH3>
         <StyledForm onSubmit={e => this.onSubmit(e)}>
+          <div className='feedback'>{this.state.movies.length} movies selected</div>
           <div className="options">
             {inputs}
           </div>
