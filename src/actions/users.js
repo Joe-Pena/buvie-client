@@ -437,6 +437,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
   console.log(authToken, 'line 437');
   dispatch(userPicRequest());
   console.log(imgUrl);
+  console.log(API_BASE_URL);
   fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
     method: 'POST',
     mode: 'cors',
@@ -464,6 +465,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
 export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
   dispatch(userPicRequest());
   console.log(file);
+  console.log(CLOUDINARY_BASE_URL);
   fetch(`${CLOUDINARY_BASE_URL}`, {
     method: 'POST',
     body: file

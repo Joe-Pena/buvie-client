@@ -69,11 +69,12 @@ class ProfilePage extends Component {
 	onSubmit = () => {
 		let file = this.state.profilePicture;
 		let formData = new FormData();
-
-		console.log(file, 'line 72 on submit');
+		console.log(CLOUDINARY_UPLOAD_PRESET, 'line 72 on submit');
+		console.log(file);
 		formData.append('file', file);
 		formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 		console.log(formData, 'line 74');
+
 		this.props.dispatch(
 			postCloudinaryProfilePicture(formData, this.props.user.id)
 		);
@@ -91,11 +92,14 @@ class ProfilePage extends Component {
 				</div>
 				<div className="profile-display-container">
 					<ImageUploader
+						label="Max file size: 150kb, accepted: 'jpg', 'png'"
 						withIcon={true}
 						buttonText="Choose images"
 						onChange={this.onDrop}
-						imgExtension={['.jpg', '.gif', '.png', '.gif']}
-						maxFileSize={5242880}
+						imgExtension={['.jpg', '.png']}
+						maxFileSize={150000}
+						fileSizeError="File size is too big!"
+						fileTypeError="That file is not supported!"
 					/>
 					{this.state.imgSrc && <img src={this.state.imgSrc} />}
 					<form

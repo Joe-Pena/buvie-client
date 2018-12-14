@@ -42,7 +42,7 @@ const initialState = {
   userCity: '',
   userCoords: {},
   profilePage: false,
-  userPic: ''
+  profilePic: ''
 };
 
 export default function reducer(state = initialState, action) {
