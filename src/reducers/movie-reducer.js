@@ -10,7 +10,7 @@ const initialState = {
   list: [],
   loading: false,
   error: null,
-  currentMovie: null
+  currentMovie: {}
 };
 
 export default function reducer(state = initialState, action) {

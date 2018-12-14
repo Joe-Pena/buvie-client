@@ -7,6 +7,25 @@ import { fetchOmdbInfo } from '../actions/movies-action';
 const StyledMovieModal = styled.div`
 `;
 
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    height: '60%',
+    width: '640px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  overlay: {
+    backgroundColor: 'transparent'
+  }
+};
+
 export class MovieModal extends React.Component {
   constructor(props) {
     super(props);
@@ -15,20 +34,25 @@ export class MovieModal extends React.Component {
     };
   }
 
-  openModal() {
+  openModal = () => {
     this.setState({
       modalIsOpen: true
     });
   }
 
-  closeModal() {
+  closeModal = () => {
     this.setState({
       modalIsOpen: false
     });
   }
 
   getMovieInfo(imdbID) {
-    this.props.dispatch(fetchOmdbInfo(imdbID));
+    this.props
+      .dispatch(fetchOmdbInfo(imdbID))
+      .then(() => {
+        this.openModal();
+        console.log(this.props.movieInfo);
+      })
   }
 
   render() {
@@ -41,6 +65,16 @@ export class MovieModal extends React.Component {
           alt={movie.title}
           onClick={() => this.getMovieInfo(movie.imdbID)}
         />
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          shouldCloseOnOverlayClick={true}
+          style={customStyles}
+        >
+          <div>{this.props.movieInfo.Title}</div>
+
+        </Modal>
       </StyledMovieModal>
     );
   }
@@ -48,7 +82,7 @@ export class MovieModal extends React.Component {
 
 const mapStateToProps = state => {
   return {
-
+    movieInfo: state.movie.currentMovie
   };
 };
 
