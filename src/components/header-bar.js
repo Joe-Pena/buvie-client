@@ -1,20 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { clearAuth } from '../actions/auth';
-import { resetUser } from '../actions/users';
+import { resetUser, toggleProfilePage } from '../actions/users';
 import { resetMovies } from '../actions/movies-action';
 import { clearAuthToken } from '../local-storage';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 import DropDown from './dropdown';
 
 const StyledHeaderBar = styled.div`
-
   display: grid;
   grid-template-columns: 8fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "logo menu" "logout logout" "notifications notifications";
-
   .menu-button {
     display: block;
     grid-area: menu;
@@ -124,6 +123,16 @@ export class HeaderBar extends React.Component {
     });
   }
 
+	toggleProfilePage = () => {
+		if (this.props.location.pathname === '/dashboard') {
+			this.props.dispatch(toggleProfilePage(true));
+			console.log('happened');
+		} else {
+			this.props.dispatch(toggleProfilePage(false));
+			console.log('happened');
+		}
+	};
+
   render() {
     let logOutButton;
     if (this.props.loggedIn) {
@@ -149,7 +158,7 @@ export class HeaderBar extends React.Component {
       <StyledHeaderBar className="header-bar" isCollapsed={this.state.isCollapsed}>
         <img src={logoName} alt="buvie logo" className="nav-logo" />
         {this.props.loggedIn ?
-          <h2 className="welcome-message">Welcome, {this.props.user.username}!</h2>
+          <h2 onClick={this.toggleProfilePage} className="welcome-message">Welcome, {this.props.user.username}!</h2>
           :
           <div></div>
         }
@@ -167,7 +176,8 @@ const mapStateToProps = state => ({
   loggedIn: state.auth.currentUser !== null,
   user: state.auth.currentUser,
   notifications: state.user.notifications,
-  notificationCheck: state.user.notificationCheck
+  notificationCheck: state.user.notificationCheck,
+	profilePage: state.user.profilePage
 });
 
 export default connect(mapStateToProps)(HeaderBar);

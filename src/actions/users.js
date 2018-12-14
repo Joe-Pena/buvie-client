@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
-import { API_BASE_URL, GOOGLE_MAP_KEY } from '../config';
+import { API_BASE_URL, GOOGLE_MAP_KEY, CLOUDINARY_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
-
+import { refreshAuthToken } from './auth';
 export const SET_GENRES = 'SET_GENRES';
 export const setGenres = genres => ({
   type: SET_GENRES,
@@ -163,7 +163,9 @@ export const updateUser = data => (dispatch, getState) => {
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const popCornMatch = data => (dispatch, getState) => {
@@ -180,7 +182,9 @@ export const popCornMatch = data => (dispatch, getState) => {
     .then(res => {
       console.log(res);
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const FETCH_POPCORN_REQUEST = 'FETCH_POPCORN_REQUEST';
@@ -221,7 +225,6 @@ export const fetchPopcorn = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(fetchPopcornFailure(err)));
 };
-
 
 export const FETCH_MATCHED_REQUEST = 'FETCH_MATCHED_REQUEST';
 export const fetchMatchedRequest = () => ({
@@ -303,7 +306,6 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     })
     .catch(err => dispatch(chairUserFailure(err)));
 };
-
 
 export const FETCH_MESSAGE_REQUEST = 'FETCH_MESSAGE_REQUEST';
 export const fetchMessageRequest = () => ({
@@ -408,9 +410,13 @@ export const geolocateUser = () => (dispatch, getState) => {
   // }
 
   function findCity(areas) {
-    const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
+    const correctLoc = areas.filter(
+      area =>
+        area.types.includes('locality') && area.types.includes('political')
+    );
     return correctLoc[0].formatted_address;
   }
+
 
   function getLocationName(lat, lng) {
     console.log(`Coordinates are ${lat}, ${lng}`);
@@ -424,7 +430,7 @@ export const geolocateUser = () => (dispatch, getState) => {
       .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
-  
+
   if ('geolocation' in navigator) {
     console.log('aquiring location...');
     navigator.geolocation.getCurrentPosition(function success(position) {
@@ -432,12 +438,87 @@ export const geolocateUser = () => (dispatch, getState) => {
     }, function error(error_message) {
       console.error('An error has occured while retrieving location', error_message);
     });
+
   } else {
     console.log('geolocation is not enabled on this browser');
   }
 };
 
-//IGNORING MATCHES ============================================================================
+export const TOGGLE_PROFILE = 'TOGGLE_PROFILE';
+export const toggleProfilePage = value => {
+  return {
+    type: TOGGLE_PROFILE,
+    value
+  };
+};
+
+//NICK ADDED
+
+export const USER_PIC_REQUEST = 'USER_PIC_REQUEST';
+export const userPicRequest = () => ({
+  type: USER_PIC_REQUEST
+});
+
+export const USER_PIC_SUCCESS = 'USER_PIC_SUCCESS';
+export const userPicSuccess = (location, coords) => ({
+  type: USER_PIC_SUCCESS
+});
+
+export const USER_PIC_FAILURE = 'USER_PIC_FAILURE';
+export const userPicFailure = error => ({
+  type: USER_PIC_SUCCESS,
+  error
+});
+
+export const postUserProfilePicture = (userId, imgUrl) => (
+  dispatch,
+  getState
+) => {
+  const authToken = getState().auth.authToken;
+  console.log(authToken, 'line 437');
+  dispatch(userPicRequest());
+  console.log(imgUrl);
+  console.log(API_BASE_URL);
+  fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
+    method: 'POST',
+    mode: 'cors',
+     body: JSON.stringify({
+      profilePic: imgUrl
+    })
+  })
+    .then(res => {
+      dispatch(userPicSuccess());
+      dispatch(refreshAuthToken());
+      return res.json();
+    })
+    .then(() => {
+      console.log('hello');
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+    });
+};
+
+export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
+  dispatch(userPicRequest());
+  console.log(file);
+  console.log(CLOUDINARY_BASE_URL);
+  fetch(`${CLOUDINARY_BASE_URL}`, {
+    method: 'POST',
+    body: file
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(userPicSuccess());
+      let profilePic = res.secure_url;
+      return dispatch(postUserProfilePicture(userId, profilePic));
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+      console.log(err);
+    });
+};
+    
 export const NEVER_MIND_USER_REQUEST = 'NEVER_MIND_USER_REQUEST';
 export const neverMindUserRequest = () => ({
   type: NEVER_MIND_USER_REQUEST
@@ -557,3 +638,4 @@ export const putNotificationTime = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(putNotificationTimeFailure(err)));
 };
+

@@ -14,6 +14,7 @@ import {
   fetchNotification,
   fetchMatchesNearMe
 } from '../actions/users';
+import { Redirect } from 'react-router-dom';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import Chat from './chat';
@@ -29,7 +30,6 @@ const StyledDashboard = styled.div`
 	grid-column-gap: 3rem;
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
-
 
   .dashboard-profile {
     grid-area: profile;
@@ -56,19 +56,18 @@ const StyledDashboard = styled.div`
     justify-self: center;
   }
 
-  .dashboard-matches {
-    grid-area: matches;
-    display: grid;
-    grid-template-rows: 0.8fr 0.8fr 0.8fr;
-    grid-row-gap: 1.5rem;
-    grid-template-areas:
-      "first-match"
-      "second-match"
-      "third-match";
-    height: 85%;
-    align-self: center;
-  }
-
+	.dashboard-matches {
+		grid-area: matches;
+		display: grid;
+		grid-template-rows: 0.8fr 0.8fr 0.8fr;
+		grid-row-gap: 1.5rem;
+		grid-template-areas:
+			'first-match'
+			'second-match'
+			'third-match';
+		height: 85%;
+		align-self: center;
+	}
 
 	.first-match {
 		grid-area: first-match;
@@ -161,33 +160,31 @@ const StyledDashboard = styled.div`
 		display: inline-block;
 	}
 
-
 	.match-movie-poster {
 		width: 12rem;
 		margin: 0 1rem;
 		justify-self: center;
 	}
 
-  .match-popcorn-btn {
-    grid-area: popcorn-btn;
-    background-color: #a33944;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
+	.match-popcorn-btn {
+		grid-area: popcorn-btn;
+		background-color: #a33944;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 
-  .match-chair-btn {
-    grid-area: ignore-btn;
-    background-color: #b8b999;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
-
+	.match-chair-btn {
+		grid-area: ignore-btn;
+		background-color: #b8b999;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 `;
 
 export class Dashboard extends React.Component {
@@ -231,6 +228,11 @@ export class Dashboard extends React.Component {
   }
 
   render() {
+
+    if (this.props.profilePage) {
+      return <Redirect to="/profile" />;
+    }
+
     if (!this.props.genres.length) {
       return <GenreSelection />;
     }
@@ -238,13 +240,28 @@ export class Dashboard extends React.Component {
     if (!this.props.movies.length) {
       return <MovieSelection />;
     }
+    
+    let userProfilePicture;
+
+    if (this.props.profilePicture) {
+      userProfilePicture = this.props.profilePicture;
+    } else {
+      userProfilePicture = `https://www.gravatar.com/avatar/${md5(
+        this.props.email
+      )}?d=retro`;
+    }
 
     const matches = this.props.matches
       .filter(user => !this.props.filter.includes(user.id))
       .map(user => {
-        let gravatar = `https://www.gravatar.com/avatar/${md5(
-          user.email
-        )}?d=retro`;
+        let gravatar;
+        if (user.profilePicture) {
+          gravatar = user.profilePicture;
+        } else {
+          gravatar = `https://www.gravatar.com/avatar/${md5(
+            user.email
+          )}?d=retro`;
+        }
         let matchGenres;
         if (user.genres) {
           matchGenres = user.genres.map(genre => {
@@ -352,15 +369,14 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile-avatar" />
+
+          <img
+            className="dashboard-profile-avatar"
+            src={userProfilePicture}
+            alt="profile picture"
+          />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
-          <div>
-            <h3 name='popcorn'>popcorns</h3>
-            {popcorns}
-          </div>
-          <div>
-            pending popcorns {pending}
-          </div>
+					popcorns {popcorns}
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -392,13 +408,15 @@ const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
     email: state.auth.currentUser.email,
+    profilePicture: state.auth.currentUser.profilePicture,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches,
     popcorn: state.user.popcorn,
     pending: state.user.pending,
     matched: state.user.matched,
-    filter: state.user.filter
+    filter: state.user.filter,
+    profilePage: state.user.profilePage
   };
 };
 

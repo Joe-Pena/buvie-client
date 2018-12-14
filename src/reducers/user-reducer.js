@@ -24,6 +24,11 @@ import {
   GEOLOCATE_USER_REQUEST,
   GEOLOCATE_USER_SUCCESS,
   GEOLOCATE_USER_FAILURE,
+  USER_PIC_REQUEST,
+  USER_PIC_SUCCESS,
+  USER_PIC_FAILURE,
+  TOGGLE_PROFILE,
+
   NEVER_MIND_USER_REQUEST,
   NEVER_MIND_USER_SUCCESS,
   NEVER_MIND_USER_FAILURE,
@@ -47,7 +52,9 @@ const initialState = {
   notifications: [],
   notificationCheck: null,
   filter: [],
-  location: {},
+  profilePage: false,
+  profilePic: '',
+  location: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -124,7 +131,7 @@ export default function reducer(state = initialState, action) {
     return Object.assign({}, state, {
       filter: [...state.filter, action.user]
     });
-  }  else if (action.type === RESET_USER) {
+  } else if (action.type === RESET_USER) {
     return initialState;
   } else if (action.type === FETCH_MESSAGE_REQUEST) {
     return Object.assign({}, state, {
@@ -212,7 +219,24 @@ export default function reducer(state = initialState, action) {
       error: null,
       notificationCheck: action.date
     });
-  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {
+  } else if (action.type === PUT_NOTIFICATION_TIME_FAILURE) {    
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
+    });
+  } else if (action.type === TOGGLE_PROFILE) {
+    return Object.assign({}, state, {
+      profilePage: action.value
+    });
+  } else if (action.type === USER_PIC_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true
+    });
+  } else if (action.type === USER_PIC_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false
+    });
+  } else if (action.type === USER_PIC_FAILURE) {
     return Object.assign({}, state, {
       loading: false,
       error: action.error
