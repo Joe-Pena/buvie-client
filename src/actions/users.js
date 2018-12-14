@@ -465,6 +465,7 @@ export const fetchNotification = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
+      console.log(res);
       dispatch(fetchNotificationSuccess(res));
     })
     .catch(err => dispatch(fetchNotificationFailure(err)));
@@ -496,7 +497,7 @@ export const putNotificationTime = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  return fetch(`${API_BASE_URL}/main/notifications/${userId}`, {
+  return fetch(`${API_BASE_URL}/main/notificationtime/${userId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
