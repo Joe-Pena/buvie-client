@@ -48,6 +48,7 @@ const StyledHeaderBar = styled.div`
 
 	.welcome-message {
 		display: none;
+		cursor: pointer;
 	}
 
 	@media (min-width: 768px) {

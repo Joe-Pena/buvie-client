@@ -207,6 +207,16 @@ export class Dashboard extends React.Component {
   }
 
   render() {
+    let userProfilePicture;
+
+    if (this.props.profilePicture) {
+      userProfilePicture = this.props.profilePicture;
+    } else {
+      userProfilePicture = `https://www.gravatar.com/avatar/${md5(
+        this.props.email
+      )}?d=retro`;
+    }
+
     if (this.props.profilePage) {
       return <Redirect to="/profile" />;
     }
@@ -222,9 +232,14 @@ export class Dashboard extends React.Component {
     const matches = this.props.matches
       .filter(user => !this.props.filter.includes(user.id))
       .map(user => {
-        let gravatar = `https://www.gravatar.com/avatar/${md5(
-          user.email
-        )}?d=retro`;
+        let gravatar;
+        if (user.profilePicture) {
+          gravatar = user.profilePicture;
+        } else {
+          gravatar = `https://www.gravatar.com/avatar/${md5(
+            user.email
+          )}?d=retro`;
+        }
         let matchGenres;
         if (user.genres) {
           matchGenres = user.genres.map(genre => {
@@ -306,9 +321,7 @@ export class Dashboard extends React.Component {
         <div className="dashboard-profile">
           <img
             className="dashboard-profile-avatar"
-            src={`https://www.gravatar.com/avatar/${md5(
-              this.props.email
-            )}?d=retro`}
+            src={userProfilePicture}
             alt="profile picture"
           />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
@@ -343,6 +356,7 @@ const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
     email: state.auth.currentUser.email,
+    profilePicture: state.auth.currentUser.profilePicture,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches,

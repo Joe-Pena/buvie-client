@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form';
 
 import { API_BASE_URL, GOOGLE_MAP_KEY, CLOUDINARY_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
-
+import { refreshAuthToken } from './auth';
 export const SET_GENRES = 'SET_GENRES';
 export const setGenres = genres => ({
   type: SET_GENRES,
@@ -450,6 +450,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
   })
     .then(res => {
       dispatch(userPicSuccess());
+      dispatch(refreshAuthToken());
       return res.json();
     })
     .then(() => {
@@ -467,22 +468,11 @@ export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
     method: 'POST',
     body: file
   })
-    .then(res => {
-      return res.json();
-    })
+    .then(res => res.json())
     .then(res => {
       dispatch(userPicSuccess());
       let profilePic = res.secure_url;
-      dispatch(postUserProfilePicture(userId, profilePic))
-        .then(res => {
-          return res.json();
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      return dispatch(postUserProfilePicture(userId, profilePic));
     })
     .catch(err => {
       dispatch(userPicFailure(err));
