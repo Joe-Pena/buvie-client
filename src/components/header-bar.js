@@ -13,7 +13,7 @@ const StyledHeaderBar = styled.div`
 	grid-template-columns: 8fr 1fr;
 	grid-template-rows: 1fr 1fr;
 	grid-template-areas: 'logo menu' 'logout logout';
-
+	padding: 1%;
 	.menu-button {
 		display: block;
 		grid-area: menu;

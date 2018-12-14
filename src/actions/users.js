@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
-import { API_BASE_URL, GOOGLE_MAP_KEY } from '../config';
+import { API_BASE_URL, GOOGLE_MAP_KEY, CLOUDINARY_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
 
 export const SET_GENRES = 'SET_GENRES';
@@ -409,4 +409,83 @@ export const toggleProfilePage = value => {
     type: TOGGLE_PROFILE,
     value
   };
+};
+
+//NICK ADDED
+
+export const USER_PIC_REQUEST = 'USER_PIC_REQUEST';
+export const userPicRequest = () => ({
+  type: USER_PIC_REQUEST
+});
+
+export const USER_PIC_SUCCESS = 'USER_PIC_SUCCESS';
+export const userPicSuccess = (location, coords) => ({
+  type: USER_PIC_SUCCESS
+});
+
+export const USER_PIC_FAILURE = 'USER_PIC_FAILURE';
+export const userPicFailure = error => ({
+  type: USER_PIC_SUCCESS,
+  error
+});
+
+export const postUserProfilePicture = (userId, imgUrl) => (
+  dispatch,
+  getState
+) => {
+  const authToken = getState().auth.authToken;
+  console.log(authToken, 'line 437');
+  dispatch(userPicRequest());
+  console.log(imgUrl);
+  fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+    body: JSON.stringify({
+      profilePic: imgUrl
+    })
+  })
+    .then(res => {
+      dispatch(userPicSuccess());
+      return res.json();
+    })
+    .then(() => {
+      console.log('hello');
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+    });
+};
+
+export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
+  dispatch(userPicRequest());
+  console.log(file);
+  fetch(`${CLOUDINARY_BASE_URL}`, {
+    method: 'POST',
+    body: file
+  })
+    .then(res => {
+      return res.json();
+    })
+    .then(res => {
+      dispatch(userPicSuccess());
+      let profilePic = res.secure_url;
+      dispatch(postUserProfilePicture(userId, profilePic))
+        .then(res => {
+          return res.json();
+        })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+      console.log(err);
+    });
 };

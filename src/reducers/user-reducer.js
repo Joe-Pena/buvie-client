@@ -24,6 +24,9 @@ import {
   GEOLOCATE_USER_REQUEST,
   GEOLOCATE_USER_SUCCESS,
   GEOLOCATE_USER_FAILURE,
+  USER_PIC_REQUEST,
+  USER_PIC_SUCCESS,
+  USER_PIC_FAILURE,
   TOGGLE_PROFILE
 } from '../actions/users';
 
@@ -38,7 +41,8 @@ const initialState = {
   filter: [],
   userCity: '',
   userCoords: {},
-  profilePage: false
+  profilePage: false,
+  userPic: ''
 };
 
 export default function reducer(state = initialState, action) {
@@ -166,6 +170,19 @@ export default function reducer(state = initialState, action) {
   } else if (action.type === TOGGLE_PROFILE) {
     return Object.assign({}, state, {
       profilePage: action.value
+    });
+  } else if (action.type === USER_PIC_REQUEST) {
+    return Object.assign({}, state, {
+      loading: true
+    });
+  } else if (action.type === USER_PIC_SUCCESS) {
+    return Object.assign({}, state, {
+      loading: false
+    });
+  } else if (action.type === USER_PIC_FAILURE) {
+    return Object.assign({}, state, {
+      loading: false,
+      error: action.error
     });
   }
   return state;
