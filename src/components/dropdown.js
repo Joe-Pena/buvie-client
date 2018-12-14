@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import moment from 'moment';
 import onClickOutside from 'react-onclickoutside';
-import { putNotificationTime } from '../actions/users';
+import { putNotificationTime, fetchNotification } from '../actions/users';
 
 const StyledDropDown = styled.div`
   color: #fff;
@@ -56,7 +56,9 @@ export class DropDown extends React.Component {
 
   toggleList() {
     if (!this.state.listOpen) {
-      this.props.dispatch(putNotificationTime());
+      this.props
+        .dispatch(fetchNotification())
+        .then(() => this.props.dispatch(putNotificationTime()));
     }
     this.setState({
       listOpen: !this.state.listOpen
@@ -82,8 +84,8 @@ export class DropDown extends React.Component {
           {moment(item.date).fromNow()}
         </li>);
     });
-    let newNotificationCount=0;
-    for (let i=0; i<listArr.length; i++) {
+    let newNotificationCount = 0;
+    for (let i = 0; i < listArr.length; i++) {
       if (listArr[i].date > time) {
         newNotificationCount++;
       }
