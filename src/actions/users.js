@@ -465,7 +465,6 @@ export const fetchNotification = () => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchNotificationSuccess(res));
     })
     .catch(err => dispatch(fetchNotificationFailure(err)));
