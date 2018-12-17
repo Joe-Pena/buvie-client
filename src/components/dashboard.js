@@ -11,8 +11,10 @@ import {
   filterUser,
   chairUser,
   neverMindUser,
-  fetchNotification
+  fetchNotification,
+  fetchMatchesNearMe
 } from '../actions/users';
+import { Redirect } from 'react-router-dom';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import MovieModal from '../components/movie-modal';
@@ -30,45 +32,43 @@ const StyledDashboard = styled.div`
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
 
+	.dashboard-profile {
+		grid-area: profile;
+		background-color: #8b8b99;
+		display: grid;
+		grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
+		grid-template-areas:
+			'avatar'
+			'username'
+			'content';
+		height: 85%;
+		align-self: center;
+	}
 
-  .dashboard-profile {
-    grid-area: profile;
-    background-color: #8b8b99;
-    display: grid;
-    grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
-    grid-template-areas:
-      "avatar"
-      "username"
-      "content";
-    height: 85%;
-    align-self: center;
-  }
+	.dashboard-profile-avatar {
+		grid-area: avatar;
+		border-radius: 100rem;
+		justify-self: center;
+		align-self: center;
+	}
 
-  .dashboard-profile-avatar {
-    grid-area: avatar;
-    border-radius: 100rem;
-    justify-self: center;
-    align-self: center;
-  }
+	.dashboard-profile-username {
+		grid-area: username;
+		justify-self: center;
+	}
 
-  .dashboard-profile-username {
-    grid-area: username;
-    justify-self: center;
-  }
-
-  .dashboard-matches {
-    grid-area: matches;
-    display: grid;
-    grid-template-rows: 0.8fr 0.8fr 0.8fr;
-    grid-row-gap: 1.5rem;
-    grid-template-areas:
-      "first-match"
-      "second-match"
-      "third-match";
-    height: 85%;
-    align-self: center;
-  }
-
+	.dashboard-matches {
+		grid-area: matches;
+		display: grid;
+		grid-template-rows: 0.8fr 0.8fr 0.8fr;
+		grid-row-gap: 1.5rem;
+		grid-template-areas:
+			'first-match'
+			'second-match'
+			'third-match';
+		height: 85%;
+		align-self: center;
+	}
 
 	.first-match {
 		grid-area: first-match;
@@ -77,7 +77,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -89,7 +89,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -101,7 +101,7 @@ const StyledDashboard = styled.div`
 		grid-template-rows: 0.2fr 0.6fr 0.2fr;
 		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
 		grid-template-areas:
-			'avatar username genres genres'
+			'avatar username location location'
 			'movies movies genres genres'
 			'. . popcorn-btn ignore-btn';
 	}
@@ -135,6 +135,15 @@ const StyledDashboard = styled.div`
 		left: 1.5rem;
 	}
 
+
+  .match-location {
+    grid-area: location;
+    justify-self: center;
+    align-self: center;
+    /* font-weight: 300; */
+  }
+
+
 	.match-genre-list {
 		grid-area: genres;
 		align-self: center;
@@ -154,33 +163,31 @@ const StyledDashboard = styled.div`
 		display: inline-block;
 	}
 
-
 	.match-movie-poster {
 		width: 12rem;
 		margin: 0 1rem;
 		justify-self: center;
 	}
 
-  .match-popcorn-btn {
-    grid-area: popcorn-btn;
-    background-color: #a33944;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
+	.match-popcorn-btn {
+		grid-area: popcorn-btn;
+		background-color: #a33944;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 
-  .match-chair-btn {
-    grid-area: ignore-btn;
-    background-color: #b8b999;
-    color: #000;
-    width: 8rem;
-    height: 3rem;
-    border: none;
-    cursor: pointer;
-  }
-
+	.match-chair-btn {
+		grid-area: ignore-btn;
+		background-color: #b8b999;
+		color: #000;
+		width: 8rem;
+		height: 3rem;
+		border: none;
+		cursor: pointer;
+	}
 `;
 
 export class Dashboard extends React.Component {
@@ -232,12 +239,27 @@ export class Dashboard extends React.Component {
       return <MovieSelection />;
     }
 
+    let userProfilePicture;
+
+    if (this.props.profilePicture) {
+      userProfilePicture = this.props.profilePicture;
+    } else {
+      userProfilePicture = `https://www.gravatar.com/avatar/${md5(
+        this.props.email
+      )}?d=retro`;
+    }
+
     const matches = this.props.matches
       .filter(user => !this.props.filter.includes(user.id))
       .map(user => {
-        let gravatar = `https://www.gravatar.com/avatar/${md5(
-          user.email
-        )}?d=retro`;
+        let gravatar;
+        if (user.profilePicture) {
+          gravatar = user.profilePicture;
+        } else {
+          gravatar = `https://www.gravatar.com/avatar/${md5(
+            user.email
+          )}?d=retro`;
+        }
         let matchGenres;
         if (user.genres) {
           matchGenres = user.genres.map(genre => {
@@ -264,6 +286,7 @@ export class Dashboard extends React.Component {
           <React.Fragment key={user.id}>
             <img className="match-avatar" src={gravatar} alt={user.username} />
             <h3 className="match-username">{user.username}</h3>
+            <h3 className="match-location">{user.location.city}</h3>
             <ul className="match-genre-list">
               <h3>{user.username} likes:</h3>
               {matchGenres}
@@ -273,13 +296,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user.id)}
             >
-              Popcorn
+							Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user.id)}
             >
-              Ignore
+							Ignore
             </button>
           </React.Fragment>
         );
@@ -302,13 +325,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-              Popcorn
+							Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user._id)}
             >
-              Ignore
+							Ignore
             </button>
           </React.Fragment>
         );
@@ -324,13 +347,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-              Re-Popcorn
+							Re-Popcorn
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.nevermind(user._id)}
             >
-              Never mind
+							Never mind
             </button>
           </React.Fragment>
         );
@@ -340,8 +363,13 @@ export class Dashboard extends React.Component {
     return (
       <StyledDashboard className="dashboard">
         <div className="dashboard-profile">
-          <img className="dashboard-profile-avatar" src={`https://www.gravatar.com/avatar/${md5(this.props.email)}?d=retro`} alt="profile-avatar" />
+          <img
+            className="dashboard-profile-avatar"
+            src={userProfilePicture}
+            alt="profile picture"
+          />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
+
           <div>
             <h3 name='popcorn'>popcorns</h3>
             {popcorns}
@@ -350,6 +378,7 @@ export class Dashboard extends React.Component {
             <h3 name='pending-popcorn'>pending popcorns</h3>
             {pending}
           </div>
+
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -367,7 +396,7 @@ export class Dashboard extends React.Component {
         </div>
 
         <div className="thirdspace">
-          <div name='matched'></div>
+          <div name="matched" />
           <h2>MATCHES</h2>
           {chats}
           <Chat />
@@ -381,6 +410,7 @@ const mapStateToProps = state => {
   return {
     username: state.auth.currentUser.username,
     email: state.auth.currentUser.email,
+    profilePicture: state.auth.currentUser.profilePicture,
     movies: state.user.movies,
     genres: state.user.genres,
     matches: state.user.matches,

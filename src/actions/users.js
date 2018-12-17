@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
 
-import { API_BASE_URL, GOOGLE_MAP_KEY } from '../config';
+import { API_BASE_URL, GOOGLE_MAP_KEY, CLOUDINARY_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
-
+import { refreshAuthToken } from './auth';
 export const SET_GENRES = 'SET_GENRES';
 export const setGenres = genres => ({
   type: SET_GENRES,
@@ -60,6 +60,26 @@ export const fetchMatches = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(fetchMatchesFailure(err)));
 };
+
+// export const fetchMatchesNearMe = () => (dispatch, getState) => {
+//   dispatch(fetchMatchesRequest());
+//   const authToken = getState().auth.authToken;
+//   const lng = getState().user.location.coordinates.longitude;
+//   const lat = getState().user.location.coordinates.latitude;
+
+//   return fetch(`${API_BASE_URL}/main/location?lng=${lng}&lat=${lat}`, {
+//     method: 'GET',
+//     headers: {
+//       Authorization: `Bearer ${authToken}`
+//     }
+//   })
+//     .then(res => res.json())
+//     .then(res => {
+//       console.log('response from api near call:', res);
+//       dispatch(fetchMatchesSuccess(res));
+//     })
+//     .catch(err => dispatch(fetchMatchesFailure(err)));
+// };
 
 export const FETCH_CURRENT_USER_REQUEST = 'FETCH_CURRENT_USER_REQUEST';
 export const fetchCurrentuserRequest = () => ({
@@ -139,11 +159,13 @@ export const updateUser = data => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
+   
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const popCornMatch = data => (dispatch, getState) => {
@@ -160,7 +182,9 @@ export const popCornMatch = data => (dispatch, getState) => {
     .then(res => {
       console.log(res);
     })
-    .catch(err => {console.error(err);});
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const FETCH_POPCORN_REQUEST = 'FETCH_POPCORN_REQUEST';
@@ -201,7 +225,6 @@ export const fetchPopcorn = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(fetchPopcornFailure(err)));
 };
-
 
 export const FETCH_MATCHED_REQUEST = 'FETCH_MATCHED_REQUEST';
 export const fetchMatchedRequest = () => ({
@@ -269,7 +292,6 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  console.log(userId);
   return fetch(`${API_BASE_URL}/main/ignore/${userId}`, {
     method: 'PUT',
     headers: {
@@ -283,7 +305,6 @@ export const chairUser = ignoredUserId => (dispatch, getState) => {
     })
     .catch(err => dispatch(chairUserFailure(err)));
 };
-
 
 export const FETCH_MESSAGE_REQUEST = 'FETCH_MESSAGE_REQUEST';
 export const fetchMessageRequest = () => ({
@@ -358,7 +379,7 @@ export const updateUserLocation = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
   const location = getState().user.location;
-  console.log('location to be sent', location);
+  console.log('location to be updated to:', location);
 
   let userId;
   if (currentUser) {
@@ -388,36 +409,108 @@ export const geolocateUser = () => (dispatch, getState) => {
   // }
 
   function findCity(areas) {
-    const correctLoc = areas.filter(area => area.types.includes('locality') && area.types.includes('political'));
+    const correctLoc = areas.filter(
+      area =>
+        area.types.includes('locality') && area.types.includes('political')
+    );
     return correctLoc[0].formatted_address;
   }
 
-  function getLocationName(lat, lon) {
-    console.log('Getting location name...');
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=${GOOGLE_MAP_KEY}`)
+
+  function getLocationName(lat, lng) {
+    console.log(`Coordinates are ${lat}, ${lng}`);
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`)
       .then(response => response.json())
       .then(data => {
         const cityName = findCity(data.results);
-        console.log(`City: ${cityName}, coordinates ${lat}, ${lon}`);
-        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lon } }));
+        console.log('City located: ', cityName);
+        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lng } }));
       })
       .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
   }
-  
+
   if ('geolocation' in navigator) {
-    console.log('locating...');
+    console.log('aquiring location...');
     navigator.geolocation.getCurrentPosition(function success(position) {
       getLocationName(position.coords.latitude, position.coords.longitude);
     }, function error(error_message) {
       console.error('An error has occured while retrieving location', error_message);
     });
+
   } else {
     console.log('geolocation is not enabled on this browser');
   }
 };
 
-//IGNORING MATCHES ============================================================================
+//NICK ADDED
+
+export const USER_PIC_REQUEST = 'USER_PIC_REQUEST';
+export const userPicRequest = () => ({
+  type: USER_PIC_REQUEST
+});
+
+export const USER_PIC_SUCCESS = 'USER_PIC_SUCCESS';
+export const userPicSuccess = (location, coords) => ({
+  type: USER_PIC_SUCCESS
+});
+
+export const USER_PIC_FAILURE = 'USER_PIC_FAILURE';
+export const userPicFailure = error => ({
+  type: USER_PIC_SUCCESS,
+  error
+});
+
+export const postUserProfilePicture = (userId, imgUrl) => (
+  dispatch,
+  getState
+) => {
+  const authToken = getState().auth.authToken;
+
+  dispatch(userPicRequest());
+
+  fetch(`${API_BASE_URL}/main/profilePicture/${userId}`, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${authToken}`
+    },
+     body: JSON.stringify({
+      profilePic: imgUrl
+    })
+  })
+    .then(res => {
+      dispatch(userPicSuccess());
+      dispatch(refreshAuthToken());
+      return res.json();
+    })
+    .then(() => {
+      console.log('hello');
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+    });
+};
+
+export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
+  dispatch(userPicRequest());
+  fetch(`${CLOUDINARY_BASE_URL}`, {
+    method: 'POST',
+    body: file
+  })
+    .then(res => res.json())
+    .then(res => {
+      dispatch(userPicSuccess());
+      let profilePic = res.secure_url;
+      return dispatch(postUserProfilePicture(userId, profilePic));
+    })
+    .catch(err => {
+      dispatch(userPicFailure(err));
+      console.log(err);
+    });
+};
+    
 export const NEVER_MIND_USER_REQUEST = 'NEVER_MIND_USER_REQUEST';
 export const neverMindUserRequest = () => ({
   type: NEVER_MIND_USER_REQUEST
@@ -537,3 +630,4 @@ export const putNotificationTime = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(putNotificationTimeFailure(err)));
 };
+
