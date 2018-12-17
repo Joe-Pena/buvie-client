@@ -23,7 +23,7 @@ const StyledMovieInfo = styled.div`
     font-weight: 300;
   }
   .modal-movie-poster {
-    width: 17rem;
+    width: 16rem;
     margin: 1rem;
   }
 
