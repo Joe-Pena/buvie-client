@@ -97,7 +97,6 @@ export class MovieModal extends React.Component {
       .dispatch(fetchOmdbInfo(imdbID))
       .then(() => {
         this.openModal();
-        console.log(this.props.movieInfo);
       })
   }
 
