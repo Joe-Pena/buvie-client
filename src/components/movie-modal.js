@@ -32,6 +32,23 @@ const StyledMovieInfo = styled.div`
     justify-content: space-evenly;  
     font-weight: 300;
   }
+
+  .main-movie-info {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    font-size: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .plot {
+    margin: 1rem 0;
+  }
+
+  .ratings {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.25rem;
+  }
 `;
 
 const customStyles = {
@@ -86,6 +103,14 @@ export class MovieModal extends React.Component {
 
   render() {
     const { movie, movieInfo } = this.props;
+    let ratings;
+    if (movieInfo.Ratings) {
+      ratings = movieInfo.Ratings.map(rating => {
+        return (
+          <p>{`${rating.Value} on ${rating.Source}`}</p>
+        );
+      });
+    }
     return (
       <StyledMovieModal>
         <img
@@ -108,12 +133,20 @@ export class MovieModal extends React.Component {
               <p>{movieInfo.Genre}</p>
               <p>{movieInfo.Runtime}</p>
             </div>
-            <img
-              src={movieInfo.Poster}
-              className="modal-movie-poster"
-              alt={movieInfo.Title}
-              onClick={() => this.getMovieInfo(movie.imdbID)}
-        /> 
+            <div className='main-movie-info'>
+              <img
+                src={movieInfo.Poster}
+                className="modal-movie-poster"
+                alt={movieInfo.Title}
+                onClick={() => this.getMovieInfo(movie.imdbID)}
+              /> 
+              <div className='plot'>
+                <p>{movieInfo.Plot}</p>
+              </div>
+            </div>
+            <div className='ratings'>
+              {ratings}
+            </div>
           </StyledMovieInfo>
 
         </Modal>
