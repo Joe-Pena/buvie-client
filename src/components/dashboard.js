@@ -33,6 +33,7 @@ const StyledDashboard = styled.div`
 	padding: 0 3rem;
 
 	.dashboard-profile {
+		padding: 2%;
 		grid-area: profile;
 		background-color: #8b8b99;
 		display: grid;
@@ -50,6 +51,9 @@ const StyledDashboard = styled.div`
 		border-radius: 100rem;
 		justify-self: center;
 		align-self: center;
+		width: 147px;
+		height: 160px;
+		border: 3px solid #0a2e4c;
 	}
 
 	.dashboard-profile-username {
@@ -111,11 +115,11 @@ const StyledDashboard = styled.div`
 		background-color: #8b8b99;
 		height: 85%;
 		align-self: center;
-
 		text-align: center;
 		h2: {
 			font-weight: 400;
 			text-transform: uppercase;
+			cursor: none;
 		}
 	}
 
@@ -135,14 +139,12 @@ const StyledDashboard = styled.div`
 		left: 1.5rem;
 	}
 
-
-  .match-location {
-    grid-area: location;
-    justify-self: center;
-    align-self: center;
-    /* font-weight: 300; */
-  }
-
+	.match-location {
+		grid-area: location;
+		justify-self: center;
+		align-self: center;
+		/* font-weight: 300; */
+	}
 
 	.match-genre-list {
 		grid-area: genres;
