@@ -82,9 +82,8 @@ const ChatOutPut = styled.div`
 	-ms-overflow-style: none;
 	overflow: -moz-scrollbars-none;
 
-	&nth-:nth-last-child(2) {
-		border-bottom-right-radius: 30px;
-		background-color: red;
+	.last {
+		border-bottom-right-radius: 30px !important;
 	}
 
 	&::-webkit-scrollbar {
@@ -127,10 +126,6 @@ const ChatOutPut = styled.div`
 		list-style: none;
 		margin: 0;
 		padding: 0;
-	}
-
-	.chat-message-box-1:last-of-type {
-		border-bottom-right-radius: 30px;
 	}
 
 	/* .box3 {
@@ -356,6 +351,18 @@ export class Chat extends Component {
 
 	render() {
 		const messages = this.state.messages.map((data, i) => {
+			if (
+				i === this.state.messages.length - 1 &&
+				data.handle === this.props.username
+			) {
+				return (
+					<>
+						<div className="chat-message-user last" key={i}>
+							<p>{data.message}</p>
+						</div>
+					</>
+				);
+			}
 			if (data.handle === this.props.username) {
 				return (
 					<>
@@ -365,6 +372,7 @@ export class Chat extends Component {
 					</>
 				);
 			}
+
 			return (
 				<div className="chat-message-match" key={i}>
 					<p>{data.message}</p>

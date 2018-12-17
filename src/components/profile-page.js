@@ -169,7 +169,6 @@ class ProfilePage extends Component {
 			<ProfileMain>
 				<div className="profile-option-select">
 					<h2>Change Picture</h2>
-					<h2>Stats</h2>
 				</div>
 				<div className="spacer" />
 				<div className="profile-display-container">
