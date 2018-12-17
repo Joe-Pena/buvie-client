@@ -79,8 +79,13 @@ const ChatOutPut = styled.div`
 	width: 100%;
 	max-width: 100%;
 	word-wrap: break-word;
-	-ms-overflow-style: none; // IE 10+
-	overflow: -moz-scrollbars-none; // Firefox
+	-ms-overflow-style: none;
+	overflow: -moz-scrollbars-none;
+
+	&nth-:nth-last-child(2) {
+		border-bottom-right-radius: 30px;
+		background-color: red;
+	}
 
 	&::-webkit-scrollbar {
 		display: none;
@@ -354,19 +359,15 @@ export class Chat extends Component {
 			if (data.handle === this.props.username) {
 				return (
 					<>
-						<div className="chat-message-box-1">
-							<div className="chat-message-user" key={i}>
-								<p>{data.message}</p>
-							</div>
+						<div className="chat-message-user" key={i}>
+							<p>{data.message}</p>
 						</div>
 					</>
 				);
 			}
 			return (
-				<div className="chat-message-box-2">
-					<div className="chat-message-match" key={i}>
-						<p>{data.message}</p>
-					</div>
+				<div className="chat-message-match" key={i}>
+					<p>{data.message}</p>
 				</div>
 			);
 		});
