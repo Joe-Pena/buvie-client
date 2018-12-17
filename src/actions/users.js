@@ -536,7 +536,7 @@ export const neverMindUser = neverMindUserId => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  return fetch(`${API_BASE_URL}/main/nevermind/${userId}`, {
+  return fetch(`${API_BASE_URL}/main/ignore/nevermind/${userId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
@@ -617,7 +617,7 @@ export const putNotificationTime = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  return fetch(`${API_BASE_URL}/main/notificationtime/${userId}`, {
+  return fetch(`${API_BASE_URL}/main/notifications/time/${userId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
