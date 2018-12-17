@@ -66,7 +66,7 @@ export class DropDown extends React.Component {
   }
 
   render() {
-    const { listArr, time } = this.props;
+    const { listArr = [], time } = this.props;
     const { listOpen, headerTitle } = this.state;
     let listElements = listArr.map(item => {
       let linkName;
