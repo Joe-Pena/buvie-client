@@ -106,7 +106,7 @@ export class MovieModal extends React.Component {
     if (movieInfo.Ratings) {
       ratings = movieInfo.Ratings.map(rating => {
         return (
-          <p>{`${rating.Value} on ${rating.Source}`}</p>
+          <p key={`${movieInfo.imdbID}${rating.Source}`}>{`${rating.Value} on ${rating.Source}`}</p>
         );
       });
     }
