@@ -51,7 +51,6 @@ export const fetchOmdbInfo = (imdbID) => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       dispatch(fetchOmdbInfoSuccess(res));
     })
     .catch(err => dispatch(fetchOmdbInfoError(err)));
