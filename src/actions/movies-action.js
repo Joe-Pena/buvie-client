@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { API_BASE_URL } from '../config';
+import { API_BASE_URL, OMDB_API_KEY, OMDB_URL } from '../config';
 
 export const SET_MOVIE_LIST = 'SET_MOVIE_LIST';
 export const setMovieList = movies => ({
@@ -25,4 +25,34 @@ export const fetchMovies = () => (dispatch, getState) => {
       dispatch(setMovieList(res));
     })
     .catch(err => console.error(err));
+};
+
+export const FETCH_OMDB_INFO_REQUEST = 'FETCH_OMDB_INFO_REQUEST';
+export const fetchOmdbInfoRequest = () => ({
+  type: FETCH_OMDB_INFO_REQUEST
+});
+
+export const FETCH_OMDB_INFO_SUCCESS = 'FETCH_OMDB_INFO_SUCCESS';
+export const fetchOmdbInfoSuccess = (movieInfo) => ({
+  type: FETCH_OMDB_INFO_SUCCESS,
+  movieInfo
+});
+
+export const FETCH_OMDB_INFO_ERROR = 'FETCH_OMDB_INFO_ERROR';
+export const fetchOmdbInfoError = (error) => ({
+  type: FETCH_OMDB_INFO_ERROR,
+  error
+});
+
+export const fetchOmdbInfo = (imdbID) => (dispatch, getState) => {
+  dispatch(fetchOmdbInfoRequest());
+  return fetch(`${OMDB_URL}/?apikey=${OMDB_API_KEY}&i=${imdbID}`, {
+    method: 'GET'
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      dispatch(fetchOmdbInfoSuccess(res));
+    })
+    .catch(err => dispatch(fetchOmdbInfoError(err)));
 };
