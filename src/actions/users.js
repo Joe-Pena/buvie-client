@@ -617,7 +617,7 @@ export const putNotificationTime = () => (dispatch, getState) => {
     userId = currentUser.id;
   }
 
-  return fetch(`${API_BASE_URL}/main/notificationtime/${userId}`, {
+  return fetch(`${API_BASE_URL}/main/notifications/time/${userId}`, {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
