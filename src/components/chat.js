@@ -11,25 +11,37 @@ import {
 	fetchMessageFailure,
 	putMessages
 } from '../actions/users';
+import { FaTimes } from 'react-icons/fa';
 
 const ChatHeader = styled.header`
 	display: flex;
-	justify-content: space-between;
+	position: fixed;
+	justify-content: space-around;
+	z-index: 100;
+	width: 100%;
+	align-items: center;
+	background-color: white;
+	margin-top: -1px !important;
 	h2 {
-		flex: 4;
+		flex: 3.5;
 		font-size: 1.5rem;
 		font-weight: 400;
 		color: #c4cad0;
 		text-transform: uppercase;
 	}
-	.chat-close {
-		text-align: right;
+
+	.chat-header-exit {
 		flex: 1;
+		justify-content: center;
+		text-align: center;
+		&:hover {
+			color: #492529;
+		}
 	}
 `;
 
 const ChatMessageSend = styled.form`
-	display: flex;
+	display: block;
 	border-top: 0.5px solid #ebebeb;
 	.chat-message {
 		font-family: Work Sans;
@@ -42,10 +54,22 @@ const ChatMessageSend = styled.form`
 	.chat-submit {
 		flex: 1;
 		font-family: Work Sans;
+		text-transform: uppercase;
+		color: #c4cad0;
+		font-weight: 400;
+		cursor: pointer;
 		padding: 0;
 		margin: 0;
 		border: 0;
 		background-color: transparent;
+		&:hover {
+			color: #000;
+		}
+	}
+
+	.chat-message-send-flex {
+		display: flex;
+		justify-content: space-between;
 	}
 `;
 
@@ -54,25 +78,57 @@ const ChatOutPut = styled.div`
 	padding: 2%;
 	width: 100%;
 	max-width: 100%;
-
 	word-wrap: break-word;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
+	-ms-overflow-style: none; // IE 10+
+	overflow: -moz-scrollbars-none; // Firefox
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
 	.chat-message-user {
-		align-self: flex-end;
+		display: inline-block;
+		clear: both;
+		padding: 15px;
+		border-radius: 30px;
+		margin-top: 1px;
+		margin-bottom: 1px;
+		font-family: inherit;
+		font-weight: 300;
+		float: right;
+		background: #bf7d7e;
+		color: #fff;
+		border-bottom-right-radius: 5px;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
 	}
 
 	.chat-message-match {
+		background: #eee;
+		float: left;
+		border-bottom-right-radius: 5px;
+		display: inline-block;
+		clear: both;
+		padding: 15px;
+		border-radius: 30px;
+		margin-bottom: 2px;
+		font-family: inherit;
+		font-weight: 300;
+		margin-top: 1px;
+		margin-bottom: 1px;
 	}
 
 	.chat-message-box-1 {
-		display: flex;
-		flex-direction: column;
-		text-align: right;
+		list-style: none;
+		margin: 0;
+		padding: 0;
 	}
 
-	.box3 {
+	.chat-message-box-1:last-of-type {
+		border-bottom-right-radius: 30px;
+	}
+
+	/* .box3 {
 		width: 250px;
 		margin: 10px;
 		border-radius: 15px;
@@ -96,37 +152,9 @@ const ChatOutPut = styled.div`
 		font-weight: 900;
 		font-family: arial;
 		position: relative;
-	}
+	} */
 
 	/* speech bubble 13 */
-
-	.sb13:before {
-		content: '';
-		width: 0px;
-		height: 0px;
-		position: absolute;
-		border-left: 15px solid #00bfb6;
-		border-right: 15px solid transparent;
-		border-top: 15px solid #00bfb6;
-		border-bottom: 15px solid transparent;
-		right: -16px;
-		top: 0px;
-	}
-
-	/* speech bubble 14 */
-
-	.sb14:before {
-		content: '';
-		width: 0px;
-		height: 0px;
-		position: absolute;
-		border-left: 15px solid transparent;
-		border-right: 15px solid #7e0001;
-		border-top: 15px solid #7e0001;
-		border-bottom: 15px solid transparent;
-		left: -16px;
-		top: 0px;
-	}
 `;
 
 const ChatFriendsList = styled.div`
@@ -311,13 +339,23 @@ export class Chat extends Component {
 		this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
 	};
 
+	chatScrollToBottomClick = () => {
+		if (this.state.modalIsOpen) {
+		}
+		let el = document.getElementById('chat-message-end');
+
+		if (el !== null) {
+			el.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
+
 	render() {
 		const messages = this.state.messages.map((data, i) => {
 			if (data.handle === this.props.username) {
 				return (
 					<>
 						<div className="chat-message-box-1">
-							<div className="chat-message-user box3 sb13" key={i}>
+							<div className="chat-message-user" key={i}>
 								<p>{data.message}</p>
 							</div>
 						</div>
@@ -326,10 +364,9 @@ export class Chat extends Component {
 			}
 			return (
 				<div className="chat-message-box-2">
-					<div className="chat-message-match box4 sb14" key={i}>
+					<div className="chat-message-match" key={i}>
 						<p>{data.message}</p>
 					</div>
-					<h6>{data.handle}</h6>
 				</div>
 			);
 		});
@@ -351,10 +388,11 @@ export class Chat extends Component {
 					>
 						<ChatHeader>
 							<h2>CONVERSATION WITH {this.state.match}</h2>
-							<div className="chat-close" onClick={this.closeChatModal}>
-								X
+							<div className="chat-header-exit">
+								<FaTimes onClick={this.closeChatModal} />
 							</div>
 						</ChatHeader>
+						<div className="chat-header-space-below" />
 						<ChatOutPut id="output">
 							{messages}
 
@@ -371,20 +409,23 @@ export class Chat extends Component {
 								e.target.input.value = '';
 							}}
 						>
-							<input
-								className="chat-message"
-								id="message"
-								type="text"
-								name="input"
-								placeholder="Type a message..."
-								onChange={e => this.onChange(e)}
-							/>
-							<input
-								className="chat-submit"
-								type="submit"
-								id="send"
-								value="send"
-							/>
+							<div className="chat-message-send-flex">
+								<input
+									className="chat-message"
+									id="message"
+									type="text"
+									name="input"
+									placeholder="Type a message..."
+									onChange={e => this.onChange(e)}
+									onClick={this.chatScrollToBottomClick}
+								/>
+								<input
+									className="chat-submit"
+									type="submit"
+									id="send"
+									value="send"
+								/>
+							</div>
 						</ChatMessageSend>
 					</Modal>
 				</div>

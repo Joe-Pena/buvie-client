@@ -49,6 +49,7 @@ const StyledDashboard = styled.div`
 		border-radius: 100rem;
 		justify-self: center;
 		align-self: center;
+		width: 115px;
 	}
 
 	.dashboard-profile-username {
@@ -134,14 +135,12 @@ const StyledDashboard = styled.div`
 		left: 1.5rem;
 	}
 
-
-  .match-location {
-    grid-area: location;
-    justify-self: center;
-    align-self: center;
-    /* font-weight: 300; */
-  }
-
+	.match-location {
+		grid-area: location;
+		justify-self: center;
+		align-self: center;
+		/* font-weight: 300; */
+	}
 
 	.match-genre-list {
 		grid-area: genres;

@@ -54,6 +54,7 @@ const StyledHeaderBar = styled.div`
 		position: relative;
 		right: 3rem;
 		grid-area: notifications;
+		cursor: pointer;
 	}
 
 	.welcome-message {
@@ -81,6 +82,7 @@ const StyledHeaderBar = styled.div`
 			position: relative;
 			right: 3rem;
 			grid-area: notifications;
+			cursor: pointer;
 		}
 
 		.nav-logout-btn {
