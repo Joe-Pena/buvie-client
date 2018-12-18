@@ -12,9 +12,9 @@ import DropDown from './dropdown';
 const StyledHeaderBar = styled.div`
 	display: grid;
 	grid-template-columns: 8fr 1fr;
-	grid-template-rows: 1fr;
 	grid-template-areas: 'logo menu' 'logout logout' 'notifications notifications';
 	padding: 1%;
+
 	.menu-button {
 		display: block;
 		grid-area: menu;
@@ -48,13 +48,13 @@ const StyledHeaderBar = styled.div`
 	}
 
 	.notifications {
-		display: ${props => (props.isCollapsed ? 'none' : 'block')};
+		/* display: ${props => (props.isCollapsed ? 'none' : 'block')};
 		color: #fff;
 		font-size: 1.6rem;
 		position: relative;
 		right: 3rem;
 		grid-area: notifications;
-		cursor: pointer;
+		cursor: pointer; */
 	}
 
 	.welcome-message {
@@ -63,16 +63,23 @@ const StyledHeaderBar = styled.div`
 
 	@media (min-width: 768px) {
 		display: grid;
-		grid-template-columns: 1fr 0.2fr 0.2fr 0.1fr;
-		grid-template-areas: 'logo notifications profile logout';
+		grid-template-columns: 1fr 0.5fr 0.2fr 0.1fr;
+		grid-template-areas: 'logo profile notifications logout';
 		text-align: center;
 
 		.welcome-message {
+			grid-area: profile;
 			display: block;
 			color: #fff;
-			font-size: 1.6rem;
+			font-size: 1.3rem;
+			font-weight: 300;
 			position: relative;
 			right: 1rem;
+			top: 0.35rem;
+		}
+
+		.welcome-message-user {
+			font-weight: 600;
 		}
 
 		.notifications {
@@ -158,7 +165,7 @@ export class HeaderBar extends React.Component {
 
     {
       this.props.location.pathname === '/dashboard'
-        ? (headerBarMessage = `Welcome, ${username} !`)
+        ? (headerBarMessage = `Welcome, ${username}!`)
         : (headerBarMessage = 'Back to Dashboard!');
     }
 
