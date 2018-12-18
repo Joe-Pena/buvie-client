@@ -56,10 +56,26 @@ const StyledDashboard = styled.div`
 		grid-auto-rows: 6rem;
 		padding-right: 6rem;
 		flex-direction: column;
-		max-height: 300px;
+		max-height: 220px;
 		overflow: auto;
 		justify-content: center;
 		margin: auto;
+	}
+
+	.popcorn-div::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		border-radius: 10px;
+		background-color: #f5f5f5;
+	}
+	.popcorn-div::-webkit-scrollbar {
+		width: 2px;
+		background-color: #f5f5f5;
+	}
+
+	.popcorn-div::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		background-color: #555;
 	}
 
 	.popcorn-pending-div {
@@ -69,7 +85,7 @@ const StyledDashboard = styled.div`
 		padding-right: 6rem;
 		flex-direction: column;
 		height: 100vh;
-		max-height: 300px;
+		max-height: 150px;
 		overflow: auto;
 		justify-content: center;
 		margin: auto;
@@ -375,7 +391,7 @@ export class Dashboard extends React.Component {
     if (this.props.popcorn) {
       popcorns = this.props.popcorn.map(user => {
         return (
-          <React.Fragment key={user._id}>
+          <div className="popcorns-entity" key={user._id}>
             <p>{user.username}</p>
             <button
               className="match-popcorn-btn"
@@ -389,7 +405,7 @@ export class Dashboard extends React.Component {
             >
 							Ignore
             </button>
-          </React.Fragment>
+          </div>
         );
       });
     }
