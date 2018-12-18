@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { SubmissionError } from 'redux-form';
-
+import swal from 'sweetalert';
 import { API_BASE_URL, GOOGLE_MAP_KEY, CLOUDINARY_BASE_URL } from '../config';
 import { normalizeResponseErrors } from './utils';
 import { refreshAuthToken } from './auth';
@@ -159,7 +159,6 @@ export const updateUser = data => (dispatch, getState) => {
   })
     .then(res => res.json())
     .then(res => {
-   
       dispatch(setGenres(res.genres));
       dispatch(setMovies(res.movies));
     })
@@ -363,7 +362,7 @@ export const geolocateUserRequest = () => ({
 });
 
 export const GEOLOCATE_USER_SUCCESS = 'GEOLOCATE_USER_SUCCESS';
-export const geolocateUserSuccess = (location) => ({
+export const geolocateUserSuccess = location => ({
   type: GEOLOCATE_USER_SUCCESS,
   location
 });
@@ -390,14 +389,13 @@ export const updateUserLocation = () => (dispatch, getState) => {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
-      'Authorization': `Bearer ${authToken}`
+      Authorization: `Bearer ${authToken}`
     },
     body: JSON.stringify(location)
   })
     .then(() => console.log('location updated in DB...'))
     .catch(err => console.log(err.message));
 };
-
 
 export const geolocateUser = () => (dispatch, getState) => {
   dispatch(geolocateUserRequest());
@@ -416,15 +414,21 @@ export const geolocateUser = () => (dispatch, getState) => {
     return correctLoc[0].formatted_address;
   }
 
-
   function getLocationName(lat, lng) {
     console.log(`Coordinates are ${lat}, ${lng}`);
-    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`)
+    fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`
+    )
       .then(response => response.json())
       .then(data => {
         const cityName = findCity(data.results);
         console.log('City located: ', cityName);
-        dispatch(geolocateUserSuccess({ city: cityName, coordinates: { latitude: lat, longitude: lng } }));
+        dispatch(
+          geolocateUserSuccess({
+            city: cityName,
+            coordinates: { latitude: lat, longitude: lng }
+          })
+        );
       })
       .then(() => dispatch(updateUserLocation()))
       .catch(err => dispatch(geolocateUserFailure(err)));
@@ -432,12 +436,17 @@ export const geolocateUser = () => (dispatch, getState) => {
 
   if ('geolocation' in navigator) {
     console.log('aquiring location...');
-    navigator.geolocation.getCurrentPosition(function success(position) {
-      getLocationName(position.coords.latitude, position.coords.longitude);
-    }, function error(error_message) {
-      console.error('An error has occured while retrieving location', error_message);
-    });
-
+    navigator.geolocation.getCurrentPosition(
+      function success(position) {
+        getLocationName(position.coords.latitude, position.coords.longitude);
+      },
+      function error(error_message) {
+        console.error(
+          'An error has occured while retrieving location',
+          error_message
+        );
+      }
+    );
   } else {
     console.log('geolocation is not enabled on this browser');
   }
@@ -476,7 +485,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
       'content-type': 'application/json',
       Authorization: `Bearer ${authToken}`
     },
-     body: JSON.stringify({
+    body: JSON.stringify({
       profilePic: imgUrl
     })
   })
@@ -490,6 +499,7 @@ export const postUserProfilePicture = (userId, imgUrl) => (
     })
     .catch(err => {
       dispatch(userPicFailure(err));
+      swal('Oops!', 'Seems like we couldn\'t post the picture!');
     });
 };
 
@@ -503,14 +513,15 @@ export const postCloudinaryProfilePicture = (file, userId) => dispatch => {
     .then(res => {
       dispatch(userPicSuccess());
       let profilePic = res.secure_url;
+      swal('Congrats!', 'New profile picture submitted!');
       return dispatch(postUserProfilePicture(userId, profilePic));
     })
     .catch(err => {
       dispatch(userPicFailure(err));
-      console.log(err);
+      swal('Oops!', 'Seems like we couldn\'t post the picture!');
     });
 };
-    
+
 export const NEVER_MIND_USER_REQUEST = 'NEVER_MIND_USER_REQUEST';
 export const neverMindUserRequest = () => ({
   type: NEVER_MIND_USER_REQUEST
@@ -556,7 +567,7 @@ export const fetchNotificationRequest = () => ({
 });
 
 export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
-export const fetchNotificationSuccess = (notificationInfo) => ({
+export const fetchNotificationSuccess = notificationInfo => ({
   type: FETCH_NOTIFICATION_SUCCESS,
   notifications: notificationInfo.notifications,
   notificationCheck: notificationInfo.notificationCheck
@@ -597,7 +608,7 @@ export const putNotificationTimeRequest = () => ({
 });
 
 export const PUT_NOTIFICATION_TIME_SUCCESS = 'PUT_NOTIFICATION_TIME_SUCCESS';
-export const putNotificationTimeSuccess = (date) => ({
+export const putNotificationTimeSuccess = date => ({
   type: PUT_NOTIFICATION_TIME_SUCCESS,
   date
 });
@@ -630,4 +641,3 @@ export const putNotificationTime = () => (dispatch, getState) => {
     })
     .catch(err => dispatch(putNotificationTimeFailure(err)));
 };
-

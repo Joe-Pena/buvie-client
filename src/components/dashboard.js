@@ -277,7 +277,7 @@ export class Dashboard extends React.Component {
           matchMovies = user.movies.map(movie => {
             return (
               <li key={movie._id}>
-                <MovieModal movie={movie}/>
+                <MovieModal movie={movie} />
               </li>
             );
           });
@@ -373,14 +373,13 @@ export class Dashboard extends React.Component {
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
 
           <div>
-            <h3 name='popcorn'>popcorns</h3>
+            <h3 name="popcorn">popcorns</h3>
             {popcorns}
           </div>
           <div>
-            <h3 name='pending-popcorn'>pending popcorns</h3>
+            <h3 name="pending-popcorn">pending popcorns</h3>
             {pending}
           </div>
-
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
