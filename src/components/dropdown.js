@@ -68,22 +68,31 @@ export class DropDown extends React.Component {
   render() {
     const { listArr = [], time } = this.props;
     const { listOpen, headerTitle } = this.state;
-    let listElements = listArr.map(item => {
-      let linkName;
-      if (item.type === 'popcorn' || item.type === 're-popcorn') {
-        linkName = 'popcorn';
-      } else if (item.type === 'matched') {
-        linkName = 'matched';
-      }
-      return (
-        <li className='dropdown-item' key={`${item._id}${item.type}`}>
-          <a href={`#${linkName}`}>
-            {item.message}
-          </a>
-          <br />
-          {moment(item.date).fromNow()}
-        </li>);
-    });
+    let listElements;
+    if (listArr.length) {
+      listElements = listArr.map(item => {
+        let linkName;
+        if (item.type === 'popcorn' || item.type === 're-popcorn') {
+          linkName = 'popcorn';
+        } else if (item.type === 'matched') {
+          linkName = 'matched';
+        }
+        return (
+          <li className='dropdown-item' key={`${item._id}${item.type}`}>
+            <a href={`#${linkName}`}>
+              {item.message}
+            </a>
+            <br />
+            {moment(item.date).fromNow()}
+          </li>);
+      });
+    } else {
+      listElements = [<li className='dropdown-item' key='no-notification'>
+        <a>
+          {'You have no notifications right now'}
+        </a>
+      </li>];
+    }
     let newNotificationCount = 0;
     for (let i = 0; i < listArr.length; i++) {
       if (listArr[i].date > time) {
