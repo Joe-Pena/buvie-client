@@ -35,24 +35,75 @@ const StyledDashboard = styled.div`
 	.dashboard-profile {
 		padding: 2%;
 		grid-area: profile;
+		grid-row-gap: 3rem;
 		background-color: #8b8b99;
 		display: grid;
-		grid-template-rows: 0.15fr 0.1fr 1fr 1fr;
+		grid-template-rows: 0.15fr 0.1fr 0.1fr 1fr 0.1fr 1fr;
 		grid-template-areas:
 			'avatar'
 			'username'
-			'content';
+			'popcorns'
+			'popcorns-list'
+			'pending'
+			'pending-list';
 		height: 85%;
 		align-self: center;
 	}
 
+	.popcorn-div {
+		grid-area: popcorns-list;
+		display: grid;
+		grid-auto-rows: 6rem;
+		padding-right: 6rem;
+		flex-direction: column;
+		max-height: 300px;
+		overflow: auto;
+		justify-content: center;
+		margin: auto;
+	}
+
+	.popcorn-pending-div {
+		grid-area: pending-list;
+		display: grid;
+		grid-auto-rows: 6rem;
+		padding-right: 6rem;
+		flex-direction: column;
+		height: 100vh;
+		max-height: 300px;
+		overflow: auto;
+		justify-content: center;
+		margin: auto;
+	}
+
+	.popcorn-pending-div::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		border-radius: 10px;
+		background-color: #f5f5f5;
+	}
+	.popcorn-pending-div::-webkit-scrollbar {
+		width: 2px;
+		background-color: #f5f5f5;
+	}
+
+	.popcorn-pending-div::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		background-color: #555;
+	}
+
+	.popcorn-pending-entity {
+		height: 40px;
+	}
+	.popcorn-pending-title {
+		grid-area: pending;
+	}
 	.dashboard-profile-avatar {
 		grid-area: avatar;
 		border-radius: 100rem;
 		justify-self: center;
 		align-self: center;
-		width: 147px;
-		height: 160px;
+		width: 166px;
+		height: 166px;
 		border: 3px solid #0a2e4c;
 	}
 
@@ -64,6 +115,7 @@ const StyledDashboard = styled.div`
 	.dashboard-matches {
 		grid-area: matches;
 		display: grid;
+
 		grid-template-rows: 0.8fr 0.8fr 0.8fr;
 		grid-row-gap: 1.5rem;
 		grid-template-areas:
@@ -116,10 +168,10 @@ const StyledDashboard = styled.div`
 		height: 85%;
 		align-self: center;
 		text-align: center;
-		h2: {
+		.thirdspace-title: {
 			font-weight: 400;
 			text-transform: uppercase;
-			cursor: none;
+			cursor: pointer;
 		}
 	}
 
@@ -167,6 +219,7 @@ const StyledDashboard = styled.div`
 
 	.match-movie-poster {
 		width: 12rem;
+		max-height: 177px;
 		margin: 0 1rem;
 		justify-self: center;
 	}
@@ -189,6 +242,7 @@ const StyledDashboard = styled.div`
 		height: 3rem;
 		border: none;
 		cursor: pointer;
+		font-family: inherit;
 	}
 `;
 
@@ -248,7 +302,7 @@ export class Dashboard extends React.Component {
     } else {
       userProfilePicture = `https://www.gravatar.com/avatar/${md5(
         this.props.email
-      )}?d=retro`;
+      )}?d=retro&s=160`;
     }
 
     const matches = this.props.matches
@@ -298,13 +352,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user.id)}
             >
-							Popcorn
+							POPCORN
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user.id)}
             >
-							Ignore
+							IGNORE
             </button>
           </React.Fragment>
         );
@@ -343,21 +397,21 @@ export class Dashboard extends React.Component {
     if (this.props.pending) {
       pending = this.props.pending.map(user => {
         return (
-          <React.Fragment key={user._id}>
+          <div className="popcorn-pending-entity" key={user._id}>
             <p>{user.username}</p>
             <button
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user._id)}
             >
-							Re-Popcorn
+							RE-POP
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.nevermind(user._id)}
             >
-							Never mind
+							NVM
             </button>
-          </React.Fragment>
+          </div>
         );
       });
     }
@@ -371,15 +425,12 @@ export class Dashboard extends React.Component {
             alt="profile picture"
           />
           <h2 className="dashboard-profile-username">{this.props.username}</h2>
-
-          <div>
-            <h3 name="popcorn">popcorns</h3>
-            {popcorns}
-          </div>
-          <div>
-            <h3 name="pending-popcorn">pending popcorns</h3>
-            {pending}
-          </div>
+          <h3 name="popcorn">Popcorns</h3>
+          <div className="popcorn-div">{popcorns}</div>
+          <h3 className="popcorn-pending-title" name="pending-popcorn">
+						Pending
+          </h3>
+          <div className="popcorn-pending-div">{pending}</div>
         </div>
         <div className="dashboard-matches">
           {/* =========================================FIRST MATCH================ */}
@@ -398,7 +449,7 @@ export class Dashboard extends React.Component {
 
         <div className="thirdspace">
           <div name="matched" />
-          <h2>MATCHES</h2>
+          <h2 className="thirdspace-title">MATCHES</h2>
           {chats}
           <Chat />
         </div>
