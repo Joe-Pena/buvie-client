@@ -11,6 +11,15 @@ import ImageUploader from 'react-images-upload';
 import Jimp from 'jimp';
 import md5 from 'js-md5';
 import { FaLeaf } from 'react-icons/fa';
+import FadeLoader from 'react-spinners/FadeLoader';
+
+const override = {
+	position: 'absolute'
+};
+const StyledLoader = styled(FadeLoader)`
+	display: flex;
+	margin-right: -50px;
+`;
 
 const ProfileMain = styled.main`
 	width: 80%;
@@ -24,6 +33,12 @@ const ProfileMain = styled.main`
 		color: #ffb8c7;
 		cursor: pointer;
 	}
+
+	.loader-div {
+		display: flex;
+		justify-content: center;
+	}
+
 	.profile-display-container {
 		justify-content: center;
     flex: 1;
@@ -171,6 +186,7 @@ class ProfilePage extends Component {
 					<h2>Change Picture</h2>
 				</div>
 				<div className="spacer" />
+
 				<div className="profile-display-container">
 					<ImageUploader
 						singleImage={true}
@@ -201,8 +217,7 @@ class ProfilePage extends Component {
 								style={{
 									height: '160px',
 									width: '147px',
-									borderRadius: '100rem',
-									justifySelf: 'center'
+									borderRadius: '100rem'
 								}}
 								src={this.state.imgSrc}
 							/>
@@ -236,7 +251,8 @@ class ProfilePage extends Component {
 const mapStateToProps = state => {
 	return {
 		loggedIn: state.auth.currentUser !== null,
-		user: state.auth.currentUser
+		user: state.auth.currentUser,
+		loading: state.user.loading
 	};
 };
 
