@@ -63,7 +63,7 @@ const StyledHeaderBar = styled.div`
 
 	@media (min-width: 768px) {
 		display: grid;
-		grid-template-columns: 1fr 0.5fr 0.2fr 0.1fr;
+		grid-template-columns: 1fr 0.3fr 0.2fr 0.1fr;
 		grid-template-areas: 'logo profile notifications logout';
 		text-align: center;
 
@@ -72,14 +72,10 @@ const StyledHeaderBar = styled.div`
 			display: block;
 			color: #fff;
 			font-size: 1.3rem;
-			font-weight: 300;
+			font-weight: 600;
 			position: relative;
 			right: 1rem;
 			top: 0.35rem;
-		}
-
-		.welcome-message-user {
-			font-weight: 600;
 		}
 
 		.notifications {
