@@ -1,44 +1,49 @@
 {
-  "name": "client",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "react-scripts": "2.1.1"
-  },
-  "dependencies": {
-    "hover.css": "^2.3.2",
-    "jimp": "^0.6.0",
-    "js-md5": "^0.7.3",
-    "js-string-compression": "^1.0.1",
-    "jwt-decode": "^2.2.0",
-    "moment": "^2.23.0",
-    "query-string": "^6.2.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-icons": "^3.2.2",
-    "react-images-upload": "^1.2.3",
-    "react-modal": "^3.7.1",
-    "react-onclickoutside": "^6.7.1",
-    "react-redux": "^5.1.1",
-    "react-router-dom": "^4.3.1",
-    "react-spinners": "^0.4.7",
-    "redux": "^4.0.1",
-    "redux-form": "^7.3.0",
-    "redux-thunk": "^2.2.0",
-    "socket.io-client": "^2.2.0",
-    "styled-components": "^4.1.2",
-    "sweetalert": "^2.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+	"name": "client",
+	"version": "0.1.0",
+	"private": true,
+	"devDependencies": {
+		"enzyme": "^3.8.0",
+		"enzyme-adapter-react-16": "^1.7.1",
+		"jest": "^23.6.0",
+		"react-scripts": "2.1.1",
+		"react-test-renderer": "^16.6.3"
+	},
+	"dependencies": {
+		"hover.css": "^2.3.2",
+		"jimp": "^0.6.0",
+		"js-md5": "^0.7.3",
+		"js-string-compression": "^1.0.1",
+		"jwt-decode": "^2.2.0",
+		"moment": "^2.23.0",
+		"query-string": "^6.2.0",
+		"react": "^16.6.3",
+		"react-dom": "^16.6.3",
+		"react-icons": "^3.2.2",
+		"react-images-upload": "^1.2.3",
+		"react-modal": "^3.7.1",
+		"react-onclickoutside": "^6.7.1",
+		"react-redux": "^5.1.1",
+		"react-router-dom": "^4.3.1",
+		"react-spinners": "^0.4.7",
+		"redux": "^4.0.1",
+		"redux-form": "^7.3.0",
+		"redux-thunk": "^2.2.0",
+		"socket.io-client": "^2.2.0",
+		"styled-components": "^4.1.2",
+		"sweetalert": "^2.1.2"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test --env=jsdom",
+		"eject": "react-scripts eject",
+		"jest": "jest"
+	},
+	"browserslist": [
+		">0.2%",
+		"not dead",
+		"not ie <= 11",
+		"not op_mini all"
+	]
 }
