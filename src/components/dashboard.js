@@ -30,7 +30,13 @@ const StyledDashboard = styled.div`
   grid-template-columns: 260px 1fr 0.25fr;
   grid-column-gap: 2rem;
   grid-template-areas: 'profile matches adspace';
-  padding: 0 2rem;  
+  padding: 0 2rem;
+
+  p, h2, h3, h4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   
   .popcorn-div::-webkit-scrollbar-track,
   .popcorn-pending-div::-webkit-scrollbar-track {
@@ -154,7 +160,7 @@ const StyledDashboard = styled.div`
         position: static;
         padding-top: 8px;
         padding-left: 8px;
-        width: calc(35% - 56px);
+        width: calc(55% - 56px);
       }
 
       .match-location {
@@ -162,7 +168,7 @@ const StyledDashboard = styled.div`
         padding-top: 8px;
         padding-left: 8px;
         text-align: right;
-        width: 65%;
+        width: 45%;
       }
 
       .match-movie-poster {
