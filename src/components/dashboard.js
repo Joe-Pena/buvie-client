@@ -32,6 +32,17 @@ const StyledDashboard = styled.div`
 	grid-template-areas: 'profile matches adspace';
 	padding: 0 3rem;
 
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-rows: 0.25fr 1fr;
+    /* grid-row-gap: 1rem; */
+    /* grid-column-gap: 1rem; */
+    grid-template-areas: 
+      "profile profile"
+      "matches adspace";
+    padding: 0;
+  };
+
 	.dashboard-profile {
 		padding: 2%;
 		grid-area: profile;
@@ -94,9 +105,11 @@ const StyledDashboard = styled.div`
 	.popcorn-pending-entity {
 		height: 40px;
 	}
+
 	.popcorn-pending-title {
 		grid-area: pending;
 	}
+
 	.dashboard-profile-avatar {
 		grid-area: avatar;
 		border-radius: 100rem;
@@ -244,6 +257,112 @@ const StyledDashboard = styled.div`
 		cursor: pointer;
 		font-family: inherit;
 	}
+
+  @media (max-width: 768px) {
+    .dashboard-profile {
+      grid-area: profile;
+      grid-template-rows: 1fr 0.25fr 0.5fr;
+      grid-template-columns: 1fr 0.5fr 0.5fr;
+      grid-template-areas: 
+        "avatar popcorns-list pending-list"
+        "username popcorns-list pending-list"
+        ". popcorns pending";
+      margin: 0 1.5rem;
+      border-radius: 2px;
+      /* width: 100vw; */
+    }
+
+    .dashboard-profile-avatar {
+
+    }
+
+    .thirdspace {
+		grid-area: adspace;
+		background-color: #8b8b99;
+		height: 85%;
+		align-self: flex-start;
+		text-align: center;
+    margin-right: 1.5rem;
+	  }
+
+    .dashboard-matches {
+		grid-area: matches;
+		display: grid;
+
+		grid-template-rows: 0.8fr 0.8fr 0.8fr;
+		grid-row-gap: 0.8rem;
+		grid-template-areas:
+			'first-match'
+			'second-match'
+			'third-match';
+		height: 85%;
+		align-self: flex-start;
+    margin-left: 1.5rem;
+	  }
+
+    .first-match {
+		grid-area: first-match;
+		background-color: #8b8b99;
+		display: grid;
+		grid-template-rows: 0.2fr 0.6fr 0.4fr 0.25fr;
+		grid-template-columns: 0.25fr 1fr 0.75fr;
+		grid-template-areas:
+      'avatar username location'
+      'movies movies movies'
+      'genres genres popcorn-btn'
+      'genres genres ignore-btn';
+    padding: 0.5rem;
+    border-radius: 2px;
+	  }
+
+    .second-match {
+      grid-area: second-match;
+      background-color: #8b8b99;
+      display: grid;
+      grid-template-rows: 0.2fr 0.6fr 0.4fr 0.25fr;
+      grid-template-columns: 0.25fr 1fr 0.75fr;
+      grid-template-areas:
+      'avatar username location'
+      'movies movies movies'
+      'genres genres popcorn-btn'
+      'genres genres ignore-btn';
+      padding: 0.5rem;
+      border-radius: 2px;
+    }
+
+    .third-match {
+      grid-area: third-match;
+      background-color: #8b8b99;
+      display: grid;
+      grid-template-rows: 0.2fr 0.6fr 0.4fr 0.25fr;
+      grid-template-columns: 0.25fr 1fr 0.75fr;
+      grid-template-areas:
+      'avatar username location'
+      'movies movies movies'
+      'genres genres popcorn-btn'
+      'genres genres ignore-btn';
+      padding: 0.5rem;
+      border-radius: 2px;
+    }
+
+    .match-movie-poster {
+      width: 8rem;
+    }
+
+    .match-genre-list {
+      justify-self: center;
+      font-size: 1.0rem;
+    }
+
+    .match-location {
+      font-size: 1.2rem;
+    }
+
+    .thirdspace {
+      height: 100%;
+      border-radius: 2px;
+    }
+  };
 `;
 
 export class Dashboard extends React.Component {
