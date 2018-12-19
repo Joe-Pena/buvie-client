@@ -8,7 +8,6 @@ import {
   fetchMatches,
   popCornMatch,
   fetchPopcorn,
-  filterUser,
   chairUser,
   neverMindUser,
   fetchNotification,
@@ -494,7 +493,6 @@ export class Dashboard extends React.Component {
   popcorn(userId) {
     this.props
       .dispatch(popCornMatch({ userId }))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
@@ -504,7 +502,6 @@ export class Dashboard extends React.Component {
   ignore(userId) {
     this.props
       .dispatch(chairUser(userId))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
@@ -514,7 +511,6 @@ export class Dashboard extends React.Component {
   nevermind(userId) {
     this.props
       .dispatch(neverMindUser(userId))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
