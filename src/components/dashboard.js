@@ -258,23 +258,74 @@ padding: 0 3rem;
   font-family: inherit;
 }
 
-@media (max-width: 768px) {
-  .dashboard-profile {
-    grid-area: profile;
-    grid-template-rows: 1fr 0.25fr 0.5fr;
-    grid-template-columns: 1fr 0.5fr 0.5fr;
-    grid-template-areas: 
-      "avatar popcorns-list pending-list"
-      "username popcorns-list pending-list"
-      ". popcorns pending";
-    margin: 0 1.5rem;
-    border-radius: 2px;
-    /* width: 100vw; */
-  }
+@media (max-width: 768px) {    .dashboard-profile {
+      width: calc(100% - 32px);
+      background-color: #8b8b99;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+      padding: 0 2%;
+      margin: 0 16px 16px;
 
-  .dashboard-profile-avatar {
+      h2, h3 {
+        text-align: center;
+      }
 
-  }
+      h3 {
+        margin-bottom: 8px;
+      }
+
+      .dashboard-profile-avatar {
+        border-radius: 100rem;
+        justify-self: center;
+        align-self: center;
+        width: 166px;
+        height: 166px;
+        border: 3px solid #0a2e4c;
+        margin: 16px;
+      }
+
+      .popcorn-div, .popcorn-pending-div {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        max-height: none;
+        height: auto;
+      }
+
+      .popcorn-list-user, .popcorn-pending-entity {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        height: auto;
+        border-bottom: 1px solid black;
+      }
+
+      .match-popcorn-btn {
+        grid-area: popcorn-btn;
+        background-color: #a33944;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+      }
+
+      .match-chair-btn {
+        grid-area: ignore-btn;
+        background-color: #b8b999;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+    }
 
   .thirdspace {
   grid-area: adspace;
