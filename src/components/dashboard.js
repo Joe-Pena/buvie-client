@@ -30,25 +30,25 @@ const StyledDashboard = styled.div`
   grid-template-columns: 260px 1fr 0.25fr;
   grid-column-gap: 2rem;
   grid-template-areas: 'profile matches adspace';
-  padding: 0 2rem;	
+  padding: 0 2rem;  
   
   .popcorn-div::-webkit-scrollbar-track,
   .popcorn-pending-div::-webkit-scrollbar-track {
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		border-radius: 10px;
-		background-color: #f5f5f5;
-	}
-	.popcorn-div::-webkit-scrollbar-track,
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+  .popcorn-div::-webkit-scrollbar-track,
   .popcorn-pending-div::-webkit-scrollbar {
-		width: 2px;
-		background-color: #f5f5f5;
-	}
-	.popcorn-div::-webkit-scrollbar-track,
+    width: 2px;
+    background-color: #f5f5f5;
+  }
+  .popcorn-div::-webkit-scrollbar-track,
   .popcorn-pending-div::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		background-color: #555;
-	}
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #555;
+  }
 
   .dashboard-profile {
     grid-area: profile;
@@ -142,6 +142,7 @@ const StyledDashboard = styled.div`
       padding-bottom: 16px;
 
       .match-avatar {
+      border-radius: 100rem;
         position: static;
         height: 40px;
         width: 40px;
