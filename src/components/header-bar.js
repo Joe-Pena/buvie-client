@@ -8,6 +8,8 @@ import { Redirect, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 import DropDown from './dropdown';
+import Container from './styles/container-styles';
+
 
 const StyledHeaderBar = styled.div`
   display: flex;
@@ -175,47 +177,49 @@ export class HeaderBar extends React.Component {
     }
 
     return (
-      <StyledHeaderBar
-        className="header-bar"
-        isCollapsed={this.state.isCollapsed}
-      >
-        <div className="header-top">
-          <Link to="/dashboard">
-            <img src={logoName} alt="buvie logo" className="nav-logo" />
-          </Link>
+      <Container>
+        <StyledHeaderBar
+          className="header-bar"
+          isCollapsed={this.state.isCollapsed}
+        >
+          <div className="header-top">
+            <Link to="/dashboard">
+              <img src={logoName} alt="buvie logo" className="nav-logo" />
+            </Link>
 
-          <div className="header-right">
-            {this.props.loggedIn ? (
-              <Link to={linkLocation}>
-                <h2 className="welcome-message">{headerBarMessage}</h2>
-              </Link>
-            ) : (
-              <div />
-            )}
-            {notifications}
-            {logOutButton}
-          </div>
-          <button className="menu-button" onClick={() => this.toggleMenu()}>
-            <i className="material-icons">menu</i>
-          </button>
-        </div>
-        <nav>
-          <ul>
-            <li className="menu-item">
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li className="menu-item">
-              <Link to="/" onClick={() => this.logOut()}>log out</Link>
-            </li>
-            <li className="menu-item">
+            <div className="header-right">
+              {this.props.loggedIn ? (
+                <Link to={linkLocation}>
+                  <h2 className="welcome-message">{headerBarMessage}</h2>
+                </Link>
+              ) : (
+                <div />
+              )}
               {notifications}
-            </li>
-          </ul>
-        </nav>
-      </StyledHeaderBar>
+              {logOutButton}
+            </div>
+            <button className="menu-button" onClick={() => this.toggleMenu()}>
+              <i className="material-icons">menu</i>
+            </button>
+          </div>
+          <nav>
+            <ul>
+              <li className="menu-item">
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li className="menu-item">
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li className="menu-item">
+                <Link to="/" onClick={() => this.logOut()}>log out</Link>
+              </li>
+              <li className="menu-item">
+                {notifications}
+              </li>
+            </ul>
+          </nav>
+        </StyledHeaderBar>
+      </Container>
     );
   }
 }

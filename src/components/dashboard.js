@@ -20,6 +20,7 @@ import MovieModal from '../components/movie-modal';
 import Chat from './chat';
 import styled from 'styled-components';
 import './clearfix.css';
+import Container from './styles/container-styles';
 
 const StyledDashboard = styled.div`
   background-color: #212032;
@@ -29,7 +30,25 @@ const StyledDashboard = styled.div`
   grid-template-columns: 260px 1fr 0.25fr;
   grid-column-gap: 2rem;
   grid-template-areas: 'profile matches adspace';
-  padding: 0 2rem;
+  padding: 0 2rem;	
+  
+  .popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		border-radius: 10px;
+		background-color: #f5f5f5;
+	}
+	.popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar {
+		width: 2px;
+		background-color: #f5f5f5;
+	}
+	.popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+		background-color: #555;
+	}
 
   .dashboard-profile {
     grid-area: profile;
@@ -60,7 +79,7 @@ const StyledDashboard = styled.div`
 
     .popcorn-div, .popcorn-pending-div {
       height: 229px;
-      overflow: scroll;
+      overflow: auto;
       display: flex;
       flex-direction: column;
       padding: 0;
@@ -240,7 +259,7 @@ const StyledDashboard = styled.div`
 
       .popcorn-div, .popcorn-pending-div {
         height: 229px;
-        overflow: scroll;
+        overflow: auto;
         display: flex;
         flex-direction: column;
         padding: 0;
@@ -335,7 +354,7 @@ const StyledDashboard = styled.div`
         display: flex;
         flex-direction: column;
         height: 226px;
-        overflow: scroll;
+        overflow: auto;
         padding: 0;
         margin: 0;
       }
@@ -630,43 +649,45 @@ export class Dashboard extends React.Component {
     }
 
     return (
-      <StyledDashboard className="dashboard">
-        <div className="dashboard-profile">
-          <img
-            className="dashboard-profile-avatar"
-            src={userProfilePicture}
-            alt="profile picture"
-          />
-          <h2 className="dashboard-profile-username">{this.props.username}</h2>
-          <h3 name="popcorn">Popcorns</h3>
-          <div className="popcorn-div">{popcorns}</div>
-          <h3 className="popcorn-pending-title" name="pending-popcorn">
+      <Container>
+        <StyledDashboard className="dashboard">
+          <div className="dashboard-profile">
+            <img
+              className="dashboard-profile-avatar"
+              src={userProfilePicture}
+              alt="profile picture"
+            />
+            <h2 className="dashboard-profile-username">{this.props.username}</h2>
+            <h3 name="popcorn">Popcorns</h3>
+            <div className="popcorn-div">{popcorns}</div>
+            <h3 className="popcorn-pending-title" name="pending-popcorn">
             Pending
-          </h3>
-          <div className="popcorn-pending-div">{pending}</div>
-        </div>
-        <div className="dashboard-matches">
-          {/* =========================================FIRST MATCH================ */}
-          <div className="first-match">
-            {matches[0] ? matches[0] : 'No more matches'}
+            </h3>
+            <div className="popcorn-pending-div">{pending}</div>
           </div>
-          {/* =========================================SECOND MATCH================ */}
-          <div className="second-match">
-            {matches[1] ? matches[1] : 'No more matches'}
+          <div className="dashboard-matches">
+            {/* =========================================FIRST MATCH================ */}
+            <div className="first-match">
+              {matches[0] ? matches[0] : 'No more matches'}
+            </div>
+            {/* =========================================SECOND MATCH================ */}
+            <div className="second-match">
+              {matches[1] ? matches[1] : 'No more matches'}
+            </div>
+            {/* =========================================THIRD MATCH================ */}
+            <div className="third-match">
+              {matches[2] ? matches[2] : 'No more matches'}
+            </div>
           </div>
-          {/* =========================================THIRD MATCH================ */}
-          <div className="third-match">
-            {matches[2] ? matches[2] : 'No more matches'}
-          </div>
-        </div>
 
-        <div className="thirdspace">
-          <div name="matched" />
-          <h2 className="thirdspace-title">MATCHES</h2>
-          {chats}
-          <Chat />
-        </div>
-      </StyledDashboard>
+          <div className="thirdspace">
+            <div name="matched" />
+            <h2 className="thirdspace-title">MATCHES</h2>
+            {chats}
+            <Chat />
+          </div>
+        </StyledDashboard>
+      </Container>
     );
   }
 }
