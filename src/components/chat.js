@@ -221,7 +221,8 @@ const customStyles = {
 		marginRight: '-50%',
 		transform: 'translate(-50%, -50%)',
 		height: '60%',
-		width: '640px',
+    maxWidth: '640px',
+    width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-between'
@@ -356,25 +357,21 @@ export class Chat extends Component {
 				data.handle === this.props.username
 			) {
 				return (
-					<>
-						<div className="chat-message-user last" key={i}>
-							<p>{data.message}</p>
-						</div>
-					</>
+          <div className="chat-message-user last" key={`${data.handle}-${i}`}>
+            <p>{data.message}</p>
+          </div>
 				);
 			}
 			if (data.handle === this.props.username) {
 				return (
-					<>
-						<div className="chat-message-user" key={i}>
-							<p>{data.message}</p>
-						</div>
-					</>
+          <div className="chat-message-user" key={`${data.handle}-${i}`}>
+            <p>{data.message}</p>
+          </div>
 				);
 			}
 
 			return (
-				<div className="chat-message-match" key={i}>
+				<div className="chat-message-match" key={`${data.handle}-${i}`}>
 					<p>{data.message}</p>
 				</div>
 			);

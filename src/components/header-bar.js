@@ -8,100 +8,114 @@ import { Redirect, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 import DropDown from './dropdown';
+import Container from './styles/container-styles';
+
 
 const StyledHeaderBar = styled.div`
-	display: grid;
-	grid-template-columns: 8fr 1fr;
-	grid-template-rows: 1fr;
-	grid-template-areas: 'logo menu' 'logout logout' 'notifications notifications';
-	padding: 1%;
-	.menu-button {
-		display: block;
-		grid-area: menu;
-		font-size: 80%;
-		padding: 0.1rem 0.3rem;
-		cursor: pointer;
-		text-decoration: none;
-		line-height: 1;
-		border: 1px solid transparent;
-		border-radius: 0.25rem;
-	}
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 
-	.nav-logo {
-		grid-area: logo;
-		width: 8rem;
-		position: relative;
-		left: 0.5rem;
-		top: 0.5rem;
-	}
+  .header-top {
+    padding: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-	.nav-logout-btn {
-		display: ${props => (props.isCollapsed ? 'none' : 'block')};
-		grid-area: logout;
-		background-color: #a33944;
-		color: #000;
-		justify-self: right;
-		width: 100%;
-		height: 3rem;
-		border: none;
-		cursor: pointer;
-	}
+  .nav-logo {
+    width: 8rem;
+    position: relative;
+    left: 0.5rem;
+    top: 0.5rem;
+  }
 
-	.notifications {
-		display: ${props => (props.isCollapsed ? 'none' : 'block')};
-		color: #fff;
-		font-size: 1.6rem;
-		position: relative;
-		right: 3rem;
-		grid-area: notifications;
-		cursor: pointer;
-	}
+  .header-right {
+    display: none;
+  }
 
-	.welcome-message {
-		display: none;
-	}
+  .menu-button {
+    display: block;
+    font-size: 80%;
+    padding: 0.1rem 0.3rem;
+    height: 50%;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+  }
 
-	@media (min-width: 768px) {
-		display: grid;
-		grid-template-columns: 1fr 0.2fr 0.2fr 0.1fr;
-		grid-template-areas: 'logo notifications profile logout';
-		text-align: center;
+  nav {
+    display: ${props => props.isCollapsed ? 'none' : 'block'};
+    position: absolute;
+    margin-top: 8px;
+    margin-left: auto;
+    margin-right: 16px;
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    right: 0;
+    top: 50px;
+    list-style: none;
+    letter-spacing: .0625rem;
+  }
 
-		.welcome-message {
-			display: block;
-			color: #fff;
-			font-size: 1.6rem;
-			position: relative;
-			right: 1rem;
-		}
+  a {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+  }
 
-		.notifications {
-			display: block;
-			color: #fff;
-			font-size: 1.6rem;
-			position: relative;
-			right: 3rem;
-			grid-area: notifications;
-			cursor: pointer;
-		}
+  .menu-item {
+    background-color: #333;
+    display: ${props => props.isCollapsed ? 'none' : 'block'};
+    padding: 0 16px;
 
-		.nav-logout-btn {
-			display: block;
-			grid-area: logout;
-			background-color: #a33944;
-			color: #000;
-			justify-self: center;
-			width: 10rem;
-			height: 3rem;
-			margin-right: 2rem;
-			border: none;
-			cursor: pointer;
-		}
+    &:hover {
+      background-color: #666;
+    }
+  }
 
-		.menu-button {
-			display: none;
-		}
-	}
+  @media (min-width: 768px) {
+    .menu-button {
+      display: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logout-btn {
+      background-color: #a33944;
+      color: #000;
+      margin-left: 16px;
+      width: 120px;
+      height: 3rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .dropdown-wrapper {
+      display: block;
+      color: #fff;
+      margin-left: 16px;
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+
+    .welcome-message {
+      display: block;
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 600;
+    }
+  }
 `;
 
 export class HeaderBar extends React.Component {
@@ -136,7 +150,7 @@ export class HeaderBar extends React.Component {
       username = this.props.user.username;
       logOutButton = (
         <button className="nav-logout-btn" onClick={() => this.logOut()}>
-					Log out
+          Log out
         </button>
       );
       notifications = (
@@ -158,29 +172,54 @@ export class HeaderBar extends React.Component {
 
     {
       this.props.location.pathname === '/dashboard'
-        ? (headerBarMessage = `Welcome, ${username} !`)
+        ? (headerBarMessage = `Welcome, ${username}!`)
         : (headerBarMessage = 'Back to Dashboard!');
     }
 
     return (
-      <StyledHeaderBar
-        className="header-bar"
-        isCollapsed={this.state.isCollapsed}
-      >
-        <img src={logoName} alt="buvie logo" className="nav-logo" />
-        {this.props.loggedIn ? (
-          <Link to={linkLocation}>
-            <h2 className="welcome-message">{headerBarMessage}</h2>
-          </Link>
-        ) : (
-          <div />
-        )}
-        <button className="menu-button" onClick={() => this.toggleMenu()}>
-          <i className="material-icons">menu</i>
-        </button>
-        {notifications}
-        {logOutButton}
-      </StyledHeaderBar>
+      <Container>
+        <StyledHeaderBar
+          className="header-bar"
+          isCollapsed={this.state.isCollapsed}
+        >
+          <div className="header-top">
+            <Link to="/dashboard">
+              <img src={logoName} alt="buvie logo" className="nav-logo" />
+            </Link>
+
+            <div className="header-right">
+              {this.props.loggedIn ? (
+                <Link to={linkLocation}>
+                  <h2 className="welcome-message">{headerBarMessage}</h2>
+                </Link>
+              ) : (
+                <div />
+              )}
+              {notifications}
+              {logOutButton}
+            </div>
+            <button className="menu-button" onClick={() => this.toggleMenu()}>
+              <i className="material-icons">menu</i>
+            </button>
+          </div>
+          <nav>
+            <ul>
+              <li className="menu-item">
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li className="menu-item">
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li className="menu-item">
+                <Link to="/" onClick={() => this.logOut()}>log out</Link>
+              </li>
+              <li className="menu-item">
+                {notifications}
+              </li>
+            </ul>
+          </nav>
+        </StyledHeaderBar>
+      </Container>
     );
   }
 }

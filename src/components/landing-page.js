@@ -60,8 +60,8 @@ const StyledLandingPage = styled.div`
     grid-template-areas: 
       "logo"
       "loginform"
-      "signup-btn"
-      "google-btn";
+      "google-btn"
+      "signup-btn";
     color: #8b8b99;
     background-color: #212032;
     text-align: center;

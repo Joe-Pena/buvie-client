@@ -8,258 +8,476 @@ import {
   fetchMatches,
   popCornMatch,
   fetchPopcorn,
-  filterUser,
   chairUser,
   neverMindUser,
   fetchNotification,
   fetchMatchesNearMe
 } from '../actions/users';
-import { Redirect } from 'react-router-dom';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
 import MovieModal from '../components/movie-modal';
 import Chat from './chat';
 import styled from 'styled-components';
 import './clearfix.css';
+import Container from './styles/container-styles';
 
 const StyledDashboard = styled.div`
-	background-color: #212032;
-	color: #fff;
-	height: 100rem; /*TODO: FIX THIS LINE. 100% OR 100VH DOES NOT COVER ENTIRE SCREEN */
-	display: grid;
-	grid-template-columns: 0.25fr 1fr 0.25fr;
-	grid-column-gap: 3rem;
-	grid-template-areas: 'profile matches adspace';
-	padding: 0 3rem;
+  background-color: #212032;
+  min-height: 100%;
+  color: #fff;
+  display: grid;
+  grid-template-columns: 260px 1fr 0.25fr;
+  grid-column-gap: 2rem;
+  grid-template-areas: 'profile matches adspace';
+  padding: 0 2rem;
 
-	.dashboard-profile {
-		padding: 2%;
-		grid-area: profile;
-		grid-row-gap: 3rem;
-		background-color: #8b8b99;
-		display: grid;
-		grid-template-rows: 0.15fr 0.1fr 0.1fr 1fr 0.1fr 1fr;
-		grid-template-areas:
-			'avatar'
-			'username'
-			'popcorns'
-			'popcorns-list'
-			'pending'
-			'pending-list';
-		height: 85%;
-		align-self: center;
-	}
+  p, h2, h3, h4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+  }
+  .popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar {
+    width: 2px;
+    background-color: #f5f5f5;
+  }
+  .popcorn-div::-webkit-scrollbar-track,
+  .popcorn-pending-div::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #555;
+  }
 
-	.popcorn-div {
-		grid-area: popcorns-list;
-		display: grid;
-		grid-auto-rows: 6rem;
-		padding-right: 6rem;
-		flex-direction: column;
-		max-height: 220px;
-		overflow: auto;
-		justify-content: center;
-		margin: auto;
-	}
+  .dashboard-profile {
+    grid-area: profile;
+    height: 90%;
+    background-color: #8b8b99;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0 2%;
 
-	.popcorn-div::-webkit-scrollbar-track {
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		border-radius: 10px;
-		background-color: #f5f5f5;
-	}
-	.popcorn-div::-webkit-scrollbar {
-		width: 2px;
-		background-color: #f5f5f5;
-	}
+    h2, h3 {
+      text-align: center;
+    }
 
-	.popcorn-div::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		background-color: #555;
-	}
+    h3 {
+      margin-bottom: 8px;
+    }
 
-	.popcorn-pending-div {
-		grid-area: pending-list;
-		display: grid;
-		grid-auto-rows: 6rem;
-		padding-right: 6rem;
-		flex-direction: column;
-		height: 100vh;
-		max-height: 150px;
-		overflow: auto;
-		justify-content: center;
-		margin: auto;
-	}
+    .dashboard-profile-avatar {
+      border-radius: 100rem;
+      justify-self: center;
+      align-self: center;
+      width: 166px;
+      height: 166px;
+      border: 3px solid #0a2e4c;
+      margin: 16px;
+    }
 
-	.popcorn-pending-div::-webkit-scrollbar-track {
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		border-radius: 10px;
-		background-color: #f5f5f5;
-	}
-	.popcorn-pending-div::-webkit-scrollbar {
-		width: 2px;
-		background-color: #f5f5f5;
-	}
+    .popcorn-div, .popcorn-pending-div {
+      height: 229px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      margin: 0;
+    }
 
-	.popcorn-pending-div::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-		background-color: #555;
-	}
+    .popcorn-list-user, .popcorn-pending-entity {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      height: auto;
+      min-height: 30px;
+    }
 
-	.popcorn-pending-entity {
-		height: 40px;
-	}
-	.popcorn-pending-title {
-		grid-area: pending;
-	}
-	.dashboard-profile-avatar {
-		grid-area: avatar;
-		border-radius: 100rem;
-		justify-self: center;
-		align-self: center;
-		width: 166px;
-		height: 166px;
-		border: 3px solid #0a2e4c;
-	}
+    .match-popcorn-btn {
+      grid-area: popcorn-btn;
+      background-color: #a33944;
+      color: #000;
+      width: 6rem;
+      height: 3rem;
+      border: none;
+      cursor: pointer;
+    }
 
-	.dashboard-profile-username {
-		grid-area: username;
-		justify-self: center;
-	}
+    .match-chair-btn {
+      grid-area: ignore-btn;
+      background-color: #b8b999;
+      color: #000;
+      width: 6rem;
+      height: 3rem;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+  }
 
-	.dashboard-matches {
-		grid-area: matches;
-		display: grid;
+  .dashboard-matches {
+    height: 90%;
+    grid-area: matches;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-		grid-template-rows: 0.8fr 0.8fr 0.8fr;
-		grid-row-gap: 1.5rem;
-		grid-template-areas:
-			'first-match'
-			'second-match'
-			'third-match';
-		height: 85%;
-		align-self: center;
-	}
+    .first-match {
+      margin-bottom: 16px;
+    }
 
-	.first-match {
-		grid-area: first-match;
-		background-color: #8b8b99;
-		display: grid;
-		grid-template-rows: 0.2fr 0.6fr 0.2fr;
-		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
-		grid-template-areas:
-			'avatar username location location'
-			'movies movies genres genres'
-			'. . popcorn-btn ignore-btn';
-	}
+    .second-match {
+      margin-bottom: 16px;
+    }
 
-	.second-match {
-		grid-area: second-match;
-		background-color: #8b8b99;
-		display: grid;
-		grid-template-rows: 0.2fr 0.6fr 0.2fr;
-		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
-		grid-template-areas:
-			'avatar username location location'
-			'movies movies genres genres'
-			'. . popcorn-btn ignore-btn';
-	}
+    .first-match, .second-match, .third-match {
+      width: 100%;
+      background-color: #8b8b99;
+      flex-wrap: wrap;
+      display: flex;
+      flex-direction: row;
+      padding-bottom: 16px;
 
-	.third-match {
-		grid-area: third-match;
-		background-color: #8b8b99;
-		display: grid;
-		grid-template-rows: 0.2fr 0.6fr 0.2fr;
-		grid-template-columns: 0.1fr 1fr 0.25fr 0.25fr;
-		grid-template-areas:
-			'avatar username location location'
-			'movies movies genres genres'
-			'. . popcorn-btn ignore-btn';
-	}
+      .match-avatar {
+      border-radius: 100rem;
+        position: static;
+        height: 40px;
+        width: 40px;
+        padding-top: 8px;
+        padding-left: 8px;
+      }
 
-	.thirdspace {
-		grid-area: adspace;
-		background-color: #8b8b99;
-		height: 85%;
-		align-self: center;
-		text-align: center;
-		.thirdspace-title: {
-			font-weight: 400;
-			text-transform: uppercase;
-			cursor: pointer;
-		}
-	}
+      .match-username {
+        position: static;
+        padding-top: 8px;
+        padding-left: 8px;
+        width: calc(55% - 56px);
+      }
 
-	.match-avatar {
-		grid-area: avatar;
-		position: relative;
-		top: 0.5rem;
-		left: 1rem;
-		width: 4rem;
-		border-radius: 100rem;
-	}
+      .match-location {
+        position: static;
+        padding-top: 8px;
+        padding-left: 8px;
+        text-align: right;
+        width: 45%;
+      }
 
-	.match-username {
-		grid-area: username;
-		position: relative;
-		align-self: center;
-		left: 1.5rem;
-	}
+      .match-movie-poster {
+        max-height: 120px;
+        max-width: 80px;
+        margin: 1rem 1rem;
+        justify-self: center;
+      }
+      .match-genre-list {
+        display: none;
+      }
 
-	.match-location {
-		grid-area: location;
-		justify-self: center;
-		align-self: center;
-		/* font-weight: 300; */
-	}
+      .match-movie-list {
+        list-style: none;
+        position: static;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+      }
 
-	.match-genre-list {
-		grid-area: genres;
-		align-self: center;
-		list-style: none;
-		word-wrap: none;
-		font-weight: 300;
-	}
+      .match-popcorn-btn {
+        grid-area: popcorn-btn;
+        background-color: #a33944;
+        color: #000;
+        width: calc(50% - 32px);
+        margin-right: 16px;
+        margin-left: 16px;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+      }
 
-	.match-movie-list {
-		grid-area: movies;
-		list-style: none;
-		position: relative;
-		left: 5rem;
-	}
+      .match-chair-btn {
+        grid-area: ignore-btn;
+        background-color: #b8b999;
+        color: #000;
+        width: calc(50% - 32px);
+        margin-right: 16px;
+        margin-left: 16px;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+    }
+  }
 
-	.match-movie-list li {
-		display: inline-block;
-	}
+  .thirdspace {
+    height: 90%;
+    grid-area: adspace;
+    background-color: #8b8b99;
+    text-align: center;
+    .thirdspace-title {
+      font-weight: 400;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+  }
 
-	.match-movie-poster {
-		width: 12rem;
-		max-height: 177px;
-		margin: 0 1rem;
-		justify-self: center;
-	}
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+      "profile profile"
+      "matches adspace";
+    padding: 0;
 
-	.match-popcorn-btn {
-		grid-area: popcorn-btn;
-		background-color: #a33944;
-		color: #000;
-		width: 8rem;
-		height: 3rem;
-		border: none;
-		cursor: pointer;
-	}
+    .dashboard-profile {
+      width: calc(100% - 32px);
+      background-color: #8b8b99;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+      padding: 0 2%;
+      margin: 0 16px 16px;
 
-	.match-chair-btn {
-		grid-area: ignore-btn;
-		background-color: #b8b999;
-		color: #000;
-		width: 8rem;
-		height: 3rem;
-		border: none;
-		cursor: pointer;
-		font-family: inherit;
-	}
+      h2, h3 {
+        text-align: center;
+      }
+
+      h3 {
+        margin-bottom: 8px;
+      }
+
+      .dashboard-profile-avatar {
+        border-radius: 100rem;
+        justify-self: center;
+        align-self: center;
+        width: 166px;
+        height: 166px;
+        border: 3px solid #0a2e4c;
+        margin: 16px;
+      }
+
+      .popcorn-div, .popcorn-pending-div {
+        height: 229px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+      }
+
+      .popcorn-list-user, .popcorn-pending-entity {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        height: auto;
+        border-bottom: 1px solid black;
+      }
+
+      .match-popcorn-btn {
+        grid-area: popcorn-btn;
+        background-color: #a33944;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+      }
+
+      .match-chair-btn {
+        grid-area: ignore-btn;
+        background-color: #b8b999;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+    }
+
+    .dashboard-matches {
+      min-height: 732px;
+      margin-left: 16px;
+    }
+
+    .thirdspace {
+      grid-area: adspace;
+      background-color: #8b8b99;
+      min-height: 732px;
+      align-self: flex-start;
+      text-align: center;
+      margin-right: 1.5rem;
+      height: 90%;
+      border-radius: 2px;
+    }
+  };
+
+  @media (max-width: 550px) {
+    display: flex;
+    flex-direction: column;
+    background-color: #212032;
+    color: #fff;
+    height: auto;
+    
+    .dashboard-profile {
+      width: calc(100% - 32px);
+      background-color: #8b8b99;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+      padding: 0 2%;
+      margin: 0 16px 16px;
+
+      h2, h3 {
+        text-align: center;
+      }
+
+      h3 {
+        margin-bottom: 8px;
+      }
+
+      .dashboard-profile-avatar {
+        border-radius: 100rem;
+        justify-self: center;
+        align-self: center;
+        width: 166px;
+        height: 166px;
+        border: 3px solid #0a2e4c;
+        margin: 16px;
+      }
+
+      .popcorn-div, .popcorn-pending-div {
+        display: flex;
+        flex-direction: column;
+        height: 226px;
+        overflow: auto;
+        padding: 0;
+        margin: 0;
+      }
+
+      .popcorn-list-user, .popcorn-pending-entity {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        height: auto;
+        border-bottom: 1px solid black;
+      }
+
+      .match-popcorn-btn {
+        grid-area: popcorn-btn;
+        background-color: #a33944;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+      }
+
+      .match-chair-btn {
+        grid-area: ignore-btn;
+        background-color: #b8b999;
+        color: #000;
+        width: 6rem;
+        height: 3rem;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+      }
+    }
+
+    .dashboard-matches {
+      width: calc(100% - 32px);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+      margin: 0 16px 16px;
+
+      .first-match, .second-match, .third-match {
+        width: 100%;
+        background-color: #8b8b99;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+
+        .match-avatar {
+          position: static;
+          height: 40px;
+          width: 40px;
+        }
+
+        .match-username {
+          position: static;
+          padding-left: 8px;
+          width: calc(100% - 40px);
+        }
+
+        .match-genre-list {
+          display: none;
+        }
+
+        .match-movie-list {
+          position: static;
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+        }
+
+        .match-popcorn-btn {
+          grid-area: popcorn-btn;
+          background-color: #a33944;
+          color: #000;
+          width: calc(50% - 32px);
+          margin-right: 16px;
+          margin-left: 16px;
+          height: 3rem;
+          border: none;
+          cursor: pointer;
+        }
+
+        .match-chair-btn {
+          grid-area: ignore-btn;
+          background-color: #b8b999;
+          color: #000;
+          width: calc(50% - 32px);
+          margin-right: 16px;
+          margin-left: 16px;
+          height: 3rem;
+          border: none;
+          cursor: pointer;
+          font-family: inherit;
+        }
+      }
+
+      .movie-list-3 {
+        display: none;
+      }
+    }
+
+    .thirdspace {
+      width: calc(100% - 32px);
+      background-color: #8b8b99;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      height: auto;
+      padding: 0 2%;
+      margin: 0 16px 16px;
+    }
+  }
 `;
 
 export class Dashboard extends React.Component {
@@ -275,7 +493,6 @@ export class Dashboard extends React.Component {
   popcorn(userId) {
     this.props
       .dispatch(popCornMatch({ userId }))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
@@ -285,7 +502,6 @@ export class Dashboard extends React.Component {
   ignore(userId) {
     this.props
       .dispatch(chairUser(userId))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
@@ -295,7 +511,6 @@ export class Dashboard extends React.Component {
   nevermind(userId) {
     this.props
       .dispatch(neverMindUser(userId))
-      .then(() => this.props.dispatch(filterUser(userId)))
       .then(() => this.props.dispatch(fetchCurrentuser()))
       .then(() => this.props.dispatch(fetchMatches()))
       .then(() => this.props.dispatch(fetchPopcorn()))
@@ -344,9 +559,9 @@ export class Dashboard extends React.Component {
         }
         let matchMovies;
         if (user.movies) {
-          matchMovies = user.movies.map(movie => {
+          matchMovies = user.movies.map((movie, i) => {
             return (
-              <li key={movie._id}>
+              <li className={`movie-list-${i+1}`} key={movie._id}>
                 <MovieModal movie={movie} />
               </li>
             );
@@ -358,7 +573,7 @@ export class Dashboard extends React.Component {
           <React.Fragment key={user.id}>
             <img className="match-avatar" src={gravatar} alt={user.username} />
             <h3 className="match-username">{user.username}</h3>
-            <h3 className="match-location">{user.location.city}</h3>
+            <h4 className="match-location">{user.location.city}</h4>
             <ul className="match-genre-list">
               <h3>{user.username} likes:</h3>
               {matchGenres}
@@ -368,13 +583,13 @@ export class Dashboard extends React.Component {
               className="match-popcorn-btn"
               onClick={() => this.popcorn(user.id)}
             >
-							POPCORN
+              POPCORN
             </button>
             <button
               className="match-chair-btn"
               onClick={() => this.ignore(user.id)}
             >
-							IGNORE
+              IGNORE
             </button>
           </React.Fragment>
         );
@@ -391,20 +606,24 @@ export class Dashboard extends React.Component {
     if (this.props.popcorn) {
       popcorns = this.props.popcorn.map(user => {
         return (
-          <div className="popcorns-entity" key={user._id}>
+
+          <div className="popcorn-list-user" key={user._id}>
             <p>{user.username}</p>
-            <button
-              className="match-popcorn-btn"
-              onClick={() => this.popcorn(user._id)}
-            >
-							Popcorn
-            </button>
-            <button
-              className="match-chair-btn"
-              onClick={() => this.ignore(user._id)}
-            >
-							Ignore
-            </button>
+            <div className="popcorn-list-user-buttons">
+              <button
+                className="match-popcorn-btn"
+                onClick={() => this.popcorn(user._id)}
+              >
+              Popcorn
+              </button>
+              <button
+                className="match-chair-btn"
+                onClick={() => this.ignore(user._id)}
+              >
+              Ignore
+              </button>
+            </div>
+
           </div>
         );
       });
@@ -413,63 +632,67 @@ export class Dashboard extends React.Component {
     if (this.props.pending) {
       pending = this.props.pending.map(user => {
         return (
-          <div className="popcorn-pending-entity" key={user._id}>
+          <div className=" key={user._id}>
             <p>{user.username}</p>
-            <button
-              className="match-popcorn-btn"
-              onClick={() => this.popcorn(user._id)}
-            >
-							RE-POP
-            </button>
-            <button
-              className="match-chair-btn"
-              onClick={() => this.nevermind(user._id)}
-            >
-							NVM
-            </button>
+            <div className="popcorn-pending-entity-buttons">
+              <button
+                className="match-popcorn-btn"
+                onClick={() => this.popcorn(user._id)}
+              >
+              RE-POP
+              </button>
+              <button
+                className="match-chair-btn"
+                onClick={() => this.nevermind(user._id)}
+              >
+              NVM
+              </button>
+            </div>
           </div>
         );
       });
     }
 
     return (
-      <StyledDashboard className="dashboard">
-        <div className="dashboard-profile">
-          <img
-            className="dashboard-profile-avatar"
-            src={userProfilePicture}
-            alt="profile picture"
-          />
-          <h2 className="dashboard-profile-username">{this.props.username}</h2>
-          <h3 name="popcorn">Popcorns</h3>
-          <div className="popcorn-div">{popcorns}</div>
-          <h3 className="popcorn-pending-title" name="pending-popcorn">
-						Pending
-          </h3>
-          <div className="popcorn-pending-div">{pending}</div>
-        </div>
-        <div className="dashboard-matches">
-          {/* =========================================FIRST MATCH================ */}
-          <div className="first-match">
-            {matches[0] ? matches[0] : 'No more matches'}
+      <Container>
+        <StyledDashboard className="dashboard">
+          <div className="dashboard-profile">
+            <img
+              className="dashboard-profile-avatar"
+              src={userProfilePicture}
+              alt="profile picture"
+            />
+            <h2 className="dashboard-profile-username">{this.props.username}</h2>
+            <h3 name="popcorn">Popcorns</h3>
+            <div className="popcorn-div">{popcorns}</div>
+            <h3 className="popcorn-pending-title" name="pending-popcorn">
+            Pending
+            </h3>
+            <div className="popcorn-pending-div">{pending}</div>
           </div>
-          {/* =========================================SECOND MATCH================ */}
-          <div className="second-match">
-            {matches[1] ? matches[1] : 'No more matches'}
+          <div className="dashboard-matches">
+            {/* =========================================FIRST MATCH================ */}
+            <div className="first-match">
+              {matches[0] ? matches[0] : 'No more matches'}
+            </div>
+            {/* =========================================SECOND MATCH================ */}
+            <div className="second-match">
+              {matches[1] ? matches[1] : 'No more matches'}
+            </div>
+            {/* =========================================THIRD MATCH================ */}
+            <div className="third-match">
+              {matches[2] ? matches[2] : 'No more matches'}
+            </div>
           </div>
-          {/* =========================================THIRD MATCH================ */}
-          <div className="third-match">
-            {matches[2] ? matches[2] : 'No more matches'}
-          </div>
-        </div>
 
-        <div className="thirdspace">
-          <div name="matched" />
-          <h2 className="thirdspace-title">MATCHES</h2>
-          {chats}
-          <Chat />
-        </div>
-      </StyledDashboard>
+          <div className="thirdspace">
+            <div name="matched" />
+            <h2 className="thirdspace-title">MATCHES</h2>
+            {chats}
+            <Chat />
+          </div>
+        </StyledDashboard>
+      </Container>
     );
   }
 }
