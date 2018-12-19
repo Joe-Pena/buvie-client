@@ -606,7 +606,6 @@ export class Dashboard extends React.Component {
     if (this.props.popcorn) {
       popcorns = this.props.popcorn.map(user => {
         return (
-
           <div className="popcorn-list-user" key={user._id}>
             <p>{user.username}</p>
             <div className="popcorn-list-user-buttons">
@@ -623,7 +622,6 @@ export class Dashboard extends React.Component {
               Ignore
               </button>
             </div>
-
           </div>
         );
       });
@@ -632,7 +630,7 @@ export class Dashboard extends React.Component {
     if (this.props.pending) {
       pending = this.props.pending.map(user => {
         return (
-          <div className=" key={user._id}>
+          <div className="popcorn-pending-entity" key={user._id}>
             <p>{user.username}</p>
             <div className="popcorn-pending-entity-buttons">
               <button
