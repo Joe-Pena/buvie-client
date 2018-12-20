@@ -1,6 +1,7 @@
 # Buvie
 
-##What is Buvie?
+## What is Buvie?
+
 Buvie is a platform where users can find other people with similar taste in movies and plan to catch a movie with them!
 
 ## Getting Started
