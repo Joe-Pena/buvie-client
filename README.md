@@ -10,11 +10,11 @@ Deployed: version: https://buvie.netlify.com
 To use Buvie without needing to register, simply log in with the credentials below.
 
 Demo Account: 
-  username: Demo123
-  password: password123
+  username: Demo123  
+  password: password123  
   
-  Preferred Genres: Action, Comedy, Horror
-  Preferred Movies: Mad-Max, Baby Driver, The Hangover
+  Preferred Genres: Action, Comedy, Horror  
+  Preferred Movies: Mad-Max, Baby Driver, The Hangover  
 
 ### Prerequisites
 
