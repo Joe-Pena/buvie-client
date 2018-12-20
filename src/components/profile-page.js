@@ -1,25 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	postCloudinaryProfilePicture,
-	postUserProfilePicture
+	postCloudinaryProfilePicture
 } from '../actions/users';
 import { Redirect } from 'react-router-dom';
-import { CLOUDINARY_BASE_URL, CLOUDINARY_UPLOAD_PRESET } from '../config.js';
+import { CLOUDINARY_UPLOAD_PRESET } from '../config.js';
 import styled from 'styled-components';
 import ImageUploader from 'react-images-upload';
-import Jimp from 'jimp';
-import md5 from 'js-md5';
-import { FaLeaf } from 'react-icons/fa';
-import FadeLoader from 'react-spinners/FadeLoader';
-
-const override = {
-	position: 'absolute'
-};
-const StyledLoader = styled(FadeLoader)`
-	display: flex;
-	margin-right: -50px;
-`;
 
 const ProfileMain = styled.main`
 	width: 80%;
@@ -92,7 +79,7 @@ const ProfileMain = styled.main`
     border-radius: 30px;
     color: white;
     font-weight: 300;
-    font-size: 14px;
+    font-size: 14px; 
     margin: 10px 0;
     transition: all 0.2s ease-in;
     cursor: pointer;
