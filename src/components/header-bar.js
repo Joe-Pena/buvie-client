@@ -4,7 +4,7 @@ import { clearAuth } from '../actions/auth';
 import { resetUser } from '../actions/users';
 import { resetMovies } from '../actions/movies-action';
 import { clearAuthToken } from '../local-storage';
-import { Redirect, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoName from '../images/buvielogoname.svg';
 import DropDown from './dropdown';
@@ -164,16 +164,12 @@ export class HeaderBar extends React.Component {
       );
     }
 
-    {
-      this.props.location.pathname === '/dashboard'
-        ? (linkLocation = '/profile')
-        : (linkLocation = '/dashboard');
-    }
-
-    {
-      this.props.location.pathname === '/dashboard'
-        ? (headerBarMessage = `Welcome, ${username}!`)
-        : (headerBarMessage = 'Back to Dashboard!');
+    if (this.props.location.pathname === '/dashboard') {
+      linkLocation = '/profile';
+      headerBarMessage = `Welcome, ${username}!`;
+    } else {
+      linkLocation = '/dashboard';
+      headerBarMessage = 'Back to Dashboard!';
     }
 
     return (

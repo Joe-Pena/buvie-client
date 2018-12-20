@@ -178,9 +178,6 @@ export const popCornMatch = data => (dispatch, getState) => {
     },
     body: JSON.stringify(data)
   })
-    .then(res => {
-      console.log(res);
-    })
     .catch(err => {
       console.error(err);
     });
@@ -282,7 +279,6 @@ export const chairUserFailure = error => ({
 });
 
 export const chairUser = ignoredUserId => (dispatch, getState) => {
-  console.log('chairing');
   dispatch(chairUserRequest());
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
@@ -378,7 +374,6 @@ export const updateUserLocation = () => (dispatch, getState) => {
   const authToken = getState().auth.authToken;
   const currentUser = getState().auth.currentUser;
   const location = getState().user.location;
-  console.log('location to be updated to:', location);
 
   let userId;
   if (currentUser) {
@@ -393,7 +388,6 @@ export const updateUserLocation = () => (dispatch, getState) => {
     },
     body: JSON.stringify(location)
   })
-    .then(() => console.log('location updated in DB...'))
     .catch(err => console.log(err.message));
 };
 
@@ -415,14 +409,12 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 
   function getLocationName(lat, lng) {
-    console.log(`Coordinates are ${lat}, ${lng}`);
     fetch(
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_MAP_KEY}`
     )
       .then(response => response.json())
       .then(data => {
         const cityName = findCity(data.results);
-        console.log('City located: ', cityName);
         dispatch(
           geolocateUserSuccess({
             city: cityName,
@@ -435,7 +427,6 @@ export const geolocateUser = () => (dispatch, getState) => {
   }
 
   if ('geolocation' in navigator) {
-    console.log('aquiring location...');
     navigator.geolocation.getCurrentPosition(
       function success(position) {
         getLocationName(position.coords.latitude, position.coords.longitude);
@@ -447,8 +438,6 @@ export const geolocateUser = () => (dispatch, getState) => {
         );
       }
     );
-  } else {
-    console.log('geolocation is not enabled on this browser');
   }
 };
 
@@ -493,9 +482,6 @@ export const postUserProfilePicture = (userId, imgUrl) => (
       dispatch(userPicSuccess());
       dispatch(refreshAuthToken());
       return res.json();
-    })
-    .then(() => {
-      console.log('hello');
     })
     .catch(err => {
       dispatch(userPicFailure(err));

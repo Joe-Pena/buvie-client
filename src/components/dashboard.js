@@ -10,8 +10,7 @@ import {
   fetchPopcorn,
   chairUser,
   neverMindUser,
-  fetchNotification,
-  fetchMatchesNearMe
+  fetchNotification
 } from '../actions/users';
 import GenreSelection from '../components/genre-selection';
 import MovieSelection from '../components/movie-selection';
@@ -660,7 +659,7 @@ export class Dashboard extends React.Component {
             <img
               className="dashboard-profile-avatar"
               src={userProfilePicture}
-              alt="profile picture"
+              alt="profile"
             />
             <h2 className="dashboard-profile-username">{this.props.username}</h2>
             <h3 name="popcorn">Popcorns</h3>

@@ -24,7 +24,7 @@ export const fetchMovies = () => (dispatch, getState) => {
     .then(res => {
       dispatch(setMovieList(res));
     })
-    .catch(err => console.error(err));
+    .catch((err) => console.error(err));
 };
 
 export const FETCH_OMDB_INFO_REQUEST = 'FETCH_OMDB_INFO_REQUEST';
