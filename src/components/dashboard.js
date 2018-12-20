@@ -43,12 +43,14 @@ const StyledDashboard = styled.div`
     border-radius: 10px;
     background-color: #f5f5f5;
   }
-  .popcorn-div::-webkit-scrollbar-track,
+  
+  .popcorn-div::-webkit-scrollbar,
   .popcorn-pending-div::-webkit-scrollbar {
     width: 2px;
     background-color: #f5f5f5;
   }
-  .popcorn-div::-webkit-scrollbar-track,
+
+  .popcorn-div::-webkit-scrollbar-thumb,
   .popcorn-pending-div::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
