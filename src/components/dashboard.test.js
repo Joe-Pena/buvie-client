@@ -1,7 +1,5 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { Dashboard } from './dashboard';
 
@@ -63,20 +61,6 @@ jest.mock('../actions/users', () => Object.assign({},
       }
     })
   }));
-
-const store = createStore(() => ({
-  username: 'username',
-  email: 'email@test.com',
-  profilePicture: 'picture.png',
-  movies: [],
-  genres: ['Horror', 'Comedy', 'Drama'],
-  matches: [],
-  popcorn: [],
-  pending: [],
-  matched: [],
-  filter: [],
-  loading: false
-}));
 
 describe('<Dashboard/>', () => {
   const dispatch = jest.fn();
