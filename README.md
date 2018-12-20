@@ -9,7 +9,7 @@ Deployed: version: https://buvie.netlify.com
 
 To use Buvie without needing to register, simply log in with the credentials below.
 
-Demo Account: 
+Demo Account:   
   username: Demo123  
   password: password123  
   
