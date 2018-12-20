@@ -88,7 +88,7 @@ export class DropDown extends React.Component {
         );
       });
     } else {
-      listElements = [<li>You don't have any noticiations right now</li>];
+      listElements = [<li key='no-notes'>You don't have any noticiations right now</li>];
     }
     let newNotificationCount = 0;
     for (let i = 0; i < listArr.length; i++) {
