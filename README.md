@@ -5,6 +5,9 @@
 Buvie is a platform where users can find other people with similar taste in movies and plan to catch a movie with them!
 
 ## Getting Started
+server repo: https://github.com/thinkful-ei24/buvie-server
+native repo: https://github.com/thinkful-ei24/buvie-native
+
 Deployed: version: https://buvie.netlify.com
 
 To use Buvie without needing to register, simply log in with the credentials below.
