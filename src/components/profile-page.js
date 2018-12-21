@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-	postCloudinaryProfilePicture
-} from '../actions/users';
+import { postCloudinaryProfilePicture } from '../actions/users';
 import { Redirect } from 'react-router-dom';
 import { CLOUDINARY_UPLOAD_PRESET } from '../config.js';
 import styled from 'styled-components';
@@ -139,7 +137,9 @@ class ProfilePage extends Component {
 			() => {
 				let file = this.state.profilePicture;
 				let reader = new FileReader();
-				let url = reader.readAsDataURL(file);
+				if (file) {
+					let url = reader.readAsDataURL(file);
+				}
 
 				reader.onloadend = e => {
 					this.setState({
@@ -185,6 +185,7 @@ class ProfilePage extends Component {
 						maxFileSize={150000}
 						fileSizeError="File size is too big!"
 						fileTypeError="That file is not supported!"
+						singleImage={true}
 					/>
 					<div className="profile-pic-container">
 						{!this.state.imgSrc && (
