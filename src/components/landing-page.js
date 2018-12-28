@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 import { saveAuthToken } from '../local-storage';
 import LoginForm from './login-form';
 import logo from '../images/buvielogoname.svg';
-import { setAuthToken, authSuccess } from '../actions/auth';
+import { setAuthToken, authSuccess, demoUser } from '../actions/auth';
 import { API_BASE_URL } from '../config';
 
 import googleNormal from '../images/btn_google_signin_light_normal_web.png';
@@ -39,6 +39,12 @@ const StyledLandingPage = styled.div`
     background-size: cover;
     background-repeat: no-repeat;
     min-height: 100vh;
+  }
+
+  .demo-link {
+    color: #fff;
+    text-decoration: underline;
+    padding-bottom: 5rem;
   }
 
   .info-message {
@@ -209,6 +215,7 @@ export class LandingPage extends React.Component {
             :
             <span className="signup-button" >Not a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
           }
+          <a href="#demo" className="demo-link" onClick={() => this.props.dispatch(demoUser())}>Use Demo Account</a>
         </div>
       </StyledLandingPage>
     );
