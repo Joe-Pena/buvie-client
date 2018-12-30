@@ -5,9 +5,10 @@ import { Route, withRouter } from 'react-router-dom';
 import HeaderBar from './header-bar';
 import LandingPage from './landing-page';
 import Dashboard from './dashboard';
+import ProfilePage from './profile-page';
 import './clearfix.css';
 import { refreshAuthToken } from '../actions/auth';
-import { geolocateUser } from '../actions/users';
+import { geolocateUser, fetchNotification } from '../actions/users';
 
 export class App extends React.Component {
   componentDidUpdate(prevProps) {
@@ -28,6 +29,10 @@ export class App extends React.Component {
       () => this.props.dispatch(refreshAuthToken()),
       60 * 60 * 1000
     );
+    this.notificationRefreshInterval = setInterval(
+      () => this.props.dispatch(fetchNotification()),
+      60 * 1000
+    );
   }
 
   stopPeriodicRefresh() {
@@ -36,6 +41,7 @@ export class App extends React.Component {
     }
 
     clearInterval(this.refreshInterval);
+    clearInterval(this.notificationRefreshInterval);
   }
 
   render() {
@@ -44,6 +50,8 @@ export class App extends React.Component {
         <Route exact path="/dashboard" component={HeaderBar} />
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/profile" component={HeaderBar} />
+        <Route exact path="/profile" component={ProfilePage} />
       </div>
     );
   }

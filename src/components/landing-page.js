@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode';
 import { saveAuthToken } from '../local-storage';
 import LoginForm from './login-form';
 import logo from '../images/buvielogoname.svg';
-import { setAuthToken, authSuccess } from '../actions/auth';
+import { setAuthToken, authSuccess, demoUser } from '../actions/auth';
 import { API_BASE_URL } from '../config';
 
 import googleNormal from '../images/btn_google_signin_light_normal_web.png';
@@ -18,14 +18,13 @@ import googlePressed from '../images/btn_google_signin_light_pressed_web.png';
 
 const StyledLandingPage = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-areas: 
-    "info side-login";
-  height: 100vh;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "side-login";
 
   .info-area {
     grid-area: info;
-    display: grid;
+    display: none;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-areas: 
       "first"
@@ -39,6 +38,13 @@ const StyledLandingPage = styled.div`
     url(https://kylegrant76.files.wordpress.com/2015/12/top-10-movies-people-in-movie-theater-with-3d-glasses.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    min-height: 100vh;
+  }
+
+  .demo-link {
+    color: #fff;
+    text-decoration: underline;
+    padding-bottom: 5rem;
   }
 
   .info-message {
@@ -46,13 +52,21 @@ const StyledLandingPage = styled.div`
     align-self: center;
   }
 
+  .google-signup {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
+    position: relative;
+  }
+
   .side-login {
     grid-area: side-login;
     display: grid;
-    grid-template-rows: 0.5fr 1fr 0.3fr;
+    grid-template-rows: 0.5fr 1fr 0.3fr 0.3fr;
     grid-template-areas: 
       "logo"
       "loginform"
+      "google-btn"
       "signup-btn";
     color: #8b8b99;
     background-color: #212032;
@@ -80,7 +94,13 @@ const StyledLandingPage = styled.div`
     align-self: flex-start;
   }
 
+  .signup-button a {
+    text-decoration: underline; 
+    color: #fff;
+  }
+
   .landing-login-form input {
+    outline: none;
     border: none;
     background-color: #212032;
     border-bottom: 0.1rem solid #8b8b99;
@@ -102,30 +122,48 @@ const StyledLandingPage = styled.div`
     font-size: 2rem;
   }
 
-  .google-signup {
-    position: relative;
-  }
-
   .google-normal, .google-pressed, .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     position: absolute;
     display: none;
   }
 
   .google-signup:hover .google-focus {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block;
     z-index: 99;
   }
 
   .google-signup:active .google-pressed {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block;
     z-index: 100;
   }
 
   .google-normal {
+    grid-area: google-btn;
+    justify-self: center;
+    transform: translateX(-50%);
     display: block
   }
 
+    @media (min-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 0.5fr;
+    grid-template-areas: 
+      "info side-login";
+    height: 100vh;
 
+    .info-area {
+      display: grid;
+    }
+  }
 `;
 
 export class LandingPage extends React.Component {
@@ -173,10 +211,11 @@ export class LandingPage extends React.Component {
             <img className="google-focus" src={googleFocus} alt="login with google" />
           </a>
           { this.state.signUp ?
-            <span className="signup-button" >Already a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
+            <span className="signup-button" >Already a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Login</Link></span>
             :
-            <span className="signup-button" >Not a member?<Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
+            <span className="signup-button" >Not a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
           }
+          <a href="#demo" className="demo-link" onClick={() => this.props.dispatch(demoUser())}>Use Demo Account</a>
         </div>
       </StyledLandingPage>
     );

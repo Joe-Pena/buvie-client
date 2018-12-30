@@ -100,3 +100,17 @@ export const refreshAuthToken = () => (dispatch, getState) => {
       clearAuthToken(authToken);
     });
 };
+
+export const demoUser = () => (dispatch) => {
+  dispatch(authRequest());
+  return fetch(`${API_BASE_URL}/auth/demo`, {
+    method: 'POST',
+  })
+    .then(res => normalizeResponseErrors(res))
+    .then(res => res.json())
+    .then(({ authToken }) => storeAuthInfo(authToken, dispatch))
+    .catch(err => {
+      dispatch(authError(err));
+      dispatch(clearAuth());
+    });
+};
