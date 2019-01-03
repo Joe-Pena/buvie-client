@@ -169,12 +169,12 @@ class ProfilePage extends Component {
 
 		return (
 			<ProfileMain>
-				<div className="profile-option-select">
+				<header className="profile-option-select">
 					<h2>Change Picture</h2>
-				</div>
+				</header>
 				<div className="spacer" />
 
-				<div className="profile-display-container">
+				<section className="profile-display-container">
 					<ImageUploader
 						singleImage={true}
 						label="Max file size: 150kb, accepted: 'jpg', 'png'"
@@ -230,7 +230,7 @@ class ProfilePage extends Component {
 							<input className="profile-pic-submit" type="submit" />
 						)}
 					</form>
-				</div>
+				</section>
 			</ProfileMain>
 		);
 	}
