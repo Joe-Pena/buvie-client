@@ -116,10 +116,10 @@ export class DropDown extends React.Component {
         className="dropdown-wrapper"
         isCollapsed={this.props.isCollapsed}
       >
-        <div
+        <header
           className="dropdown-header"
           onClick={() => this.toggleList()}
-        >{`${headerTitle} ${displayCount}`}</div>
+        >{`${headerTitle} ${displayCount}`}</header>
         {list}
       </StyledDropDown>
     );

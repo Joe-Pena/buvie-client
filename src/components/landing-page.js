@@ -195,10 +195,10 @@ export class LandingPage extends React.Component {
 
     return (
       <StyledLandingPage className="landing-page-main-grid">
-        <div className="info-area">
+        <section className="info-area">
           <h1 className="info-message">Buvie, find friends to watch your <br />favorite movies with!</h1>
-        </div>
-        <div className="side-login">
+        </section>
+        <section className="side-login">
           <img src={logo} alt="Buvie logo" className="buvie-landing-logo" />
           { this.state.signUp ?
             <RegistrationForm />
@@ -216,7 +216,7 @@ export class LandingPage extends React.Component {
             <span className="signup-button" >Not a member? <Link to="/" onClick={() => this.setState({ signUp: !this.state.signUp })}>Register</Link></span>
           }
           <a href="#demo" className="demo-link" onClick={() => this.props.dispatch(demoUser())}>Use Demo Account</a>
-        </div>
+        </section>
       </StyledLandingPage>
     );
   }

@@ -384,7 +384,7 @@ export class Chat extends Component {
 					{this.state.match}
 				</h2>
 				<div id="chat-window" />
-				<div>
+				<article>
 					<Modal
 						isOpen={this.state.modalIsOpen}
 						onAfterOpen={this.afterOpenModal}
@@ -434,7 +434,7 @@ export class Chat extends Component {
 							</div>
 						</ChatMessageSend>
 					</Modal>
-				</div>
+				</article>
 			</ChatFriendsList>
 		);
 	}

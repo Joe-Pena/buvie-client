@@ -607,7 +607,7 @@ export class Dashboard extends React.Component {
     if (this.props.popcorn) {
       popcorns = this.props.popcorn.map(user => {
         return (
-          <div className="popcorn-list-user" key={user._id}>
+          <article className="popcorn-list-user" key={user._id}>
             <p>{user.username}</p>
             <div className="popcorn-list-user-buttons">
               <button
@@ -623,7 +623,7 @@ export class Dashboard extends React.Component {
               Ignore
               </button>
             </div>
-          </div>
+          </article>
         );
       });
     }
@@ -655,7 +655,7 @@ export class Dashboard extends React.Component {
     return (
       <Container>
         <StyledDashboard className="dashboard">
-          <div className="dashboard-profile">
+          <section className="dashboard-profile">
             <img
               className="dashboard-profile-avatar"
               src={userProfilePicture}
@@ -663,33 +663,33 @@ export class Dashboard extends React.Component {
             />
             <h2 className="dashboard-profile-username">{this.props.username}</h2>
             <h3 name="popcorn">Popcorns</h3>
-            <div className="popcorn-div">{popcorns}</div>
+            <article className="popcorn-div">{popcorns}</article>
             <h3 className="popcorn-pending-title" name="pending-popcorn">
             Pending
             </h3>
-            <div className="popcorn-pending-div">{pending}</div>
-          </div>
-          <div className="dashboard-matches">
+            <article className="popcorn-pending-div">{pending}</article>
+          </section>
+          <section className="dashboard-matches">
             {/* =========================================FIRST MATCH================ */}
-            <div className="first-match">
+            <article className="first-match">
               {matches[0] ? matches[0] : 'No more matches'}
-            </div>
+            </article>
             {/* =========================================SECOND MATCH================ */}
-            <div className="second-match">
+            <article className="second-match">
               {matches[1] ? matches[1] : 'No more matches'}
-            </div>
+            </article>
             {/* =========================================THIRD MATCH================ */}
-            <div className="third-match">
+            <article className="third-match">
               {matches[2] ? matches[2] : 'No more matches'}
-            </div>
-          </div>
+            </article>
+          </section>
 
-          <div className="thirdspace">
+          <section className="thirdspace">
             <div name="matched" />
             <h2 className="thirdspace-title">MATCHES</h2>
             {chats}
             <Chat />
-          </div>
+          </section>
         </StyledDashboard>
       </Container>
     );

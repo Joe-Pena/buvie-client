@@ -144,9 +144,9 @@ class MovieSelection extends Component {
         <StyledH3>And now select your favorite movies! Choose at least 3</StyledH3>
         <StyledForm onSubmit={e => this.onSubmit(e)}>
           <div className='feedback'>{this.state.movies.length} movies selected</div>
-          <div className="options">
+          <section className="options">
             {inputs}
-          </div>
+          </section>
           <button className="movie-select-btn" disabled={disabled}>
             Continue
           </button>
