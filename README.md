@@ -1,9 +1,11 @@
 # Buvie
 <img src="https://github.com/thinkful-ei24/buvie-client/blob/master/src/images/buvielogoname.png" width="500">
+
 ## What is Buvie?
 
 Buvie is a platform where users can find other people with similar taste in movies and plan to catch a movie with them!
 <img src="https://github.com/thinkful-ei24/buvie-client/blob/master/src/images/dashboard.png" width="100%">
+
 ## Getting Started
 server repo: https://github.com/thinkful-ei24/buvie-server  
 native repo: https://github.com/thinkful-ei24/buvie-native
