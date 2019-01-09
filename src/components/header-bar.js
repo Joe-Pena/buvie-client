@@ -178,7 +178,7 @@ export class HeaderBar extends React.Component {
           className="header-bar"
           isCollapsed={this.state.isCollapsed}
         >
-          <div className="header-top">
+          <header className="header-top">
             <Link to="/dashboard">
               <img src={logoName} alt="buvie logo" className="nav-logo" />
             </Link>
@@ -197,7 +197,7 @@ export class HeaderBar extends React.Component {
             <button className="menu-button" onClick={() => this.toggleMenu()}>
               <i className="material-icons">menu</i>
             </button>
-          </div>
+          </header>
           <nav>
             <ul>
               <li className="menu-item">

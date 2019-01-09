@@ -108,7 +108,7 @@ class GenreSelection extends Component {
 
     const inputs = genreList.map(genre => {
       return (
-        <div key={genre.id}>
+        <article key={genre.id}>
           <input
             type="checkbox"
             className={`genres-list-${genre.id}`}
@@ -120,7 +120,7 @@ class GenreSelection extends Component {
           <label htmlFor={genre.id} onClick={(e) => e.target.classList.toggle('picked')}>
             <span>{genre.name}</span>
           </label>
-        </div>);
+        </article>);
     });
 
     const disabled = this.props.loading || this.state.genres.length !== 3;
